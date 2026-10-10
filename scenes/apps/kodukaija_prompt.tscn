@@ -55,7 +55,6 @@ offset_right = 709.0
 offset_bottom = 385.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Run Kodukäija.exe"
 
 [node name="NoButton" type="Button" parent="."]
 offset_left = 727.0
@@ -64,7 +63,6 @@ offset_right = 867.0
 offset_bottom = 385.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Return to Kratt"
 
 [node name="CloseButton" type="Button" parent="."]
 offset_left = 825.0
@@ -73,7 +71,6 @@ offset_right = 885.0
 offset_bottom = 52.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
-tooltip_text = "Close"
 
 [node name="DetailsButton" type="Button" parent="."]
 offset_left = 32.0
@@ -83,7 +80,6 @@ offset_bottom = 387.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 toggle_mode = true
-tooltip_text = "Show or hide the controls"
 
 [node name="Details" type="ColorRect" parent="."]
 visible = false

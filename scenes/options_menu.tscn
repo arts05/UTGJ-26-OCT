@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/options_menu.gd" id="1_options"]
+[ext_resource type="Theme" path="res://resources/menu_theme.tres" id="2_theme"]
+
+[node name="Options" type="VBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme = ExtResource("2_theme")
+theme_override_constants/separation = 16
+script = ExtResource("1_options")
+
+[node name="Heading" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Options"
+horizontal_alignment = 1
+
+[node name="VolumeControls" type="GridContainer" parent="."]
+layout_mode = 2
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 14
+columns = 3
+
+[node name="MasterLabel" type="Label" parent="VolumeControls"]
+layout_mode = 2
+text = "Master"
+
+[node name="MasterVolume" type="HSlider" parent="VolumeControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+
+[node name="MasterValue" type="Label" parent="VolumeControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="MusicLabel" type="Label" parent="VolumeControls"]
+layout_mode = 2
+text = "Music"
+
+[node name="MusicVolume" type="HSlider" parent="VolumeControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+
+[node name="MusicValue" type="Label" parent="VolumeControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="EffectsLabel" type="Label" parent="VolumeControls"]
+layout_mode = 2
+text = "Effects"
+
+[node name="EffectsVolume" type="HSlider" parent="VolumeControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 28)
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+
+[node name="EffectsValue" type="Label" parent="VolumeControls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Fullscreen" type="CheckButton" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="Controls" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.68, 0.63, 1)
+theme_override_font_sizes/font_size = 16
+text = "Click the computer or press E to use the CRT.
+Right-click to look away.
+Esc or P to pause.
+While typing: Esc, or right-click then P.
+Web: Esc may leave fullscreen; use P to pause."
+autowrap_mode = 2
+
+[node name="BackButton" type="Button" parent="."]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"
+
+[connection signal="value_changed" from="VolumeControls/MasterVolume" to="." method="_on_volume_changed"]
+[connection signal="value_changed" from="VolumeControls/MusicVolume" to="." method="_on_volume_changed"]
+[connection signal="value_changed" from="VolumeControls/EffectsVolume" to="." method="_on_volume_changed"]
+[connection signal="toggled" from="Fullscreen" to="." method="_on_fullscreen_toggled"]
+[connection signal="pressed" from="BackButton" to="." method="close"]

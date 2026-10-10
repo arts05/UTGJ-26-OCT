@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scripts/main.gd" id="4_main"]
 [ext_resource type="AudioStream" path="res://assets/sounds/ambi.ogg" id="5_ambient_music"]
 [ext_resource type="Shader" path="res://shaders/shadow_vignette.gdshader" id="6_shadow_vignette"]
+[ext_resource type="PackedScene" path="res://scenes/scene_fade.tscn" id="7_fade"]
+[ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="8_pause"]
 
 [sub_resource type="FastNoiseLite" id="Noise_shadows"]
 noise_type = 1
@@ -38,7 +40,6 @@ script = ExtResource("4_main")
 [node name="AmbientMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ambient_music")
 volume_db = -12.0
-autoplay = true
 bus = &"Music"
 
 [node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
@@ -47,13 +48,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03430806, 0.020355403, -0.0
 [node name="Computer" parent="." unique_id=359784547 instance=ExtResource("1_computer")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.985, 0)
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1972033861 node_paths=PackedStringArray("room_view", "computer_view")]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1972033861 node_paths=PackedStringArray("room_view", "computer_view", "computer")]
 transform = Transform3D(1, 0, 0, 0, 0.9848078, 0.1736482, 0, -0.1736482, 0.9848078, 0, 1.075, 1)
 current = true
 fov = 50.0
 script = ExtResource("2_rvslj")
 room_view = NodePath("../RoomView")
 computer_view = NodePath("../ComputerView")
+computer = NodePath("../Computer")
 
 [node name="RoomView" type="Marker3D" parent="." unique_id=662047318]
 transform = Transform3D(1, 0, 0, 0, 0.9848078, 0.1736482, 0, -0.1736482, 0.9848078, 0, 1.075, 1)
@@ -74,5 +76,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="PauseMenu" parent="." node_paths=PackedStringArray("computer", "scene_fade") instance=ExtResource("8_pause")]
+computer = NodePath("../Computer")
+scene_fade = NodePath("../SceneFade")
+
+[node name="SceneFade" parent="." instance=ExtResource("7_fade")]
 
 [connection signal="computer_focus_changed" from="Camera3D" to="Computer" method="set_interactive"]

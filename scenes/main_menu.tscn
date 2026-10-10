@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
+[ext_resource type="Shader" path="res://shaders/menu_signal.gdshader" id="2_signal"]
+[ext_resource type="AudioStream" path="res://assets/sounds/raymenuvolfix2.ogg" id="3_music"]
+[ext_resource type="PackedScene" path="res://scenes/scene_fade.tscn" id="4_fade"]
+
+[ext_resource type="Theme" path="res://resources/menu_theme.tres" id="5_theme"]
+[ext_resource type="PackedScene" path="res://scenes/options_menu.tscn" id="6_options"]
+
+[sub_resource type="FastNoiseLite" id="Noise_signal"]
+noise_type = 1
+frequency = 0.012
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_signal"]
+width = 256
+height = 256
+seamless = true
+noise = SubResource("Noise_signal")
+
+[sub_resource type="ShaderMaterial" id="Material_signal"]
+shader = ExtResource("2_signal")
+shader_parameter/signal_noise = SubResource("Texture_signal")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_theme")
+script = ExtResource("1_menu")
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_music")
+volume_db = -12.0
+bus = &"Music"
+
+[node name="Background" type="ColorRect" parent="."]
+material = SubResource("Material_signal")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Center"]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Title" type="Label" parent="Center/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.95, 0.92, 1)
+theme_override_font_sizes/font_size = 48
+text = "Project Kalev"
+horizontal_alignment = 1
+
+[node name="Buttons" type="VBoxContainer" parent="Center/Menu"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 12
+
+[node name="PlayButton" type="Button" parent="Center/Menu/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play"
+
+[node name="OptionsButton" type="Button" parent="Center/Menu/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Options"
+
+[node name="QuitButton" type="Button" parent="Center/Menu/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit"
+
+[node name="Options" parent="Center" instance=ExtResource("6_options")]
+visible = false
+layout_mode = 2
+
+[node name="SceneFade" parent="." instance=ExtResource("4_fade")]
+
+[connection signal="pressed" from="Center/Menu/Buttons/PlayButton" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Center/Menu/Buttons/OptionsButton" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Center/Menu/Buttons/QuitButton" to="." method="_on_quit_pressed"]
+[connection signal="closed" from="Center/Options" to="." method="_on_options_closed"]

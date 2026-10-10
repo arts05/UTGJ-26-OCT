@@ -8,6 +8,7 @@
 [ext_resource type="Shader" path="res://shaders/winter_sky.gdshader" id="6_sky"]
 [ext_resource type="Shader" path="res://shaders/drifting_fog.gdshader" id="7_fog"]
 [ext_resource type="Shader" path="res://shaders/snowflake.gdshader" id="8_snow"]
+[ext_resource type="PackedScene" path="res://scenes/neighbour_building.tscn" id="9_building"]
 
 [sub_resource type="StandardMaterial3D" id="Material_balcony"]
 resource_name = "Balcony - nearest filtering"
@@ -132,6 +133,9 @@ tracks/3/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Arr
 tracks/4/type = "value"
 tracks/4/path = NodePath("WindowHaze:material_override:shader_parameter/lightning")
 tracks/4/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [0.0]}
+tracks/5/type = "value"
+tracks/5/path = NodePath("NeighbourBuilding/Facade:modulate")
+tracks/5/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [Color(0.23, 0.27, 0.34, 1)]}
 
 [sub_resource type="Animation" id="Animation_flash"]
 resource_name = "flash"
@@ -176,6 +180,14 @@ tracks/4/keys = {
 "update": 0,
 "values": [0.0, 0.25, 0.08, 0.0]
 }
+tracks/5/type = "value"
+tracks/5/path = NodePath("NeighbourBuilding/Facade:modulate")
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.42, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.23, 0.27, 0.34, 1), Color(0.5, 0.56, 0.65, 1), Color(0.35, 0.4, 0.48, 1), Color(0.23, 0.27, 0.34, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="Animations_lightning"]
 _data = {&"RESET": SubResource("Animation_reset"), &"flash": SubResource("Animation_flash")}
@@ -196,11 +208,15 @@ material_override = SubResource("Material_glass")
 cast_shadow = 0
 
 [node name="NightSky" type="MeshInstance3D" parent="."]
-position = Vector3(6.2, 0.75, 0.1)
+position = Vector3(12, 0.75, 0.1)
 rotation_degrees = Vector3(0, -90, 0)
 mesh = SubResource("Mesh_sky")
 material_override = SubResource("Material_sky")
 cast_shadow = 0
+
+[node name="NeighbourBuilding" parent="." instance=ExtResource("9_building")]
+position = Vector3(8, 0.1, 1.7)
+rotation_degrees = Vector3(0, -90, 0)
 
 [node name="FarFog" type="MeshInstance3D" parent="."]
 position = Vector3(4.8, 0.75, 0.1)

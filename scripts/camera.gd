@@ -6,6 +6,7 @@ enum ViewMode { ROOM, MOVING, COMPUTER }
 
 @export var room_view: Marker3D
 @export var computer_view: Marker3D
+@export var computer: Node3D
 @export var zoom_duration: float = 0.6
 
 @export_group("Seated look")
@@ -57,8 +58,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("leave_computer"):
 		if view_mode == ViewMode.COMPUTER:
 			_move_to_view(room_view, ViewMode.ROOM)
-		else:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		get_viewport().set_input_as_handled()
 		return
 
@@ -72,7 +71,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			var aim_position: Vector2 = event.position
+			if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+				aim_position = get_viewport().get_visible_rect().get_center()
+			if view_mode == ViewMode.ROOM and computer.is_monitor_at(aim_position):
+				_move_to_view(computer_view, ViewMode.COMPUTER)
+			else:
+				Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			get_viewport().set_input_as_handled()
 
 	if event is InputEventMouseMotion:

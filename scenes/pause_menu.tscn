@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pause_menu.gd" id="1_pause"]
+[ext_resource type="Theme" path="res://resources/menu_theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" path="res://scenes/options_menu.tscn" id="3_options"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 50
+script = ExtResource("1_pause")
+
+[node name="Overlay" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+
+[node name="Dim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.92)
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Overlay/Center"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Heading" type="Label" parent="Overlay/Center/Menu"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Overlay/Center/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Resume"
+
+[node name="OptionsButton" type="Button" parent="Overlay/Center/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Options"
+
+[node name="MainMenuButton" type="Button" parent="Overlay/Center/Menu"]
+layout_mode = 2
+text = "Main menu"
+
+[node name="Hint" type="Label" parent="Overlay/Center/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.68, 0.63, 1)
+theme_override_font_sizes/font_size = 16
+text = "Esc / P to resume
+Leaving ends this run."
+horizontal_alignment = 1
+
+[node name="Options" parent="Overlay/Center" instance=ExtResource("3_options")]
+visible = false
+layout_mode = 2
+
+[connection signal="pressed" from="Overlay/Center/Menu/ResumeButton" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Overlay/Center/Menu/OptionsButton" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Overlay/Center/Menu/MainMenuButton" to="." method="_on_main_menu_pressed"]
+[connection signal="closed" from="Overlay/Center/Options" to="." method="_on_options_closed"]

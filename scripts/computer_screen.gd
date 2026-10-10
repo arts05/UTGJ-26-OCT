@@ -4,10 +4,13 @@ extends Node3D
 const OUTSIDE_SCREEN := Vector2(-1.0, -1.0)
 
 @onready var screen: MeshInstance3D = $Model/Screen
+@onready var casing: MeshInstance3D = $Model/Body
 @onready var computer_viewport: SubViewport = $ComputerViewport
 @onready var desktop = $ComputerViewport/Desktop
 
 var interactive: bool = false
+var input_paused: bool = false
+var focus_before_pause: Control
 var mouse_inside: bool = false
 var left_button_down: bool = false
 var last_mouse_position := Vector2.ZERO
@@ -33,6 +36,8 @@ func _ready() -> void:
 
 func set_interactive(enabled: bool) -> void:
 	interactive = enabled
+	if input_paused:
+		return
 	desktop.set_computer_focused(enabled)
 	if not enabled:
 		_clear_pointer()
@@ -45,8 +50,36 @@ func set_interactive(enabled: bool) -> void:
 	_forward_mouse(motion)
 
 
+func set_input_paused(paused: bool) -> void:
+	input_paused = paused
+	if paused:
+		focus_before_pause = computer_viewport.gui_get_focus_owner()
+		_clear_pointer()
+		desktop.set_computer_focused(false)
+		computer_viewport.gui_release_focus()
+	else:
+		set_interactive(interactive)
+		if interactive and is_instance_valid(focus_before_pause):
+			focus_before_pause.grab_focus()
+		focus_before_pause = null
+
+
+func is_typing() -> bool:
+	var focused := computer_viewport.gui_get_focus_owner()
+	return focused is LineEdit or focused is TextEdit
+
+
+func is_monitor_at(window_position: Vector2) -> bool:
+	# Include the bezel: entering the CRT shouldn't require hitting the glass precisely.
+	var camera := get_viewport().get_camera_3d()
+	var casing_inverse := casing.global_transform.affine_inverse()
+	var ray_origin := casing_inverse * camera.project_ray_origin(window_position)
+	var ray_direction := casing_inverse.basis * camera.project_ray_normal(window_position)
+	return casing.get_aabb().intersects_ray(ray_origin, ray_direction) != null
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	if not interactive:
+	if not interactive or input_paused:
 		return
 
 	if event is InputEventMouseMotion:
@@ -54,9 +87,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			_forward_mouse(event)
-	elif event is InputEventKey and not event.is_action("leave_computer"):
+	elif event is InputEventKey:
 		# Letters, Enter, and editing shortcuts belong to the focused desktop control.
-		# Escape stays with the room camera.
+		# Pause shortcuts have already been handled by the pause menu.
 		computer_viewport.push_input(event, true)
 		get_viewport().set_input_as_handled()
 

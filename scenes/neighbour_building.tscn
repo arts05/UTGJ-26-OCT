@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/brezhnevka.png" id="1_building"]
+[ext_resource type="Shader" path="res://shaders/apartment_window.gdshader" id="2_window_light"]
+
+[sub_resource type="ShaderMaterial" id="Material_warm_window"]
+resource_name = "Warm apartment light"
+shader = ExtResource("2_window_light")
+shader_parameter/building_texture = ExtResource("1_building")
+shader_parameter/brightness = 0.6
+
+[sub_resource type="ShaderMaterial" id="Material_dim_window"]
+resource_name = "Dim apartment light"
+shader = ExtResource("2_window_light")
+shader_parameter/building_texture = ExtResource("1_building")
+shader_parameter/brightness = 0.35
+
+[node name="NeighbourBuilding" type="Node3D"]
+
+[node name="Facade" type="Sprite3D" parent="."]
+texture = ExtResource("1_building")
+pixel_size = 0.055
+texture_filter = 0
+modulate = Color(0.23, 0.27, 0.34, 1)
+alpha_cut = 1
+cast_shadow = 0
+
+; Each light reuses a window pane from the original sprite, preserving its pixels.
+; Move the whole building in balcony.tscn; adjust the materials for window brightness.
+[node name="LitWindows" type="Node3D" parent="."]
+
+[node name="UpperLeft" type="Sprite3D" parent="LitWindows"]
+position = Vector3(0.165, 1.485, 0.005)
+texture = ExtResource("1_building")
+region_enabled = true
+region_rect = Rect2(215, 30, 8, 6)
+pixel_size = 0.055
+texture_filter = 0
+material_override = SubResource("Material_warm_window")
+alpha_cut = 1
+cast_shadow = 0
+
+[node name="UpperRight" type="Sprite3D" parent="LitWindows"]
+position = Vector3(2.255, 1.485, 0.005)
+texture = ExtResource("1_building")
+region_enabled = true
+region_rect = Rect2(253, 30, 8, 6)
+pixel_size = 0.055
+texture_filter = 0
+material_override = SubResource("Material_dim_window")
+alpha_cut = 1
+cast_shadow = 0
+
+[node name="MiddleLeftPane" type="Sprite3D" parent="LitWindows"]
+position = Vector3(0.825, 0.66, 0.005)
+texture = ExtResource("1_building")
+region_enabled = true
+region_rect = Rect2(230, 45, 2, 6)
+pixel_size = 0.055
+texture_filter = 0
+material_override = SubResource("Material_warm_window")
+alpha_cut = 1
+cast_shadow = 0
+
+[node name="MiddleRightPane" type="Sprite3D" parent="LitWindows"]
+position = Vector3(1.1825, 0.66, 0.005)
+texture = ExtResource("1_building")
+region_enabled = true
+region_rect = Rect2(234, 45, 7, 6)
+pixel_size = 0.055
+texture_filter = 0
+material_override = SubResource("Material_warm_window")
+alpha_cut = 1
+cast_shadow = 0
+
+[node name="LowerWindow" type="Sprite3D" parent="LitWindows"]
+position = Vector3(1.1825, -0.99, 0.005)
+texture = ExtResource("1_building")
+region_enabled = true
+region_rect = Rect2(234, 75, 7, 6)
+pixel_size = 0.055
+texture_filter = 0
+material_override = SubResource("Material_dim_window")
+alpha_cut = 1
+cast_shadow = 0
