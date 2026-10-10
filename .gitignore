@@ -25,3 +25,7 @@ mono_crash.*.json
 # *.pck
 # Godot Android build directory
 /android/
+
+# Local VS Code settings
+.vscode/
+*.code-workspace

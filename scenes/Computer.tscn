@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cciot774okn1k"]
+
+[ext_resource type="PackedScene" uid="uid://j5q7qebr2jp" path="res://scenes/desktop.tscn" id="1_desktop"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_desktop"]
+resource_local_to_scene = true
+viewport_path = NodePath("ComputerViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_screen"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_desktop")
+
+[sub_resource type="QuadMesh" id="QuadMesh_screen"]
+size = Vector2(1.4, 1.05)
+
+[node name="Computer" type="Node3D" unique_id=978978962]
+
+[node name="Screen" type="MeshInstance3D" parent="." unique_id=707482238]
+material_override = SubResource("StandardMaterial3D_screen")
+mesh = SubResource("QuadMesh_screen")
+
+[node name="ComputerViewport" type="SubViewport" parent="." unique_id=1137603431]
+disable_3d = true
+size = Vector2i(1200, 900)
+render_target_update_mode = 4
+
+[node name="Desktop" parent="ComputerViewport" instance=ExtResource("1_desktop")]
