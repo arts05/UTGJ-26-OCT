@@ -2,18 +2,27 @@
 
 [ext_resource type="Script" uid="uid://deufwkf8yj74d" path="res://scripts/apps/window_art.gd" id="1_drag"]
 [ext_resource type="Texture2D" uid="uid://qf0jh481bffq" path="res://assets/sprites/window.png" id="2_art"]
+[ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="3_theme"]
+[ext_resource type="Shader" path="res://shaders/window_ink.gdshader" id="4_ink"]
+
+[sub_resource type="ShaderMaterial" id="Material_ink"]
+resource_local_to_scene = true
+shader = ExtResource("4_ink")
 
 [sub_resource type="AtlasTexture" id="Texture_window"]
 atlas = ExtResource("2_art")
 region = Rect2(16, 240, 1480, 1072)
 
-[node name="WindowArt" type="Control"]
+[node name="WindowArt" type="Control" node_paths=PackedStringArray("artwork")]
 offset_right = 900.0
 offset_bottom = 652.0
 mouse_filter = 0
 script = ExtResource("1_drag")
+theme = ExtResource("3_theme")
+artwork = NodePath("Artwork")
 
 [node name="Artwork" type="TextureRect" parent="."]
+material = SubResource("Material_ink")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

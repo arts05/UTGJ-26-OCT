@@ -2,24 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://baprup5lbtf5o"
-path.s3tc="res://.godot/imported/keyboard_Plastic Base Color.png-16bbbf1bfbe771fe1183d78217f7649c.s3tc.ctex"
+uid="uid://ca7iodbb3a4oj"
+path="res://.godot/imported/kalev2.png-3d82f80a350a93be46e09fba1d2d42d5.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
-}
-generator_parameters={
-"md5": "519c579c1b93d5ad64fdc20f78275d5c"
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/keyboard_Plastic Base Color.png"
-dest_files=["res://.godot/imported/keyboard_Plastic Base Color.png-16bbbf1bfbe771fe1183d78217f7649c.s3tc.ctex"]
+source_file="res://assets/sprites/kalev2.png"
+dest_files=["res://.godot/imported/kalev2.png-3d82f80a350a93be46e09fba1d2d42d5.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -27,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -41,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

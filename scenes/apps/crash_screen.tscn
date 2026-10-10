@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/apps/crash_screen.gd" id="1_crash"]
+[ext_resource type="Texture2D" path="res://assets/sprites/shutdownscreen.png" id="2_artwork"]
+[ext_resource type="Shader" path="res://shaders/signal_breakup.gdshader" id="3_signal"]
+
+[sub_resource type="ShaderMaterial" id="Material_signal"]
+resource_local_to_scene = true
+shader = ExtResource("3_signal")
+
+[node name="CrashScreen" type="ColorRect"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+script = ExtResource("1_crash")
+
+[node name="Artwork" type="TextureRect" parent="."]
+material = SubResource("Material_signal")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_artwork")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Message" type="Label" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+anchor_top = 0.8
+anchor_bottom = 0.8
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Restarting..."
+horizontal_alignment = 1
+vertical_alignment = 1

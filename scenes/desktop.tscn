@@ -1,6 +1,18 @@
 [gd_scene format=3 uid="uid://j5q7qebr2jp"]
 
-[ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_window"]
+[ext_resource type="Script" path="res://scripts/desktop.gd" id="1_flow"]
+[ext_resource type="PackedScene" path="res://scenes/apps/kalevav_installer.tscn" id="2_installer"]
+[ext_resource type="PackedScene" path="res://scenes/apps/kratt.tscn" id="3_kratt"]
+[ext_resource type="PackedScene" path="res://scenes/minigames/viljaneitsi.tscn" id="4_viljaneitsi"]
+[ext_resource type="PackedScene" path="res://scenes/apps/crash_screen.tscn" id="5_crash"]
+[ext_resource type="PackedScene" path="res://scenes/minigames/kodukaija.tscn" id="6_kodukaija"]
+[ext_resource type="Texture2D" path="res://assets/sprites/osbackground.png" id="7_background"]
+[ext_resource type="PackedScene" path="res://scenes/apps/kodukaija_prompt.tscn" id="8_prompt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/desktopbar.png" id="9_taskbar"]
+
+[sub_resource type="AtlasTexture" id="Texture_taskbar"]
+atlas = ExtResource("9_taskbar")
+region = Rect2(0, 909, 2400, 53)
 
 [node name="Desktop" type="Control" unique_id=884689875]
 layout_mode = 3
@@ -9,8 +21,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_flow")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1992822387]
+[node name="Background" type="TextureRect" parent="." unique_id=1992822387]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,11 +31,71 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.227451, 0.431373, 0.647059, 1)
+texture = ExtResource("7_background")
+expand_mode = 1
 
-[node name="WindowArt" parent="." instance=ExtResource("1_window")]
+[node name="Screens" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Installation" parent="Screens" instance=ExtResource("2_installer")]
+visible = false
 layout_mode = 0
 offset_left = 150.0
 offset_top = 110.0
 offset_right = 1050.0
 offset_bottom = 762.0
+
+[node name="Kratt" parent="Screens" instance=ExtResource("3_kratt")]
+visible = false
+offset_left = 700.0
+offset_top = 290.0
+offset_right = 1160.0
+offset_bottom = 860.0
+
+[node name="KodukaijaPrompt" parent="Screens" instance=ExtResource("8_prompt")]
+visible = false
+offset_left = 150.0
+offset_top = 110.0
+offset_right = 1050.0
+offset_bottom = 762.0
+
+[node name="Viljaneitsi" parent="Screens" instance=ExtResource("4_viljaneitsi")]
+visible = false
+
+[node name="Kodukaija" parent="Screens" instance=ExtResource("6_kodukaija")]
+visible = false
+
+[node name="CrashScreen" parent="Screens" instance=ExtResource("5_crash")]
+visible = false
+
+[node name="Taskbar" type="TextureRect" parent="."]
+layout_mode = 1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = SubResource("Texture_taskbar")
+expand_mode = 1
+
+[node name="WelcomeDelay" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[connection signal="timeout" from="WelcomeDelay" to="." method="_on_welcome_delay_timeout"]
+[connection signal="installed" from="Screens/Installation" to="." method="_on_installation_finished"]
+[connection signal="continued" from="Screens/Kratt" to="." method="_on_kratt_continued"]
+[connection signal="accepted" from="Screens/KodukaijaPrompt" to="." method="_on_kodukaija_accepted"]
+[connection signal="declined" from="Screens/KodukaijaPrompt" to="." method="_show_kodukaija_introduction"]
+[connection signal="completed" from="Screens/Viljaneitsi" to="." method="_on_viljaneitsi_completed"]
+[connection signal="failed" from="Screens/Viljaneitsi" to="." method="_on_encounter_failed"]
+[connection signal="failed" from="Screens/Kodukaija" to="." method="_on_encounter_failed"]
+[connection signal="closed" from="Screens/Kodukaija" to="." method="_on_kodukaija_closed"]
+[connection signal="restarted" from="Screens/CrashScreen" to="." method="_on_restart_finished"]

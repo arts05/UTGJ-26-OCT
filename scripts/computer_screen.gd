@@ -5,6 +5,7 @@ const OUTSIDE_SCREEN := Vector2(-1.0, -1.0)
 
 @onready var screen: MeshInstance3D = $Model/Screen
 @onready var computer_viewport: SubViewport = $ComputerViewport
+@onready var desktop = $ComputerViewport/Desktop
 
 var interactive: bool = false
 var mouse_inside: bool = false
@@ -26,13 +27,16 @@ func _ready() -> void:
 	screen_indices = arrays[Mesh.ARRAY_INDEX]
 	screen_triangles = screen.mesh.generate_triangle_mesh()
 	get_window().mouse_exited.connect(_clear_pointer)
-	get_window().focus_exited.connect(_clear_pointer)
+	get_window().focus_exited.connect(_on_window_focus_exited)
+	get_window().focus_entered.connect(_restore_desktop_focus)
 
 
 func set_interactive(enabled: bool) -> void:
 	interactive = enabled
+	desktop.set_computer_focused(enabled)
 	if not enabled:
 		_clear_pointer()
+		computer_viewport.gui_release_focus()
 		return
 
 	# Refresh hover after zooming, even if the mouse hasn't moved yet.
@@ -50,6 +54,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			_forward_mouse(event)
+	elif event is InputEventKey and not event.is_action("leave_computer"):
+		# Letters, Enter, and editing shortcuts belong to the focused desktop control.
+		# Escape stays with the room camera.
+		computer_viewport.push_input(event, true)
+		get_viewport().set_input_as_handled()
 
 
 func _forward_mouse(event: InputEventMouse) -> void:
@@ -141,4 +150,13 @@ func _clear_pointer() -> void:
 	if mouse_inside:
 		computer_viewport.notify_mouse_exited()
 		mouse_inside = false
+
+
+func _on_window_focus_exited() -> void:
+	_clear_pointer()
 	computer_viewport.gui_release_focus()
+	desktop.set_computer_focused(false)
+
+
+func _restore_desktop_focus() -> void:
+	desktop.set_computer_focused(interactive)
