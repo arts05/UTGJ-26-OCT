@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/apps/speech_bubble.gd" id="1_speech"]
+[ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="2_theme"]
+[ext_resource type="Shader" path="res://shaders/ui_paper.gdshader" id="3_paper"]
+[ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="4_button"]
+[ext_resource type="Material" path="res://resources/button_highlight.tres" id="5_highlight"]
+
+[sub_resource type="ShaderMaterial" id="Material_paper"]
+shader = ExtResource("3_paper")
+
+[sub_resource type="StyleBoxFlat" id="Style_paper"]
+bg_color = Color(0.97, 0.95, 0.83, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.22, 0.21, 0.18, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 9
+corner_radius_bottom_left = 9
+corner_radius_bottom_right = 7
+shadow_color = Color(0.05, 0.06, 0.08, 0.28)
+shadow_size = 4
+shadow_offset = Vector2(3, 5)
+
+[node name="SpeechBubble" type="Control"]
+offset_right = 440.0
+offset_bottom = 210.0
+mouse_filter = 0
+theme = ExtResource("2_theme")
+script = ExtResource("1_speech")
+
+[node name="Tail" type="Polygon2D" parent="."]
+position = Vector2(264, 210)
+color = Color(0.22, 0.21, 0.18, 1)
+polygon = PackedVector2Array(0, -3, 19, 25, 42, -3)
+
+[node name="Paper" type="Polygon2D" parent="Tail"]
+material = SubResource("Material_paper")
+color = Color(0.97, 0.95, 0.83, 1)
+polygon = PackedVector2Array(4, -4, 19, 21, 38, -4)
+
+[node name="Panel" type="PanelContainer" parent="."]
+material = SubResource("Material_paper")
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 210.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("Style_paper")
+
+[node name="Margins" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="Stack" type="VBoxContainer" parent="Panel/Margins"]
+layout_mode = 2
+mouse_filter = 1
+theme_override_constants/separation = 16
+
+[node name="Message" type="Label" parent="Panel/Margins/Stack"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.15, 0.14, 0.11, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_constants/line_spacing = 3
+text = "Your disk is full."
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Panel/Margins/Stack"]
+layout_mode = 2
+mouse_filter = 1
+alignment = 2
+
+[node name="ActionButton" type="Button" parent="Panel/Margins/Stack/Actions"]
+material = ExtResource("5_highlight")
+custom_minimum_size = Vector2(156, 44)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 22
+script = ExtResource("4_button")
+text = "Continue"
+
+[connection signal="pressed" from="Panel/Margins/Stack/Actions/ActionButton" to="." method="_on_action_pressed"]

@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/apps/kratt.gd" id="1_kratt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kratt1.png" id="2_portrait"]
+[ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="3_theme"]
+[ext_resource type="PackedScene" path="res://scenes/apps/speech_bubble.tscn" id="4_speech"]
+[ext_resource type="Script" path="res://scripts/apps/floating_portrait.gd" id="5_float"]
+
+[node name="Kratt" type="Control"]
+offset_right = 460.0
+offset_bottom = 570.0
+mouse_filter = 1
+theme = ExtResource("3_theme")
+script = ExtResource("1_kratt")
+
+[node name="Portrait" type="TextureRect" parent="."]
+offset_left = 40.0
+offset_top = 245.0
+offset_right = 420.0
+offset_bottom = 565.0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("5_float")
+texture = ExtResource("2_portrait")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Speech" parent="." instance=ExtResource("4_speech")]
+
+[connection signal="action_pressed" from="Speech" to="." method="_on_continue_pressed"]

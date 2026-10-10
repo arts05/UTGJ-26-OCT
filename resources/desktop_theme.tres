@@ -1,0 +1,66 @@
+[gd_resource type="Theme" format=3 uid="uid://cqrr0s3epjvkp"]
+
+[sub_resource type="StyleBoxFlat" id="Style_button"]
+content_margin_left = 14.0
+content_margin_top = 8.0
+content_margin_right = 14.0
+content_margin_bottom = 8.0
+bg_color = Color(0.86, 0.86, 0.83, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.32, 0.35, 1)
+
+[sub_resource type="StyleBoxEmpty" id="Style_focus"]
+
+[sub_resource type="StyleBoxFlat" id="Style_hover"]
+bg_color = Color(0.94, 0.94, 0.9, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.32, 0.35, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_pressed"]
+bg_color = Color(0.68, 0.7, 0.72, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.32, 0.35, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_input"]
+content_margin_left = 10.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.98, 0.98, 0.96, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.32, 0.35, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_fill"]
+bg_color = Color(0.18, 0.4, 0.28, 1)
+
+[resource]
+default_font_size = 24
+Button/colors/font_color = Color(0.08, 0.09, 0.11, 1)
+Button/colors/font_disabled_color = Color(0.48, 0.48, 0.48, 1)
+Button/colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
+Button/colors/font_pressed_color = Color(0.08, 0.09, 0.11, 1)
+Button/styles/disabled = SubResource("Style_button")
+Button/styles/focus = SubResource("Style_focus")
+Button/styles/hover = SubResource("Style_hover")
+Button/styles/normal = SubResource("Style_button")
+Button/styles/pressed = SubResource("Style_pressed")
+Label/colors/font_color = Color(0.08, 0.09, 0.11, 1)
+LineEdit/colors/caret_color = Color(0.08, 0.09, 0.11, 1)
+LineEdit/colors/font_color = Color(0.08, 0.09, 0.11, 1)
+LineEdit/colors/font_placeholder_color = Color(0.4, 0.4, 0.4, 1)
+LineEdit/styles/focus = SubResource("Style_focus")
+LineEdit/styles/normal = SubResource("Style_input")
+ProgressBar/styles/background = SubResource("Style_input")
+ProgressBar/styles/fill = SubResource("Style_fill")

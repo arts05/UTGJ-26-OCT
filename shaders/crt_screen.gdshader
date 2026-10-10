@@ -14,6 +14,7 @@ uniform float flicker_strength : hint_range(0.0, 0.04, 0.001) = 0.012;
 uniform float vignette_strength : hint_range(0.0, 0.4, 0.01) = 0.24;
 uniform float rolling_band_strength : hint_range(0.0, 0.3, 0.01) = 0.12;
 uniform float rolling_band_speed : hint_range(0.0, 0.5, 0.01) = 0.08;
+uniform float color_bleed_strength : hint_range(0.0, 0.4, 0.01) = 0.16;
 
 
 float pattern_visibility(float cycles_per_pixel) {
@@ -51,6 +52,15 @@ void fragment() {
 	float slot_softness = fwidth(mask_position.x) * 0.5;
 
 	if (effects_enabled) {
+		// A faint one-pixel color bleed, without displacing the desktop or its hitboxes.
+		vec2 horizontal_pixel = vec2(1.0 / desktop_size.x, 0.0);
+		vec3 separated_color = vec3(
+			texture(desktop_texture, desktop_uv - horizontal_pixel).r,
+			color.g,
+			texture(desktop_texture, desktop_uv + horizontal_pixel).b
+		);
+		color = mix(color, separated_color, color_bleed_strength);
+
 		float scanline = 0.5 + 0.5 * cos(row * TAU);
 		color *= 1.0 - scanline * scanline_strength * visible_scanlines;
 

@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/minigames/wheat_file.gd" id="1_file"]
+[ext_resource type="Shader" path="res://shaders/ui_highlight.gdshader" id="2_highlight"]
+
+[sub_resource type="ShaderMaterial" id="Material_arrival"]
+resource_local_to_scene = true
+shader = ExtResource("2_highlight")
+
+[node name="WheatFile" type="Control"]
+offset_right = 96.0
+offset_bottom = 56.0
+mouse_filter = 2
+script = ExtResource("1_file")
+
+[node name="Icon" type="ColorRect" parent="."]
+material = SubResource("Material_arrival")
+offset_left = 33.0
+offset_top = 1.0
+offset_right = 63.0
+offset_bottom = 31.0
+mouse_filter = 2
+color = Color(0.75, 0.57, 0.2, 1)
+
+[node name="Fold" type="ColorRect" parent="Icon"]
+offset_left = 20.0
+offset_right = 30.0
+offset_bottom = 10.0
+mouse_filter = 2
+color = Color(0.93, 0.79, 0.43, 1)
+
+[node name="Name" type="Label" parent="."]
+offset_top = 33.0
+offset_right = 96.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 15
+text = "vili_01.png"
+horizontal_alignment = 1

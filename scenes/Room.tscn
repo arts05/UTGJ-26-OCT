@@ -1,43 +1,25 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dn32y2jhevf8h"]
 
 [ext_resource type="Script" uid="uid://cnbui383t1pli" path="res://scripts/light_flicker.gd" id="1_flicker"]
 [ext_resource type="PackedScene" uid="uid://ickywh2irfsb" path="res://assets/models/arvuti-case.glb" id="2_pc_case"]
 [ext_resource type="Texture2D" uid="uid://dpktegx168h06" path="res://assets/models/arvuti-case_Plastic Base Color.png" id="3_case_texture"]
-[ext_resource type="PackedScene" uid="uid://c1y7ky1bltnox" path="res://assets/keyboard.glb" id="4_keyboard"]
-[ext_resource type="Texture2D" uid="uid://baprup5lbtf5o" path="res://assets/keyboard_Plastic Base Color.png" id="5_keyboard_texture"]
-
-[sub_resource type="StandardMaterial3D" id="Material_plaster"]
-albedo_color = Color(0.13, 0.14, 0.15, 1)
-roughness = 0.83
+[ext_resource type="PackedScene" uid="uid://c1y7ky1bltnox" path="res://assets/models/keyboard.glb" id="4_keyboard"]
+[ext_resource type="Texture2D" uid="uid://baprup5lbtf5o" path="res://assets/models/keyboard_Plastic Base Color.png" id="5_keyboard_texture"]
+[ext_resource type="PackedScene" uid="uid://xm0jjarbnfq7" path="res://assets/models/laud.glb" id="6_table"]
+[ext_resource type="Texture2D" uid="uid://c2i1xrxtdtpg4" path="res://assets/models/laud_Wood.png" id="7_table_texture"]
+[ext_resource type="PackedScene" uid="uid://6xdn4sr6a8sv" path="res://assets/models/whisky-glass.glb" id="8_whisky"]
+[ext_resource type="Texture2D" uid="uid://ciwx82fjd856o" path="res://assets/models/whisky-glass_GlassTransparent Base Color.png" id="9_glass_texture"]
 
 [sub_resource type="StandardMaterial3D" id="Material_floor"]
 albedo_color = Color(0.08, 0.08, 0.08, 1)
 roughness = 0.83
 
-[sub_resource type="StandardMaterial3D" id="Material_desk"]
-albedo_color = Color(0.18, 0.17, 0.15, 1)
-roughness = 0.83
-
-[sub_resource type="StandardMaterial3D" id="Material_metal"]
-albedo_color = Color(0.07, 0.075, 0.08, 1)
-roughness = 0.83
-
-[sub_resource type="StandardMaterial3D" id="Material_case"]
-resource_name = "PC case - nearest filtering"
-texture_filter = 0
-cull_mode = 2
-albedo_texture = ExtResource("3_case_texture")
-roughness = 0.5
-
-[sub_resource type="StandardMaterial3D" id="Material_keyboard"]
-resource_name = "Keyboard - nearest filtering"
-texture_filter = 0
-cull_mode = 2
-albedo_texture = ExtResource("5_keyboard_texture")
-roughness = 0.5
-
 [sub_resource type="BoxMesh" id="Mesh_floor"]
 size = Vector3(5, 0.1, 5)
+
+[sub_resource type="StandardMaterial3D" id="Material_plaster"]
+albedo_color = Color(0.13, 0.14, 0.15, 1)
+roughness = 0.83
 
 [sub_resource type="BoxMesh" id="Mesh_back_wall"]
 size = Vector3(5, 2.8, 0.1)
@@ -45,76 +27,101 @@ size = Vector3(5, 2.8, 0.1)
 [sub_resource type="BoxMesh" id="Mesh_side_wall"]
 size = Vector3(0.1, 2.8, 5)
 
-[sub_resource type="BoxMesh" id="Mesh_desktop"]
-size = Vector3(1.6, 0.06, 0.95)
+[sub_resource type="StandardMaterial3D" id="Material_table"]
+resource_name = "Table - nearest filtering"
+cull_mode = 2
+albedo_texture = ExtResource("7_table_texture")
+roughness = 0.8
+texture_filter = 0
 
-[sub_resource type="BoxMesh" id="Mesh_desk_leg"]
-size = Vector3(0.08, 0.69, 0.65)
+[sub_resource type="StandardMaterial3D" id="Material_keyboard"]
+resource_name = "Keyboard - nearest filtering"
+cull_mode = 2
+albedo_texture = ExtResource("5_keyboard_texture")
+roughness = 0.5
+texture_filter = 0
 
-[node name="Room" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="Material_glass"]
+resource_name = "Whisky glass - nearest filtering"
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.18)
+albedo_texture = ExtResource("9_glass_texture")
+roughness = 0.032663
+texture_filter = 0
 
-[node name="Floor" type="MeshInstance3D" parent="."]
-position = Vector3(0, -0.05, 1.5)
-mesh = SubResource("Mesh_floor")
+[sub_resource type="StandardMaterial3D" id="Material_case"]
+resource_name = "PC case - nearest filtering"
+cull_mode = 2
+albedo_texture = ExtResource("3_case_texture")
+roughness = 0.5
+texture_filter = 0
+
+[node name="Room" type="Node3D" unique_id=897806313]
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1249268792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 1.5)
 material_override = SubResource("Material_floor")
+mesh = SubResource("Mesh_floor")
 
-[node name="BackWall" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.4, -0.7)
+[node name="BackWall" type="MeshInstance3D" parent="." unique_id=1357727416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.7)
+material_override = SubResource("Material_plaster")
 mesh = SubResource("Mesh_back_wall")
-material_override = SubResource("Material_plaster")
 
-[node name="LeftWall" type="MeshInstance3D" parent="."]
-position = Vector3(-2.45, 1.4, 1.75)
+[node name="LeftWall" type="MeshInstance3D" parent="." unique_id=164966128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 1.4, 1.75)
+material_override = SubResource("Material_plaster")
 mesh = SubResource("Mesh_side_wall")
-material_override = SubResource("Material_plaster")
 
-[node name="RightWall" type="MeshInstance3D" parent="."]
-position = Vector3(2.45, 1.4, 1.75)
+[node name="RightWall" type="MeshInstance3D" parent="." unique_id=1001094710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.45, 1.4, 1.75)
+material_override = SubResource("Material_plaster")
 mesh = SubResource("Mesh_side_wall")
-material_override = SubResource("Material_plaster")
 
-[node name="Desk" type="Node3D" parent="."]
-position = Vector3(-0.12, 0, 0.17)
+[node name="Desk" type="Node3D" parent="." unique_id=1358994295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0, 0.17)
 
-[node name="Top" type="MeshInstance3D" parent="Desk"]
-position = Vector3(0, 0.72, 0)
-mesh = SubResource("Mesh_desktop")
-material_override = SubResource("Material_desk")
+[node name="Table" parent="Desk" unique_id=334811522 instance=ExtResource("6_table")]
+transform = Transform3D(0, 0, -1, 0, 1.037374, 0, 1, 0, 0, 0, 0.691561, 0)
 
-[node name="LeftLeg" type="MeshInstance3D" parent="Desk"]
-position = Vector3(-0.68, 0.345, 0)
-mesh = SubResource("Mesh_desk_leg")
-material_override = SubResource("Material_metal")
+[node name="Cube" parent="Desk/Table" index="0" unique_id=957348689]
+material_override = SubResource("Material_table")
 
-[node name="RightLeg" type="MeshInstance3D" parent="Desk"]
-position = Vector3(0.68, 0.345, 0)
-mesh = SubResource("Mesh_desk_leg")
-material_override = SubResource("Material_metal")
-
-[node name="KeyboardPosition" type="Marker3D" parent="Desk"]
-position = Vector3(0.12, 0.75, 0.25)
+[node name="KeyboardPosition" type="Marker3D" parent="Desk" unique_id=1287398842]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 0.73, 0.25)
 gizmo_extents = 0.12
 
-[node name="Keyboard" parent="Desk/KeyboardPosition" instance=ExtResource("4_keyboard")]
+[node name="Keyboard" parent="Desk/KeyboardPosition" unique_id=2145288340 instance=ExtResource("4_keyboard")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0.014654, 0)
 
-[node name="Cube" parent="Desk/KeyboardPosition/Keyboard" index="0"]
+[node name="Cube" parent="Desk/KeyboardPosition/Keyboard" index="0" unique_id=1094195373]
 material_override = SubResource("Material_keyboard")
 
-[node name="PCCase" parent="." instance=ExtResource("2_pc_case")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.44, 0.975621, -0.03)
+[node name="WhiskyGlass" parent="Desk" unique_id=199368729 instance=ExtResource("8_whisky")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.767741, 0.14)
 
-[node name="Cube" parent="PCCase" index="0"]
+[node name="Circle" parent="Desk/WhiskyGlass" index="0" unique_id=989975603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003287077, 0)
+material_override = SubResource("Material_glass")
+cast_shadow = 0
+
+[node name="PCCase" parent="." unique_id=1462193925 instance=ExtResource("2_pc_case")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.44, 0.955621, -0.03)
+
+[node name="Cube" parent="PCCase" index="0" unique_id=1560702609]
 material_override = SubResource("Material_case")
 
-[node name="CeilingLight" type="OmniLight3D" parent="."]
-position = Vector3(-0.6, 2.2, 0.1)
-script = ExtResource("1_flicker")
+[node name="CeilingLight" type="OmniLight3D" parent="." unique_id=1890517079]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 2.2, 0.1)
 light_color = Color(0.8, 0.84, 0.88, 1)
 light_energy = 0.06
 light_cull_mask = 3
-omni_range = 4.0
 shadow_enabled = true
+omni_range = 4.0
+script = ExtResource("1_flicker")
 
-[editable path="PCCase"]
+[editable path="Desk/Table"]
 [editable path="Desk/KeyboardPosition/Keyboard"]
+[editable path="Desk/WhiskyGlass"]
+[editable path="PCCase"]

@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_frame"]
+[ext_resource type="Script" path="res://scripts/apps/kalevav_installer.gd" id="2_installer"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kalev1.png" id="3_kalev"]
+[ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="4_button"]
+[ext_resource type="Material" path="res://resources/button_highlight.tres" id="5_highlight"]
+[ext_resource type="Shader" path="res://shaders/ui_highlight.gdshader" id="6_shader"]
+
+[sub_resource type="ShaderMaterial" id="Material_progress"]
+shader = ExtResource("6_shader")
+shader_parameter/hover_amount = 1.0
+
+[node name="Installation" instance=ExtResource("1_frame")]
+script = ExtResource("2_installer")
+
+[node name="Title" type="Label" parent="."]
+offset_left = 36.0
+offset_top = 8.0
+offset_right = 620.0
+offset_bottom = 42.0
+text = "KalevAV setup"
+
+[node name="Kalevipoeg" type="TextureRect" parent="."]
+layout_mode = 1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = -272.0
+offset_right = 276.0
+offset_bottom = -14.0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("3_kalev")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Content" type="MarginContainer" parent="."]
+offset_left = 294.0
+offset_top = 194.0
+offset_right = 852.0
+offset_bottom = 632.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Stack" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Heading" type="Label" parent="Content/Stack"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "KalevAV"
+
+[node name="Status" type="Label" parent="Content/Stack"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+text = "Welcome to KalevAV.\n\nLet's check what is living on this computer."
+autowrap_mode = 2
+
+[node name="Progress" type="ProgressBar" parent="Content/Stack"]
+material = SubResource("Material_progress")
+visible = false
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+show_percentage = false
+
+[node name="Actions" type="HBoxContainer" parent="Content/Stack"]
+layout_mode = 2
+alignment = 2
+
+[node name="InstallButton" type="Button" parent="Content/Stack/Actions"]
+material = ExtResource("5_highlight")
+custom_minimum_size = Vector2(190, 54)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+script = ExtResource("4_button")
+text = "Next"
+
+[connection signal="pressed" from="Content/Stack/Actions/InstallButton" to="." method="_on_install_pressed"]

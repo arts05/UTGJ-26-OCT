@@ -16,7 +16,7 @@ reflected_light_source = 1
 [node name="main" type="Node3D" unique_id=763560267]
 
 [node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03465867, 0.020355463, -0.0022556782)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03430806, 0.020355403, -0.0025669932)
 
 [node name="Computer" parent="." unique_id=359784547 instance=ExtResource("1_computer")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.985, 0)
