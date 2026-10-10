@@ -1,10 +1,13 @@
 extends Control
 
 signal won
+signal failed
 signal answer_accepted
 signal answer_rejected
 
-enum Phase { QUESTION, SUCCESS }
+enum Phase { QUESTION, SUCCESS, FAILURE }
+
+@export_range(1, 4) var passing_score: int = 3
 
 const QUESTIONS: Array[Dictionary] = [
 	{
@@ -41,12 +44,12 @@ const QUESTIONS: Array[Dictionary] = [
 ]
 @onready var feedback: Label = $QuizWindow/Quiz/Feedback
 @onready var continue_button: Button = $QuizWindow/Quiz/ContinueButton
-@onready var victory_message: Label = $QuizWindow/VictoryMessage
-@onready var speech = $QuizWindow/VictorySpeech
+@onready var result_message: Label = $QuizWindow/ResultMessage
 
 var phase: Phase = Phase.QUESTION
 var question_index: int = 0
 var selected_answer: int = -1
+var correct_answers: int = 0
 
 
 func _ready() -> void:
@@ -70,9 +73,9 @@ func _radio_icon(checked: bool) -> Texture2D:
 func reset() -> void:
 	phase = Phase.QUESTION
 	question_index = 0
+	correct_answers = 0
 	quiz.show()
-	victory_message.hide()
-	speech.hide()
+	result_message.hide()
 	_show_question()
 
 
@@ -82,7 +85,7 @@ func _show_question() -> void:
 	question_label.text = current_question["question"]
 	for index in range(answer_buttons.size()):
 		answer_buttons[index].text = current_question["answers"][index]
-	feedback.text = ""
+	feedback.text = "" if question_index == 0 else "Answer recorded."
 	_clear_selection()
 
 
@@ -106,27 +109,27 @@ func _on_answer_selected(button: BaseButton) -> void:
 func _on_continue_pressed() -> void:
 	if phase != Phase.QUESTION or selected_answer < 0:
 		return
-	if selected_answer != QUESTIONS[question_index]["correct_index"]:
-		feedback.text = "Try again."
-		_clear_selection()
-		answer_rejected.emit()
-		return
-	answer_accepted.emit()
-	quiz_window.flash()
-	if question_index == QUESTIONS.size() - 1:
-		_show_success()
+	if selected_answer == QUESTIONS[question_index]["correct_index"]:
+		correct_answers += 1
+		answer_accepted.emit()
+		quiz_window.flash()
 	else:
-		question_index += 1
+		answer_rejected.emit()
+	question_index += 1
+	if question_index == QUESTIONS.size():
+		_finish_quiz()
+	else:
 		_show_question()
 
 
-func _show_success() -> void:
-	if phase == Phase.SUCCESS:
-		return
-	phase = Phase.SUCCESS
+func _finish_quiz() -> void:
+	var passed := correct_answers >= passing_score
+	phase = Phase.SUCCESS if passed else Phase.FAILURE
 	_clear_selection()
 	quiz.hide()
-	victory_message.show()
-	speech.show()
-	speech.say("Good job!")
-	won.emit()
+	result_message.text = "%d of %d correct." % [correct_answers, QUESTIONS.size()]
+	result_message.show()
+	if passed:
+		won.emit()
+	else:
+		failed.emit()

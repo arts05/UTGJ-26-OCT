@@ -14,6 +14,39 @@
 [ext_resource type="Texture2D" path="res://resources/antivirus_logo.tres" id="12_installer_icon"]
 [ext_resource type="PackedScene" path="res://scenes/apps/carl_prompt.tscn" id="12_carl_prompt"]
 [ext_resource type="PackedScene" path="res://scenes/minigames/carl.tscn" id="13_carl"]
+[ext_resource type="PackedScene" path="res://scenes/apps/congratulations.tscn" id="14_congratulations"]
+[ext_resource type="PackedScene" path="res://scenes/endings/good_ending.tscn" id="15_good_ending"]
+[ext_resource type="PackedScene" path="res://scenes/endings/bad_ending.tscn" id="16_bad_ending"]
+
+[sub_resource type="Animation" id="Animation_reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_carl_victory"]
+resource_name = "carl_victory"
+length = 0.35
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:position")
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.04, 0.09, 0.14, 0.2, 0.27, 0.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(5, 1), Vector2(-4, -2), Vector2(3, 1), Vector2(-2, 0), Vector2(1, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="Library_transitions"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"carl_victory": SubResource("Animation_carl_victory")
+}
 
 [sub_resource type="StyleBoxEmpty" id="Style_shortcut_clear"]
 
@@ -135,6 +168,15 @@ visible = false
 [node name="Carl" parent="Screens" instance=ExtResource("13_carl")]
 visible = false
 
+[node name="Congratulations" parent="Screens" instance=ExtResource("14_congratulations")]
+visible = false
+
+[node name="GoodEnding" parent="Screens" instance=ExtResource("15_good_ending")]
+visible = false
+
+[node name="BadEnding" parent="Screens" instance=ExtResource("16_bad_ending")]
+visible = false
+
 [node name="Kodukaija" parent="Screens" instance=ExtResource("6_kodukaija")]
 visible = false
 
@@ -156,6 +198,13 @@ expand_mode = 1
 wait_time = 1.0
 one_shot = true
 
+[node name="VictoryPause" type="Timer" parent="."]
+wait_time = 0.65
+one_shot = true
+
+[node name="Transitions" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("Library_transitions")}
+
 [node name="Cursor" type="TextureRect" parent="."]
 visible = false
 texture_filter = 1
@@ -171,6 +220,8 @@ expand_mode = 1
 
 [connection signal="pressed" from="InstallerShortcut" to="." method="_on_installer_shortcut_pressed"]
 [connection signal="timeout" from="KrattDelay" to="." method="_on_kratt_delay_timeout"]
+[connection signal="timeout" from="VictoryPause" to="." method="_on_victory_pause_timeout"]
+[connection signal="animation_finished" from="Transitions" to="." method="_on_transition_finished"]
 [connection signal="installed" from="Screens/Installation" to="." method="_on_installation_finished"]
 [connection signal="continued" from="Screens/Kratt" to="." method="_on_kratt_continued"]
 [connection signal="accepted" from="Screens/KodukaijaPrompt" to="." method="_on_kodukaija_accepted"]
@@ -180,7 +231,9 @@ expand_mode = 1
 [connection signal="completed" from="Screens/Viljaneitsi" to="." method="_on_viljaneitsi_completed"]
 [connection signal="started" from="Screens/Viljaneitsi" to="." method="_on_viljaneitsi_started"]
 [connection signal="won" from="Screens/Viljaneitsi" to="." method="_on_encounter_won"]
-[connection signal="won" from="Screens/Carl" to="." method="_on_encounter_won"]
+[connection signal="won" from="Screens/Carl" to="." method="_on_carl_won"]
+[connection signal="failed" from="Screens/Carl" to="." method="_on_carl_failed"]
+[connection signal="continued" from="Screens/Congratulations" to="." method="_on_congratulations_finished"]
 [connection signal="failed" from="Screens/Viljaneitsi" to="." method="_on_encounter_failed"]
 [connection signal="failed" from="Screens/Kodukaija" to="." method="_on_encounter_failed"]
 [connection signal="closed" from="Screens/Kodukaija" to="." method="_on_kodukaija_closed"]

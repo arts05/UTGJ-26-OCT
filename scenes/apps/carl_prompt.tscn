@@ -65,7 +65,7 @@ text = "Open Carl.exe?"
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_vertical = 3
-text = "Answer the given questions correctly"
+text = "Answer all four questions.\n\nYou need at least three correct answers to pass."
 autowrap_mode = 2
 
 [node name="Actions" type="HBoxContainer" parent="Content/Stack"]

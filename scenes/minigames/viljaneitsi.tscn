@@ -133,3 +133,4 @@ tail_above = true
 [connection signal="gui_input" from="CharacterWindow/TitleBar" to="CharacterWindow" method="_on_title_bar_gui_input"]
 [connection signal="action_pressed" from="CharacterWindow/Speech" to="." method="_on_action_pressed"]
 [connection signal="text_submitted" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_submitted"]
+[connection signal="gui_input" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_gui_input"]

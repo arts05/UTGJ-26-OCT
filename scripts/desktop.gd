@@ -2,6 +2,7 @@ extends Control
 ## Controls the guided installation, encounter introductions, and crash recovery.
 
 signal encounter_won
+signal ending_reached
 signal drive_activity_changed(busy: bool)
 signal restart_state_changed(restarting: bool)
 signal button_clicked
@@ -17,6 +18,9 @@ enum Stage {
 	KODUKAIJA,
 	CARL_PROMPT,
 	CARL,
+	CARL_VICTORY,
+	CONGRATULATIONS,
+	ENDING,
 	CRASH,
 }
 
@@ -31,8 +35,13 @@ enum Stage {
 @onready var kodukaija = $Screens/Kodukaija
 @onready var carl_prompt = $Screens/CarlPrompt
 @onready var carl = $Screens/Carl
+@onready var congratulations = $Screens/Congratulations
+@onready var good_ending: Control = $Screens/GoodEnding
+@onready var bad_ending: Control = $Screens/BadEnding
 @onready var crash_screen = $Screens/CrashScreen
 @onready var kratt_delay: Timer = $KrattDelay
+@onready var victory_pause: Timer = $VictoryPause
+@onready var transitions: AnimationPlayer = $Transitions
 @onready var taskbar: TextureRect = $Taskbar
 @onready var cursor: TextureRect = $Cursor
 
@@ -65,6 +74,7 @@ func set_cursor_position(desktop_position: Vector2) -> void:
 	cursor.visible = (
 		Rect2(Vector2.ZERO, size).has_point(desktop_position)
 		and active_screen != crash_screen
+		and stage != Stage.ENDING
 	)
 
 
@@ -73,13 +83,13 @@ func _show_screen(next_screen: Control) -> void:
 		screen.hide()
 		screen.process_mode = Node.PROCESS_MODE_DISABLED
 	active_screen = next_screen
-	taskbar.visible = next_screen != crash_screen and next_screen != kodukaija
+	taskbar.visible = next_screen != crash_screen and next_screen != kodukaija and stage != Stage.ENDING
 	installer_shortcut.visible = taskbar.visible
 	installer_shortcut.disabled = stage != Stage.DESKTOP
 	if active_screen != null:
 		active_screen.show()
 		active_screen.process_mode = Node.PROCESS_MODE_INHERIT
-	if next_screen == kratt or next_screen == kodukaija_prompt or next_screen == carl_prompt:
+	if next_screen in [kratt, kodukaija_prompt, carl_prompt, congratulations]:
 		notification_requested.emit()
 	set_cursor_position(pointer_position)
 	set_computer_focused(computer_focused)
@@ -129,6 +139,41 @@ func _on_carl_accepted() -> void:
 func _on_carl_declined() -> void:
 	stage = Stage.VILJANEITSI
 	_show_screen(viljaneitsi)
+
+
+func _on_carl_won() -> void:
+	stage = Stage.CARL_VICTORY
+	_on_encounter_won()
+	transitions.play(&"carl_victory")
+
+
+func _on_transition_finished(animation_name: StringName) -> void:
+	if animation_name == &"carl_victory":
+		_show_screen(null)
+		victory_pause.start()
+
+
+func _on_victory_pause_timeout() -> void:
+	stage = Stage.CONGRATULATIONS
+	_show_screen(congratulations)
+	congratulations.start()
+
+
+func _on_congratulations_finished() -> void:
+	if stage == Stage.CONGRATULATIONS:
+		_begin_ending(true)
+
+
+func _on_carl_failed() -> void:
+	_begin_ending(false)
+
+
+func _begin_ending(good: bool) -> void:
+	stage = Stage.ENDING
+	var ending := good_ending if good else bad_ending
+	_show_screen(ending)
+	ending_reached.emit()
+	ending.get_node("AnimationPlayer").play(&"reveal")
 
 
 func _on_viljaneitsi_started() -> void:

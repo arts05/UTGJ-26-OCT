@@ -11,6 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://ciwx82fjd856o" path="res://assets/models/whisky-glass_GlassTransparent Base Color.png" id="9_glass_texture"]
 [ext_resource type="PackedScene" path="res://scenes/pc_status_lights.tscn" id="10_status_lights"]
 [ext_resource type="PackedScene" path="res://scenes/ghost_release.tscn" id="11_ghost_release"]
+[ext_resource type="PackedScene" path="res://scenes/balcony.tscn" id="12_balcony"]
+[ext_resource type="PackedScene" path="res://assets/models/arvutihiir.glb" id="14_mouse"]
+[ext_resource type="Texture2D" path="res://assets/models/arvutihiir_Plastic Base Color.png" id="15_mouse_texture"]
 
 [sub_resource type="StandardMaterial3D" id="Material_floor"]
 albedo_color = Color(0.08, 0.08, 0.08, 1)
@@ -19,15 +22,32 @@ roughness = 0.83
 [sub_resource type="BoxMesh" id="Mesh_floor"]
 size = Vector3(5, 0.1, 5)
 
-[sub_resource type="StandardMaterial3D" id="Material_plaster"]
-albedo_color = Color(0.13, 0.14, 0.15, 1)
-roughness = 0.83
+[sub_resource type="StandardMaterial3D" id="Material_black_walls"]
+resource_name = "Matte black walls and ceiling"
+albedo_color = Color(0, 0, 0, 1)
+metallic_specular = 0.0
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="Mesh_ceiling"]
+size = Vector3(5, 0.1, 5)
 
 [sub_resource type="BoxMesh" id="Mesh_back_wall"]
 size = Vector3(5, 2.8, 0.1)
 
 [sub_resource type="BoxMesh" id="Mesh_side_wall"]
 size = Vector3(0.1, 2.8, 5)
+
+[sub_resource type="BoxMesh" id="Mesh_left_front"]
+size = Vector3(0.1, 2.8, 0.35)
+
+[sub_resource type="BoxMesh" id="Mesh_left_rear"]
+size = Vector3(0.1, 2.8, 3.65)
+
+[sub_resource type="BoxMesh" id="Mesh_left_header"]
+size = Vector3(0.1, 0.756, 1)
+
+[sub_resource type="BoxMesh" id="Mesh_left_sill"]
+size = Vector3(0.1, 0.044, 1)
 
 [sub_resource type="StandardMaterial3D" id="Material_table"]
 resource_name = "Table - nearest filtering"
@@ -52,6 +72,13 @@ albedo_texture = ExtResource("9_glass_texture")
 roughness = 0.032663
 texture_filter = 0
 
+[sub_resource type="StandardMaterial3D" id="Material_mouse"]
+resource_name = "Mouse - nearest filtering"
+cull_mode = 2
+albedo_texture = ExtResource("15_mouse_texture")
+roughness = 0.55
+texture_filter = 0
+
 [sub_resource type="StandardMaterial3D" id="Material_case"]
 resource_name = "PC case - nearest filtering"
 cull_mode = 2
@@ -62,23 +89,56 @@ texture_filter = 0
 [node name="Room" type="Node3D" unique_id=897806313]
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1249268792]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 1.75)
 material_override = SubResource("Material_floor")
 mesh = SubResource("Mesh_floor")
 
-[node name="BackWall" type="MeshInstance3D" parent="." unique_id=1357727416]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.7)
-material_override = SubResource("Material_plaster")
+[node name="Ceiling" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.85, 1.75)
+material_override = SubResource("Material_black_walls")
+mesh = SubResource("Mesh_ceiling")
+
+[node name="RearWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.4, 4.2)
+material_override = SubResource("Material_black_walls")
 mesh = SubResource("Mesh_back_wall")
 
-[node name="LeftWall" type="MeshInstance3D" parent="." unique_id=164966128]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 1.4, 1.75)
-material_override = SubResource("Material_plaster")
-mesh = SubResource("Mesh_side_wall")
+[node name="BackWall" type="MeshInstance3D" parent="." unique_id=1357727416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.7)
+material_override = SubResource("Material_black_walls")
+mesh = SubResource("Mesh_back_wall")
+
+[node name="LeftWall" type="Node3D" parent="." unique_id=164966128]
+position = Vector3(-2.45, 0, 0)
+
+; Four wall pieces leave an opening for the balcony door.
+[node name="FrontSection" type="MeshInstance3D" parent="LeftWall"]
+position = Vector3(0, 1.4, -0.575)
+material_override = SubResource("Material_black_walls")
+mesh = SubResource("Mesh_left_front")
+
+[node name="RearSection" type="MeshInstance3D" parent="LeftWall"]
+position = Vector3(0, 1.4, 2.425)
+material_override = SubResource("Material_black_walls")
+mesh = SubResource("Mesh_left_rear")
+
+[node name="Header" type="MeshInstance3D" parent="LeftWall"]
+position = Vector3(0, 2.422, 0.1)
+material_override = SubResource("Material_black_walls")
+mesh = SubResource("Mesh_left_header")
+
+[node name="Sill" type="MeshInstance3D" parent="LeftWall"]
+position = Vector3(0, 0.022, 0.1)
+material_override = SubResource("Material_black_walls")
+mesh = SubResource("Mesh_left_sill")
+
+[node name="Balcony" parent="LeftWall" instance=ExtResource("12_balcony")]
+position = Vector3(0, 1.044, 0.1)
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="RightWall" type="MeshInstance3D" parent="." unique_id=1001094710]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.45, 1.4, 1.75)
-material_override = SubResource("Material_plaster")
+material_override = SubResource("Material_black_walls")
 mesh = SubResource("Mesh_side_wall")
 
 [node name="Desk" type="Node3D" parent="." unique_id=1358994295]
@@ -101,12 +161,19 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0.014654, 0)
 material_override = SubResource("Material_keyboard")
 
 [node name="WhiskyGlass" parent="Desk" unique_id=199368729 instance=ExtResource("8_whisky")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54, 0.767741, 0.14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61, 0.767741, 0.01)
 
 [node name="Circle" parent="Desk/WhiskyGlass" index="0" unique_id=989975603]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.003287077, 0)
 material_override = SubResource("Material_glass")
 cast_shadow = 0
+
+[node name="Mouse" parent="Desk" instance=ExtResource("14_mouse")]
+position = Vector3(0.47, 0.742, 0.28)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Mouse" parent="Desk/Mouse" index="0"]
+material_override = SubResource("Material_mouse")
 
 [node name="PCCase" parent="." unique_id=1462193925 instance=ExtResource("2_pc_case")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.44, 0.955621, -0.03)
@@ -133,4 +200,5 @@ script = ExtResource("1_flicker")
 [editable path="Desk/Table"]
 [editable path="Desk/KeyboardPosition/Keyboard"]
 [editable path="Desk/WhiskyGlass"]
+[editable path="Desk/Mouse"]
 [editable path="PCCase"]

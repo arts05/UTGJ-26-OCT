@@ -1,5 +1,5 @@
 extends Node3D
-## Plays desktop events at the monitor, outside the UI scenes that open and close.
+## Plays computer and keyboard sounds, outside the UI scenes that open and close.
 
 @onready var desktop = $"../ComputerViewport/Desktop"
 @onready var crt_loop: AudioStreamPlayer3D = $CRTLoop
@@ -10,6 +10,7 @@ func _ready() -> void:
 	desktop.button_clicked.connect($Click.play)
 	desktop.notification_requested.connect($Notification.play)
 	desktop.installation.installation_completed.connect($Notification.play)
+	desktop.viljaneitsi.typing_key_pressed.connect($KeyboardKey.play)
 	desktop.viljaneitsi.answer_accepted.connect($CorrectAnswer.play)
 	desktop.viljaneitsi.answer_rejected.connect(_on_answer_rejected)
 	desktop.carl.answer_accepted.connect($CorrectAnswer.play)
@@ -33,6 +34,7 @@ func _on_answer_rejected() -> void:
 func _on_restart_state_changed(restarting: bool) -> void:
 	if restarting:
 		$Click.stop()
+		$KeyboardKey.stop()
 		$Notification.stop()
 		$CorrectAnswer.stop()
 		wrong_answer.stop()

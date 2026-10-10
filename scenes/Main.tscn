@@ -4,6 +4,24 @@
 [ext_resource type="Script" uid="uid://bgm102ufcprno" path="res://scripts/camera.gd" id="2_rvslj"]
 [ext_resource type="PackedScene" uid="uid://dn32y2jhevf8h" path="res://scenes/Room.tscn" id="3_room"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="4_main"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ambi.ogg" id="5_ambient_music"]
+[ext_resource type="Shader" path="res://shaders/shadow_vignette.gdshader" id="6_shadow_vignette"]
+
+[sub_resource type="FastNoiseLite" id="Noise_shadows"]
+noise_type = 1
+frequency = 0.009
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_shadows"]
+width = 256
+height = 256
+seamless = true
+noise = SubResource("Noise_shadows")
+
+[sub_resource type="ShaderMaterial" id="Material_shadow_vignette"]
+resource_name = "Subtle moving shadows - preserves bright areas"
+shader = ExtResource("6_shadow_vignette")
+shader_parameter/shadow_noise = SubResource("Texture_shadows")
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -16,6 +34,12 @@ reflected_light_source = 1
 
 [node name="main" type="Node3D" unique_id=763560267]
 script = ExtResource("4_main")
+
+[node name="AmbientMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ambient_music")
+volume_db = -12.0
+autoplay = true
+bus = &"Music"
 
 [node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03430806, 0.020355403, -0.0025669932)
@@ -39,5 +63,16 @@ transform = Transform3D(1, 0, 0, 0, 0.9902681, 0.1391731, 0, -0.1391731, 0.99026
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1525173281]
 environment = SubResource("Environment_room")
+
+[node name="RoomAtmosphere" type="CanvasLayer" parent="."]
+
+[node name="ShadowVignette" type="ColorRect" parent="RoomAtmosphere"]
+material = SubResource("Material_shadow_vignette")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [connection signal="computer_focus_changed" from="Camera3D" to="Computer" method="set_interactive"]

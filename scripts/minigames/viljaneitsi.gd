@@ -6,6 +6,7 @@ signal started
 signal won
 signal answer_accepted
 signal answer_rejected
+signal typing_key_pressed
 
 enum Phase { INTRODUCTION, READY, TYPING, SUCCESS }
 
@@ -107,6 +108,16 @@ func _process(delta: float) -> void:
 	if elapsed_seconds >= time_limit_seconds:
 		set_process(false)
 		failed.emit()
+
+
+func _on_answer_gui_input(event: InputEvent) -> void:
+	if phase != Phase.TYPING or not answer.has_focus():
+		return
+	if event is not InputEventKey or not event.pressed or event.echo:
+		return
+	# One click per physical press; clearing the field and holding a key stay quiet.
+	if event.unicode >= 32 or event.keycode in [KEY_BACKSPACE, KEY_DELETE, KEY_ENTER, KEY_KP_ENTER]:
+		typing_key_pressed.emit()
 
 
 func _on_answer_submitted(text: String) -> void:

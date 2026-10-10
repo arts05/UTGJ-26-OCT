@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://scripts/minigames/carl.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="2_frame"]
 [ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="3_theme"]
-[ext_resource type="PackedScene" path="res://scenes/apps/speech_bubble.tscn" id="4_speech"]
 [ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="5_button"]
 [ext_resource type="Material" path="res://resources/button_highlight.tres" id="6_highlight"]
 
@@ -198,21 +197,14 @@ script = ExtResource("5_button")
 disabled = true
 text = "Continue"
 
-[node name="VictoryMessage" type="Label" parent="QuizWindow"]
+[node name="ResultMessage" type="Label" parent="QuizWindow"]
 visible = false
 offset_left = 350.0
 offset_top = 264.0
 offset_right = 996.0
 offset_bottom = 360.0
 theme_override_font_sizes/font_size = 24
-text = "All questions answered correctly."
+text = "3 of 4 correct."
 autowrap_mode = 2
-
-[node name="VictorySpeech" parent="QuizWindow" instance=ExtResource("4_speech")]
-visible = false
-offset_left = 36.0
-offset_top = 245.0
-offset_right = 286.0
-offset_bottom = 355.0
 
 [connection signal="pressed" from="QuizWindow/Quiz/ContinueButton" to="." method="_on_continue_pressed"]

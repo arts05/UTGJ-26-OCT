@@ -12,6 +12,14 @@
 [ext_resource type="AudioStream" path="res://assets/sounds/Windows Error.mp3" id="10_error"]
 [ext_resource type="AudioStream" path="res://assets/sounds/Windows Shutdown.mp3" id="11_shutdown"]
 [ext_resource type="AudioStream" path="res://assets/sounds/Windows Startup.mp3" id="12_startup"]
+[ext_resource type="AudioStream" path="res://assets/sounds/keyboardkey.wav" id="13_keyboard"]
+[ext_resource type="Shader" path="res://shaders/crt_dust.gdshader" id="14_dust"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_keyboard"]
+random_pitch = 1.08
+random_volume_offset_db = 1.5
+streams_count = 1
+stream_0/stream = ExtResource("13_keyboard")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_desktop"]
 resource_local_to_scene = true
@@ -21,6 +29,18 @@ viewport_path = NodePath("../ComputerViewport")
 resource_local_to_scene = true
 shader = ExtResource("4_crt_shader")
 shader_parameter/desktop_texture = SubResource("ViewportTexture_desktop")
+
+[sub_resource type="ShaderMaterial" id="Material_dust"]
+resource_name = "Faint dust in the CRT light"
+shader = ExtResource("14_dust")
+
+[sub_resource type="QuadMesh" id="Mesh_dust"]
+material = SubResource("Material_dust")
+size = Vector2(0.005, 0.005)
+
+[sub_resource type="Gradient" id="Gradient_dust_lifetime"]
+offsets = PackedFloat32Array(0, 0.15, 0.8, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="Computer" type="Node3D" unique_id=978978962]
 script = ExtResource("2_screen_input")
@@ -45,7 +65,7 @@ light_cull_mask = 2
 shadow_enabled = true
 omni_range = 0.9
 
-[node name="ScreenSpill" type="OmniLight3D" parent="." node_paths=PackedStringArray("desktop_viewport", "casing_light")]
+[node name="ScreenSpill" type="OmniLight3D" parent="." node_paths=PackedStringArray("desktop_viewport", "casing_light", "screen_dust")]
 position = Vector3(0, 0.02, 0.31)
 light_color = Color(0.55, 0.72, 1, 1)
 light_energy = 0.0
@@ -57,6 +77,31 @@ omni_range = 1.5
 script = ExtResource("5_screen_light")
 desktop_viewport = NodePath("../ComputerViewport")
 casing_light = NodePath("../ScreenGlow")
+screen_dust = NodePath("../ScreenDust")
+
+[node name="ScreenDust" type="CPUParticles3D" parent="."]
+position = Vector3(0, 0.055, 0.4)
+cast_shadow = 0
+extra_cull_margin = 0.05
+amount = 60
+lifetime = 14.0
+preprocess = 14.0
+local_coords = true
+fixed_fps = 30
+draw_order = 2
+mesh = SubResource("Mesh_dust")
+emission_shape = 3
+emission_box_extents = Vector3(0.43, 0.2, 0.15)
+direction = Vector3(0.15, 1, 0)
+spread = 45.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.004
+initial_velocity_max = 0.01
+angle_max = 360.0
+scale_amount_min = 0.45
+scale_amount_max = 1.0
+color = Color(0.55, 0.72, 1, 0)
+color_ramp = SubResource("Gradient_dust_lifetime")
 
 [node name="ComputerViewport" type="SubViewport" parent="." unique_id=1137603431]
 disable_3d = true
@@ -72,7 +117,7 @@ script = ExtResource("6_audio")
 
 [node name="CRTLoop" type="AudioStreamPlayer3D" parent="Audio"]
 stream = ExtResource("7_crt_sound")
-volume_db = 3.0
+volume_db = -21.0
 unit_size = 0.5
 max_db = 12.0
 autoplay = true
@@ -83,6 +128,15 @@ stream = ExtResource("8_click")
 volume_db = -3.0
 unit_size = 0.5
 max_db = 12.0
+bus = &"Computer"
+
+[node name="KeyboardKey" type="AudioStreamPlayer3D" parent="Audio"]
+position = Vector3(0.035, -0.255, 0.21)
+stream = SubResource("AudioStreamRandomizer_keyboard")
+volume_db = -20.0
+unit_size = 0.5
+max_db = 12.0
+max_polyphony = 6
 bus = &"Computer"
 
 [node name="Notification" type="AudioStreamPlayer3D" parent="Audio"]

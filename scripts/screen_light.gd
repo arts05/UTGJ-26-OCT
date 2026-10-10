@@ -3,6 +3,7 @@ extends OmniLight3D
 
 @export var desktop_viewport: SubViewport
 @export var casing_light: OmniLight3D
+@export var screen_dust: CPUParticles3D
 @export var maximum_energy: float = 0.35
 @export var casing_maximum_energy: float = 0.025
 @export_range(0.1, 1.0) var sample_interval: float = 0.2
@@ -41,6 +42,8 @@ func _process(delta: float) -> void:
 	casing_light.light_energy = lerpf(
 		casing_light.light_energy, target_brightness * casing_maximum_energy, blend
 	)
+	# Dust catches the same changing light and disappears when the screen goes dark.
+	screen_dust.color = Color(light_color, lerpf(screen_dust.color.a, target_brightness, blend))
 
 
 func _sample_screen() -> void:

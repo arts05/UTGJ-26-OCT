@@ -1,0 +1,337 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/aken-rodu.glb" id="1_model"]
+[ext_resource type="Texture2D" path="res://assets/models/aken-rodu_Balcony Base Color.png" id="2_balcony_texture"]
+[ext_resource type="Texture2D" path="res://assets/models/aken-rodu_WindowFrame Base Color.png" id="3_frame_texture"]
+[ext_resource type="Texture2D" path="res://assets/models/aken-rodu_WindowPane Base Color.png" id="4_glass_texture"]
+[ext_resource type="Script" path="res://scripts/balcony_weather.gd" id="5_weather"]
+[ext_resource type="Shader" path="res://shaders/winter_sky.gdshader" id="6_sky"]
+[ext_resource type="Shader" path="res://shaders/drifting_fog.gdshader" id="7_fog"]
+[ext_resource type="Shader" path="res://shaders/snowflake.gdshader" id="8_snow"]
+
+[sub_resource type="StandardMaterial3D" id="Material_balcony"]
+resource_name = "Balcony - nearest filtering"
+cull_mode = 2
+albedo_texture = ExtResource("2_balcony_texture")
+roughness = 0.86
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="Material_frame"]
+resource_name = "Door frame - nearest filtering"
+cull_mode = 2
+albedo_texture = ExtResource("3_frame_texture")
+roughness = 0.65
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="Material_glass"]
+resource_name = "Balcony glass"
+render_priority = 1
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 1, 1, 0.1)
+albedo_texture = ExtResource("4_glass_texture")
+roughness = 0.16
+texture_filter = 0
+
+[sub_resource type="FastNoiseLite" id="Noise_fog"]
+noise_type = 1
+frequency = 0.012
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_fog"]
+width = 256
+height = 256
+seamless = true
+noise = SubResource("Noise_fog")
+
+[sub_resource type="ShaderMaterial" id="Material_sky"]
+resource_local_to_scene = true
+shader = ExtResource("6_sky")
+shader_parameter/fog_noise = SubResource("Texture_fog")
+
+[sub_resource type="ShaderMaterial" id="Material_near_fog"]
+resource_local_to_scene = true
+shader = ExtResource("7_fog")
+shader_parameter/fog_noise = SubResource("Texture_fog")
+shader_parameter/opacity = 0.5
+shader_parameter/noise_scale = Vector2(4, 2.4)
+
+[sub_resource type="ShaderMaterial" id="Material_far_fog"]
+resource_local_to_scene = true
+shader = ExtResource("7_fog")
+shader_parameter/fog_noise = SubResource("Texture_fog")
+shader_parameter/opacity = 0.85
+shader_parameter/noise_scale = Vector2(3, 1.6)
+shader_parameter/drift = Vector2(-0.005, 0.001)
+
+[sub_resource type="QuadMesh" id="Mesh_sky"]
+size = Vector2(14, 10)
+
+[sub_resource type="ShaderMaterial" id="Material_window_haze"]
+resource_name = "Faint haze just inside the window"
+resource_local_to_scene = true
+shader = ExtResource("7_fog")
+shader_parameter/fog_noise = SubResource("Texture_fog")
+shader_parameter/fog_color = Color(0.1, 0.12, 0.15, 1)
+shader_parameter/opacity = 0.12
+shader_parameter/noise_scale = Vector2(1.2, 1.6)
+shader_parameter/drift = Vector2(0.003, -0.002)
+
+[sub_resource type="QuadMesh" id="Mesh_window_haze"]
+size = Vector2(1.65, 2.45)
+
+[sub_resource type="ShaderMaterial" id="Material_close_snow"]
+resource_name = "Occasional soft foreground flakes"
+shader = ExtResource("8_snow")
+shader_parameter/opacity = 0.4
+shader_parameter/flutter_distance = 0.1
+shader_parameter/edge_softness = 0.5
+
+[sub_resource type="ShaderMaterial" id="Material_near_snow"]
+resource_name = "Fluttering snowflakes"
+shader = ExtResource("8_snow")
+shader_parameter/flutter_distance = 0.16
+
+[sub_resource type="ShaderMaterial" id="Material_distant_snow"]
+resource_name = "Fine snow fading into fog"
+shader = ExtResource("8_snow")
+shader_parameter/opacity = 0.55
+shader_parameter/flutter_distance = 0.22
+
+[sub_resource type="QuadMesh" id="Mesh_close_flake"]
+material = SubResource("Material_close_snow")
+size = Vector2(0.055, 0.055)
+
+[sub_resource type="QuadMesh" id="Mesh_near_flake"]
+material = SubResource("Material_near_snow")
+size = Vector2(0.04, 0.04)
+
+[sub_resource type="QuadMesh" id="Mesh_distant_flake"]
+material = SubResource("Material_distant_snow")
+size = Vector2(0.032, 0.032)
+
+[sub_resource type="Gradient" id="Gradient_snow_lifetime"]
+offsets = PackedFloat32Array(0, 0.08, 0.8, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Animation" id="Animation_reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("FlashLight:light_energy")
+tracks/0/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [0.0]}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NightSky:material_override:shader_parameter/lightning")
+tracks/1/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [0.0]}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NearFog:material_override:shader_parameter/lightning")
+tracks/2/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [0.0]}
+tracks/3/type = "value"
+tracks/3/path = NodePath("FarFog:material_override:shader_parameter/lightning")
+tracks/3/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [0.0]}
+tracks/4/type = "value"
+tracks/4/path = NodePath("WindowHaze:material_override:shader_parameter/lightning")
+tracks/4/keys = {"times": PackedFloat32Array(0), "transitions": PackedFloat32Array(1), "update": 0, "values": [0.0]}
+
+[sub_resource type="Animation" id="Animation_flash"]
+resource_name = "flash"
+length = 1.8
+tracks/0/type = "value"
+tracks/0/path = NodePath("FlashLight:light_energy")
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.42, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.75, 0.35, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("NightSky:material_override:shader_parameter/lightning")
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.42, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.6, 0.25, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("NearFog:material_override:shader_parameter/lightning")
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.42, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.6, 0.25, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("FarFog:material_override:shader_parameter/lightning")
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.42, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.6, 0.25, 0.0]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("WindowHaze:material_override:shader_parameter/lightning")
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.42, 1.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.25, 0.08, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="Animations_lightning"]
+_data = {&"RESET": SubResource("Animation_reset"), &"flash": SubResource("Animation_flash")}
+
+[node name="Balcony" type="Node3D"]
+script = ExtResource("5_weather")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+
+[node name="Balcony" parent="Model" index="0"]
+material_override = SubResource("Material_balcony")
+
+[node name="WindowFrame" parent="Model" index="1"]
+material_override = SubResource("Material_frame")
+
+[node name="WindowPane" parent="Model" index="2"]
+material_override = SubResource("Material_glass")
+cast_shadow = 0
+
+[node name="NightSky" type="MeshInstance3D" parent="."]
+position = Vector3(6.2, 0.75, 0.1)
+rotation_degrees = Vector3(0, -90, 0)
+mesh = SubResource("Mesh_sky")
+material_override = SubResource("Material_sky")
+cast_shadow = 0
+
+[node name="FarFog" type="MeshInstance3D" parent="."]
+position = Vector3(4.8, 0.75, 0.1)
+rotation_degrees = Vector3(0, -90, 0)
+mesh = SubResource("Mesh_sky")
+material_override = SubResource("Material_far_fog")
+cast_shadow = 0
+
+[node name="NearFog" type="MeshInstance3D" parent="."]
+position = Vector3(1.8, 0.75, 0.1)
+rotation_degrees = Vector3(0, -90, 0)
+mesh = SubResource("Mesh_sky")
+material_override = SubResource("Material_near_fog")
+cast_shadow = 0
+
+[node name="WindowHaze" type="MeshInstance3D" parent="."]
+position = Vector3(-0.18, 0.05, 0)
+rotation_degrees = Vector3(0, -90, 0)
+mesh = SubResource("Mesh_window_haze")
+material_override = SubResource("Material_window_haze")
+cast_shadow = 0
+
+; The emitters stay outside the door. The shader adds gentle, individual flutter.
+[node name="CloseFlakes" type="CPUParticles3D" parent="."]
+position = Vector3(0.3, 2.4, 0.4)
+cast_shadow = 0
+extra_cull_margin = 0.3
+amount = 90
+lifetime = 7.5
+preprocess = 7.5
+local_coords = true
+fixed_fps = 30
+draw_order = 2
+mesh = SubResource("Mesh_close_flake")
+emission_shape = 3
+emission_box_extents = Vector3(0.12, 0.1, 2)
+direction = Vector3(0, -1, 0.03)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.4
+initial_velocity_max = 0.62
+angle_max = 360.0
+scale_amount_min = 0.5
+scale_amount_max = 1.0
+color_ramp = SubResource("Gradient_snow_lifetime")
+
+[node name="NearSnow" type="CPUParticles3D" parent="."]
+position = Vector3(1.1, 2.65, 0.4)
+cast_shadow = 0
+extra_cull_margin = 0.3
+amount = 420
+lifetime = 7.0
+preprocess = 7.0
+local_coords = true
+fixed_fps = 30
+draw_order = 2
+mesh = SubResource("Mesh_near_flake")
+emission_shape = 3
+emission_box_extents = Vector3(0.6, 0.1, 2.5)
+direction = Vector3(0, -1, 0.1)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.45
+initial_velocity_max = 0.7
+angle_max = 360.0
+scale_amount_min = 0.4
+scale_amount_max = 1.0
+color_ramp = SubResource("Gradient_snow_lifetime")
+
+[node name="DistantSnow" type="CPUParticles3D" parent="."]
+position = Vector3(3.4, 2.65, 0.4)
+cast_shadow = 0
+extra_cull_margin = 0.3
+amount = 1800
+lifetime = 9.0
+preprocess = 9.0
+local_coords = true
+fixed_fps = 30
+draw_order = 2
+mesh = SubResource("Mesh_distant_flake")
+emission_shape = 3
+emission_box_extents = Vector3(1.6, 0.1, 4)
+direction = Vector3(0, -1, 0.06)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.35
+initial_velocity_max = 0.6
+angle_max = 360.0
+scale_amount_min = 0.5
+scale_amount_max = 1.1
+color_ramp = SubResource("Gradient_snow_lifetime")
+
+[node name="WindowLight" type="SpotLight3D" parent="."]
+position = Vector3(3.5, 2.5, 0.5)
+rotation_degrees = Vector3(-30, 90, 0)
+light_color = Color(0.65, 0.71, 0.8, 1)
+light_energy = 0.3
+light_specular = 0.15
+light_cull_mask = 3
+shadow_enabled = true
+spot_range = 8.0
+spot_angle = 50.0
+spot_angle_attenuation = 0.6
+
+[node name="WindowBounce" type="OmniLight3D" parent="."]
+position = Vector3(-0.35, 0.45, 0)
+light_color = Color(0.65, 0.71, 0.8, 1)
+light_energy = 0.12
+light_specular = 0.0
+light_cull_mask = 3
+omni_range = 3.2
+
+[node name="FlashLight" type="SpotLight3D" parent="."]
+position = Vector3(3.5, 2.5, 0.5)
+rotation_degrees = Vector3(-30, 90, 0)
+light_color = Color(0.7, 0.79, 1, 1)
+light_energy = 0.0
+light_specular = 0.2
+light_cull_mask = 3
+shadow_enabled = true
+spot_range = 8.0
+spot_angle = 50.0
+spot_angle_attenuation = 0.6
+
+[node name="LightningTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Lightning" type="AnimationPlayer" parent="."]
+libraries = {&"": SubResource("Animations_lightning")}
+
+[connection signal="timeout" from="LightningTimer" to="." method="_on_lightning_timer_timeout"]
+[connection signal="animation_finished" from="Lightning" to="." method="_on_lightning_finished"]
+
+[editable path="Model"]
