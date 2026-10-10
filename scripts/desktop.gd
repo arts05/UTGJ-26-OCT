@@ -13,16 +13,21 @@ enum Stage {
 	KODUKAIJA_INTRO,
 	KODUKAIJA_PROMPT,
 	KODUKAIJA,
+	CARL_PROMPT,
+	CARL,
 	CRASH,
 }
 
 @export var cursor_hotspot: Vector2 = Vector2(2, 2)
+@export var skip_kodukaija_for_carl_testing: bool = false
 
 @onready var installation = $Screens/Installation
 @onready var kratt = $Screens/Kratt
 @onready var viljaneitsi = $Screens/Viljaneitsi
 @onready var kodukaija_prompt = $Screens/KodukaijaPrompt
 @onready var kodukaija = $Screens/Kodukaija
+@onready var carl_prompt = $Screens/CarlPrompt
+@onready var carl = $Screens/Carl
 @onready var crash_screen = $Screens/CrashScreen
 @onready var welcome_delay: Timer = $WelcomeDelay
 @onready var taskbar: TextureRect = $Taskbar
@@ -97,7 +102,22 @@ func _on_kratt_continued() -> void:
 
 
 func _on_viljaneitsi_completed() -> void:
-	_show_kodukaija_introduction()
+	if skip_kodukaija_for_carl_testing:
+		stage = Stage.CARL_PROMPT
+		_show_screen(carl_prompt)
+	else:
+		_show_kodukaija_introduction()
+
+
+func _on_carl_accepted() -> void:
+	stage = Stage.CARL
+	carl.reset()
+	_show_screen(carl)
+
+
+func _on_carl_declined() -> void:
+	stage = Stage.VILJANEITSI
+	_show_screen(viljaneitsi)
 
 
 func _on_viljaneitsi_started() -> void:
