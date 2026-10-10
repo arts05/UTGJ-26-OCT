@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://deufwkf8yj74d" path="res://scripts/apps/window_art.gd" id="1_drag"]
+[ext_resource type="Texture2D" uid="uid://qf0jh481bffq" path="res://assets/sprites/window.png" id="2_art"]
+
+[sub_resource type="AtlasTexture" id="Texture_window"]
+atlas = ExtResource("2_art")
+region = Rect2(16, 240, 1480, 1072)
+
+[node name="WindowArt" type="Control"]
+offset_right = 900.0
+offset_bottom = 652.0
+mouse_filter = 0
+script = ExtResource("1_drag")
+
+[node name="Artwork" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("Texture_window")
+expand_mode = 1
+
+[node name="TitleBar" type="Control" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+offset_left = 18.0
+offset_top = 8.0
+offset_right = -144.0
+offset_bottom = 54.0
+mouse_default_cursor_shape = 6
+
+[connection signal="gui_input" from="TitleBar" to="." method="_on_title_bar_gui_input"]

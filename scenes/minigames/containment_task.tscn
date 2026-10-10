@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bnb0j45ocyly1" path="res://scripts/minigames/containment_task.gd" id="1_task"]
+
+[node name="ContainmentTask" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_task")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 48.0
+theme_override_font_sizes/font_size = 32
+text = "Contain anomaly"
+
+[node name="Instructions" type="Label" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+offset_top = 60.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 28
+text = "Click the moving signal before time runs out."
+
+[node name="StatusLabel" type="Label" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+offset_top = 112.0
+offset_bottom = 156.0
+theme_override_font_sizes/font_size = 28
+text = "Captured: 0 / 5     Time: 15 s"
+
+[node name="PlayArea" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 184.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.025, 0.075, 0.1, 1)
+
+[node name="SignalTarget" type="Button" parent="PlayArea"]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 200.0
+offset_right = 576.0
+offset_bottom = 272.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 32
+text = "Signal"
+
+[node name="MoveTimer" type="Timer" parent="."]
+wait_time = 1.1
+
+[connection signal="pressed" from="PlayArea/SignalTarget" to="." method="_on_signal_target_pressed"]
+[connection signal="timeout" from="MoveTimer" to="." method="_move_target"]

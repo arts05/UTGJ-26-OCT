@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://ickywh2irfsb"
-path="res://.godot/imported/arvuti-case.glb-05b5a8064ed1ed0488d5a3100285055a.scn"
+path="res://.godot/imported/arvuti-case.glb-2e662916993aa92a78081cfb3a8d15dc.scn"
 
 [deps]
 
-source_file="res://assets/arvuti-case.glb"
-dest_files=["res://.godot/imported/arvuti-case.glb-05b5a8064ed1ed0488d5a3100285055a.scn"]
+source_file="res://assets/models/arvuti-case.glb"
+dest_files=["res://.godot/imported/arvuti-case.glb-2e662916993aa92a78081cfb3a8d15dc.scn"]
 
 [params]
 

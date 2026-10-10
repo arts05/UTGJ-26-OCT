@@ -2,24 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpktegx168h06"
-path.s3tc="res://.godot/imported/arvuti-case_Plastic Base Color.png-39450d0485c7a273f85e089806eed51f.s3tc.ctex"
+uid="uid://dyajpjlorgprf"
+path="res://.godot/imported/vilja2.png-efd071dd84522f9fd530a9a57df11e37.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
-}
-generator_parameters={
-"md5": "f3911f7836a2125730a89a2d08b35a38"
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/arvuti-case_Plastic Base Color.png"
-dest_files=["res://.godot/imported/arvuti-case_Plastic Base Color.png-39450d0485c7a273f85e089806eed51f.s3tc.ctex"]
+source_file="res://assets/sprites/vilja2.png"
+dest_files=["res://.godot/imported/vilja2.png-efd071dd84522f9fd530a9a57df11e37.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -27,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -41,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

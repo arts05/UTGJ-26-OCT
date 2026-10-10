@@ -1,28 +1,62 @@
 [gd_scene format=3 uid="uid://cciot774okn1k"]
 
 [ext_resource type="PackedScene" uid="uid://j5q7qebr2jp" path="res://scenes/desktop.tscn" id="1_desktop"]
+[ext_resource type="Script" uid="uid://13g10a6lrrmr" path="res://scripts/computer_screen.gd" id="2_screen_input"]
+[ext_resource type="PackedScene" uid="uid://dukou628xvxld" path="res://assets/models/arvuti.glb" id="3_model"]
+[ext_resource type="Shader" uid="uid://oi82vxldqge6" path="res://shaders/crt_screen.gdshader" id="4_crt_shader"]
+[ext_resource type="Script" uid="uid://bsnciprxvlt2i" path="res://scripts/screen_light.gd" id="5_screen_light"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_desktop"]
 resource_local_to_scene = true
-viewport_path = NodePath("ComputerViewport")
+viewport_path = NodePath("../ComputerViewport")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_screen"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_screen"]
 resource_local_to_scene = true
-shading_mode = 0
-albedo_texture = SubResource("ViewportTexture_desktop")
-
-[sub_resource type="QuadMesh" id="QuadMesh_screen"]
-size = Vector2(1.4, 1.05)
+shader = ExtResource("4_crt_shader")
+shader_parameter/desktop_texture = SubResource("ViewportTexture_desktop")
 
 [node name="Computer" type="Node3D" unique_id=978978962]
+script = ExtResource("2_screen_input")
 
-[node name="Screen" type="MeshInstance3D" parent="." unique_id=707482238]
-material_override = SubResource("StandardMaterial3D_screen")
-mesh = SubResource("QuadMesh_screen")
+[node name="Model" parent="." instance=ExtResource("3_model")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
+
+; The casing receives its own softer light; the stronger spill lights the room.
+[node name="Body" parent="Model" index="0"]
+layers = 2
+
+[node name="Screen" parent="Model" index="1"]
+cast_shadow = 0
+material_override = SubResource("ShaderMaterial_screen")
+
+[node name="ScreenGlow" type="OmniLight3D" parent="."]
+position = Vector3(0, 0.035, 0.205)
+light_color = Color(0.8, 0.9, 1, 1)
+light_energy = 0.015
+light_specular = 0.0
+light_cull_mask = 2
+shadow_enabled = true
+omni_range = 0.9
+
+[node name="ScreenSpill" type="OmniLight3D" parent="." node_paths=PackedStringArray("desktop_viewport", "casing_light")]
+position = Vector3(0, 0.02, 0.31)
+light_color = Color(0.55, 0.72, 1, 1)
+light_energy = 0.0
+light_specular = 0.0
+light_cull_mask = 1
+; Broad, unshadowed screen spill; the ceiling light supplies the sharper shadows.
+shadow_enabled = false
+omni_range = 1.5
+script = ExtResource("5_screen_light")
+desktop_viewport = NodePath("../ComputerViewport")
+casing_light = NodePath("../ScreenGlow")
 
 [node name="ComputerViewport" type="SubViewport" parent="." unique_id=1137603431]
 disable_3d = true
 size = Vector2i(1200, 900)
 render_target_update_mode = 4
+canvas_item_default_texture_filter = 0
 
 [node name="Desktop" parent="ComputerViewport" instance=ExtResource("1_desktop")]
+
+[editable path="Model"]

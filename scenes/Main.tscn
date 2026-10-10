@@ -1,13 +1,41 @@
 [gd_scene format=3 uid="uid://bly1intn3fq52"]
 
 [ext_resource type="PackedScene" uid="uid://cciot774okn1k" path="res://scenes/Computer.tscn" id="1_computer"]
+[ext_resource type="Script" uid="uid://bgm102ufcprno" path="res://scripts/camera.gd" id="2_rvslj"]
+[ext_resource type="PackedScene" path="res://scenes/Room.tscn" id="3_room"]
+
+[sub_resource type="Environment" id="Environment_room"]
+background_mode = 1
+background_color = Color(0.002, 0.003, 0.005, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.25, 0.3, 0.4, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.055
+reflected_light_source = 1
 
 [node name="main" type="Node3D" unique_id=763560267]
 
-[node name="Computer" parent="." instance=ExtResource("1_computer")]
-position = Vector3(0, 1.5, 0)
+[node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03465867, 0.020355463, -0.0022556782)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-position = Vector3(0, 1.5, 2)
+[node name="Computer" parent="." unique_id=359784547 instance=ExtResource("1_computer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.985, 0)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1972033861 node_paths=PackedStringArray("room_view", "computer_view")]
+transform = Transform3D(1, 0, 0, 0, 0.9848078, 0.1736482, 0, -0.1736482, 0.9848078, 0, 1.075, 1)
 current = true
 fov = 50.0
+script = ExtResource("2_rvslj")
+room_view = NodePath("../RoomView")
+computer_view = NodePath("../ComputerView")
+
+[node name="RoomView" type="Marker3D" parent="." unique_id=662047318]
+transform = Transform3D(1, 0, 0, 0, 0.9848078, 0.1736482, 0, -0.1736482, 0.9848078, 0, 1.075, 1)
+
+[node name="ComputerView" type="Marker3D" parent="." unique_id=2127656856]
+transform = Transform3D(1, 0, 0, 0, 0.9902681, 0.1391731, 0, -0.1391731, 0.9902681, 0, 1.05, 0.405)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1525173281]
+environment = SubResource("Environment_room")
+
+[connection signal="computer_focus_changed" from="Camera3D" to="Computer" method="set_interactive"]

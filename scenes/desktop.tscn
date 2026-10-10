@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://j5q7qebr2jp"]
 
-[ext_resource type="Script" uid="uid://dpydpxfirtvjc" path="res://scripts/desktop.gd" id="1_desktop"]
+[ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_window"]
 
 [node name="Desktop" type="Control" unique_id=884689875]
 layout_mode = 3
@@ -9,7 +9,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_desktop")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1992822387]
 layout_mode = 1
@@ -18,13 +17,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.025, 0.075, 0.1, 1)
+mouse_filter = 2
+color = Color(0.227451, 0.431373, 0.647059, 1)
 
-[node name="StatusLabel" type="Label" parent="." unique_id=990331401]
+[node name="WindowArt" parent="." instance=ExtResource("1_window")]
 layout_mode = 0
-offset_left = 64.0
-offset_top = 64.0
-offset_right = 600.0
-offset_bottom = 120.0
-theme_override_font_sizes/font_size = 36
-text = "Running: 0 seconds"
+offset_left = 150.0
+offset_top = 110.0
+offset_right = 1050.0
+offset_bottom = 762.0

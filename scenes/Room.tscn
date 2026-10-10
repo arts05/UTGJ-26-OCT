@@ -1,0 +1,120 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://cnbui383t1pli" path="res://scripts/light_flicker.gd" id="1_flicker"]
+[ext_resource type="PackedScene" uid="uid://ickywh2irfsb" path="res://assets/models/arvuti-case.glb" id="2_pc_case"]
+[ext_resource type="Texture2D" uid="uid://dpktegx168h06" path="res://assets/models/arvuti-case_Plastic Base Color.png" id="3_case_texture"]
+[ext_resource type="PackedScene" uid="uid://c1y7ky1bltnox" path="res://assets/keyboard.glb" id="4_keyboard"]
+[ext_resource type="Texture2D" uid="uid://baprup5lbtf5o" path="res://assets/keyboard_Plastic Base Color.png" id="5_keyboard_texture"]
+
+[sub_resource type="StandardMaterial3D" id="Material_plaster"]
+albedo_color = Color(0.13, 0.14, 0.15, 1)
+roughness = 0.83
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.08, 0.08, 0.08, 1)
+roughness = 0.83
+
+[sub_resource type="StandardMaterial3D" id="Material_desk"]
+albedo_color = Color(0.18, 0.17, 0.15, 1)
+roughness = 0.83
+
+[sub_resource type="StandardMaterial3D" id="Material_metal"]
+albedo_color = Color(0.07, 0.075, 0.08, 1)
+roughness = 0.83
+
+[sub_resource type="StandardMaterial3D" id="Material_case"]
+resource_name = "PC case - nearest filtering"
+texture_filter = 0
+cull_mode = 2
+albedo_texture = ExtResource("3_case_texture")
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="Material_keyboard"]
+resource_name = "Keyboard - nearest filtering"
+texture_filter = 0
+cull_mode = 2
+albedo_texture = ExtResource("5_keyboard_texture")
+roughness = 0.5
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="BoxMesh" id="Mesh_back_wall"]
+size = Vector3(5, 2.8, 0.1)
+
+[sub_resource type="BoxMesh" id="Mesh_side_wall"]
+size = Vector3(0.1, 2.8, 5)
+
+[sub_resource type="BoxMesh" id="Mesh_desktop"]
+size = Vector3(1.6, 0.06, 0.95)
+
+[sub_resource type="BoxMesh" id="Mesh_desk_leg"]
+size = Vector3(0.08, 0.69, 0.65)
+
+[node name="Room" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.05, 1.5)
+mesh = SubResource("Mesh_floor")
+material_override = SubResource("Material_floor")
+
+[node name="BackWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.4, -0.7)
+mesh = SubResource("Mesh_back_wall")
+material_override = SubResource("Material_plaster")
+
+[node name="LeftWall" type="MeshInstance3D" parent="."]
+position = Vector3(-2.45, 1.4, 1.75)
+mesh = SubResource("Mesh_side_wall")
+material_override = SubResource("Material_plaster")
+
+[node name="RightWall" type="MeshInstance3D" parent="."]
+position = Vector3(2.45, 1.4, 1.75)
+mesh = SubResource("Mesh_side_wall")
+material_override = SubResource("Material_plaster")
+
+[node name="Desk" type="Node3D" parent="."]
+position = Vector3(-0.12, 0, 0.17)
+
+[node name="Top" type="MeshInstance3D" parent="Desk"]
+position = Vector3(0, 0.72, 0)
+mesh = SubResource("Mesh_desktop")
+material_override = SubResource("Material_desk")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="Desk"]
+position = Vector3(-0.68, 0.345, 0)
+mesh = SubResource("Mesh_desk_leg")
+material_override = SubResource("Material_metal")
+
+[node name="RightLeg" type="MeshInstance3D" parent="Desk"]
+position = Vector3(0.68, 0.345, 0)
+mesh = SubResource("Mesh_desk_leg")
+material_override = SubResource("Material_metal")
+
+[node name="KeyboardPosition" type="Marker3D" parent="Desk"]
+position = Vector3(0.12, 0.75, 0.25)
+gizmo_extents = 0.12
+
+[node name="Keyboard" parent="Desk/KeyboardPosition" instance=ExtResource("4_keyboard")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0.014654, 0)
+
+[node name="Cube" parent="Desk/KeyboardPosition/Keyboard" index="0"]
+material_override = SubResource("Material_keyboard")
+
+[node name="PCCase" parent="." instance=ExtResource("2_pc_case")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.44, 0.975621, -0.03)
+
+[node name="Cube" parent="PCCase" index="0"]
+material_override = SubResource("Material_case")
+
+[node name="CeilingLight" type="OmniLight3D" parent="."]
+position = Vector3(-0.6, 2.2, 0.1)
+script = ExtResource("1_flicker")
+light_color = Color(0.8, 0.84, 0.88, 1)
+light_energy = 0.06
+light_cull_mask = 3
+omni_range = 4.0
+shadow_enabled = true
+
+[editable path="PCCase"]
+[editable path="Desk/KeyboardPosition/Keyboard"]

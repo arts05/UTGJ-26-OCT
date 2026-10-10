@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dukou628xvxld"
-path="res://.godot/imported/arvuti.glb-f10ea2af7fdec795bdfd66f95606103e.scn"
+path="res://.godot/imported/arvuti.glb-47557de3870761b8ffc6b5527ce5ef41.scn"
 
 [deps]
 
-source_file="res://assets/arvuti.glb"
-dest_files=["res://.godot/imported/arvuti.glb-f10ea2af7fdec795bdfd66f95606103e.scn"]
+source_file="res://assets/models/arvuti.glb"
+dest_files=["res://.godot/imported/arvuti.glb-47557de3870761b8ffc6b5527ce5ef41.scn"]
 
 [params]
 
@@ -35,7 +35,7 @@ animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
-import_script/path=""
+import_script/path="res://scripts/import/crt_model_import.gd"
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
