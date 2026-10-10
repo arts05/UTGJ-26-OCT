@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cccpx6tv2br1j"
+path="res://.godot/imported/Windows Click.mp3-02986c2f66ecd2f3ea3ebc08d1b4c87e.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Windows Click.mp3"
+dest_files=["res://.godot/imported/Windows Click.mp3-02986c2f66ecd2f3ea3ebc08d1b4c87e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

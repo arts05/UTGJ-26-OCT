@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/apps/window_art.gd" id="6_drag"]
 [ext_resource type="PackedScene" path="res://scenes/apps/speech_bubble.tscn" id="7_speech"]
 [ext_resource type="Shader" path="res://shaders/window_ink.gdshader" id="8_ink"]
+[ext_resource type="Material" path="res://resources/window_shadow.tres" id="9_shadow"]
 
 [sub_resource type="ShaderMaterial" id="Material_character"]
 resource_local_to_scene = true
@@ -30,43 +31,49 @@ offset_right = 810.0
 offset_bottom = 825.0
 
 [node name="Wheat" type="Control" parent="FolderWindow/Contents"]
-offset_right = 480.0
-offset_bottom = 224.0
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 256.0
 clip_contents = true
 mouse_filter = 2
 script = ExtResource("2_wheat")
 
 [node name="Separator" type="ColorRect" parent="FolderWindow/Contents"]
-offset_top = 236.0
-offset_right = 480.0
-offset_bottom = 237.0
+layout_mode = 1
+anchor_right = 1.0
+offset_top = 268.0
+offset_bottom = 269.0
 mouse_filter = 2
 color = Color(0.64, 0.65, 0.64, 1)
 
 [node name="Prompt" type="Control" parent="FolderWindow/Contents"]
-offset_top = 248.0
-offset_right = 480.0
-offset_bottom = 440.0
+layout_mode = 1
+anchor_right = 1.0
+offset_top = 280.0
+offset_bottom = 468.0
 mouse_filter = 1
 
 [node name="Instruction" type="Label" parent="FolderWindow/Contents/Prompt"]
-offset_right = 480.0
+layout_mode = 1
+anchor_right = 1.0
 offset_bottom = 40.0
 theme_override_font_sizes/font_size = 22
 text = "Type this 3 times to stop the new files."
 autowrap_mode = 2
 
 [node name="Phrase" type="Label" parent="FolderWindow/Contents/Prompt"]
+layout_mode = 1
+anchor_right = 1.0
 offset_top = 44.0
-offset_right = 480.0
 offset_bottom = 78.0
 theme_override_font_sizes/font_size = 24
 text = "Kulla neitsid, ärge tehke paha!"
 
 [node name="Answer" type="LineEdit" parent="FolderWindow/Contents/Prompt"]
 visible = false
+layout_mode = 1
+anchor_right = 1.0
 offset_top = 88.0
-offset_right = 480.0
 offset_bottom = 130.0
 theme_override_font_sizes/font_size = 24
 max_length = 120
@@ -74,13 +81,14 @@ keep_editing_on_text_submit = true
 placeholder_text = "Type here"
 
 [node name="Feedback" type="Label" parent="FolderWindow/Contents/Prompt"]
+layout_mode = 1
+anchor_right = 1.0
 offset_top = 138.0
-offset_right = 480.0
 offset_bottom = 174.0
 theme_override_font_sizes/font_size = 21
 text = "Press Enter after each line."
 
-[node name="CharacterWindow" type="Control" parent="." node_paths=PackedStringArray("artwork")]
+[node name="CharacterWindow" type="Control" parent="." node_paths=PackedStringArray("artwork", "shadow")]
 visible = false
 offset_left = 830.0
 offset_top = 180.0
@@ -88,7 +96,18 @@ offset_right = 1180.0
 offset_bottom = 745.0
 script = ExtResource("6_drag")
 artwork = NodePath("Portrait")
+shadow = NodePath("Shadow")
 idle_float_pixels = 2.5
+
+[node name="Shadow" type="TextureRect" parent="CharacterWindow"]
+material = ExtResource("9_shadow")
+offset_left = 6.0
+offset_top = 8.0
+offset_right = 356.0
+offset_bottom = 358.0
+mouse_filter = 2
+texture = ExtResource("3_wolf")
+expand_mode = 1
 
 [node name="Portrait" type="TextureRect" parent="CharacterWindow"]
 material = SubResource("Material_character")

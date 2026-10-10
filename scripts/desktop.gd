@@ -1,6 +1,10 @@
 extends Control
 ## Controls the guided installation, encounter introductions, and crash recovery.
 
+signal encounter_won
+signal drive_activity_changed(busy: bool)
+signal restart_state_changed(restarting: bool)
+
 enum Stage {
 	DESKTOP,
 	INSTALLATION,
@@ -12,6 +16,8 @@ enum Stage {
 	CRASH,
 }
 
+@export var cursor_hotspot: Vector2 = Vector2(2, 2)
+
 @onready var installation = $Screens/Installation
 @onready var kratt = $Screens/Kratt
 @onready var viljaneitsi = $Screens/Viljaneitsi
@@ -20,12 +26,14 @@ enum Stage {
 @onready var crash_screen = $Screens/CrashScreen
 @onready var welcome_delay: Timer = $WelcomeDelay
 @onready var taskbar: TextureRect = $Taskbar
+@onready var cursor: TextureRect = $Cursor
 
 var stage: Stage = Stage.DESKTOP
 var active_screen: Control
 var retry_screen: Control
 var computer_focused: bool = false
 var startup_started: bool = false
+var pointer_position := Vector2(-1, -1)
 
 
 func _ready() -> void:
@@ -43,6 +51,16 @@ func set_computer_focused(focused: bool) -> void:
 		kodukaija.set_computer_focused(focused)
 
 
+func set_cursor_position(desktop_position: Vector2) -> void:
+	# Keep the arrow tip at the click point, allowing for the texture's transparent margin.
+	pointer_position = desktop_position
+	cursor.position = desktop_position.floor() - cursor_hotspot
+	cursor.visible = (
+		Rect2(Vector2.ZERO, size).has_point(desktop_position)
+		and active_screen != crash_screen
+	)
+
+
 func _show_screen(next_screen: Control) -> void:
 	for screen: Control in $Screens.get_children():
 		screen.hide()
@@ -52,6 +70,7 @@ func _show_screen(next_screen: Control) -> void:
 	if active_screen != null:
 		active_screen.show()
 		active_screen.process_mode = Node.PROCESS_MODE_INHERIT
+	set_cursor_position(pointer_position)
 	set_computer_focused(computer_focused)
 
 
@@ -81,6 +100,15 @@ func _on_viljaneitsi_completed() -> void:
 	_show_kodukaija_introduction()
 
 
+func _on_viljaneitsi_started() -> void:
+	drive_activity_changed.emit(true)
+
+
+func _on_encounter_won() -> void:
+	drive_activity_changed.emit(false)
+	encounter_won.emit()
+
+
 func _show_kodukaija_introduction() -> void:
 	stage = Stage.KODUKAIJA_INTRO
 	kratt.say("The extra files are gone.\n\nThere is another file to check: Kodukäija.exe.", "Inspect file", 1)
@@ -96,11 +124,14 @@ func _on_kodukaija_accepted() -> void:
 func _on_encounter_failed() -> void:
 	retry_screen = active_screen
 	stage = Stage.CRASH
+	drive_activity_changed.emit(false)
+	restart_state_changed.emit(true)
 	_show_screen(crash_screen)
 	crash_screen.restart()
 
 
 func _on_restart_finished() -> void:
+	restart_state_changed.emit(false)
 	if retry_screen == viljaneitsi:
 		stage = Stage.VILJANEITSI
 		viljaneitsi.restart()

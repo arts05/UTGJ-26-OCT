@@ -81,6 +81,12 @@ func _forward_mouse(event: InputEventMouse) -> void:
 		left_button_down = forwarded.pressed
 
 	last_mouse_position = desktop_position
+	desktop.set_cursor_position(desktop_position)
+	# Keep the native pointer outside the glass; the desktop draws its own cursor inside.
+	var inside_desktop := Rect2(Vector2.ZERO, Vector2(computer_viewport.size)).has_point(desktop_position)
+	var pointer_mode := Input.MOUSE_MODE_HIDDEN if inside_desktop else Input.MOUSE_MODE_VISIBLE
+	if Input.mouse_mode != pointer_mode:
+		Input.mouse_mode = pointer_mode
 	computer_viewport.push_input(forwarded, true)
 	get_viewport().set_input_as_handled()
 
@@ -136,6 +142,9 @@ func _get_desktop_position(window_position: Vector2) -> Vector2:
 
 
 func _clear_pointer() -> void:
+	desktop.set_cursor_position(OUTSIDE_SCREEN)
+	if Input.mouse_mode == Input.MOUSE_MODE_HIDDEN:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if left_button_down:
 		# Cancel at the last position; a fake outside motion would move a dragged window.
 		var release := InputEventMouseButton.new()
@@ -159,4 +168,4 @@ func _on_window_focus_exited() -> void:
 
 
 func _restore_desktop_focus() -> void:
-	desktop.set_computer_focused(interactive)
+	set_interactive(interactive)

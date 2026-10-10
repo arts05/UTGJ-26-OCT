@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cciot774okn1k" path="res://scenes/Computer.tscn" id="1_computer"]
 [ext_resource type="Script" uid="uid://bgm102ufcprno" path="res://scripts/camera.gd" id="2_rvslj"]
-[ext_resource type="PackedScene" path="res://scenes/Room.tscn" id="3_room"]
+[ext_resource type="PackedScene" uid="uid://dn32y2jhevf8h" path="res://scenes/Room.tscn" id="3_room"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1

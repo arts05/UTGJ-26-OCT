@@ -9,6 +9,11 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/osbackground.png" id="7_background"]
 [ext_resource type="PackedScene" path="res://scenes/apps/kodukaija_prompt.tscn" id="8_prompt"]
 [ext_resource type="Texture2D" path="res://assets/sprites/desktopbar.png" id="9_taskbar"]
+[ext_resource type="Texture2D" path="res://resources/desktop_cursor.tres" id="10_cursor"]
+[ext_resource type="Shader" path="res://shaders/cursor_outline.gdshader" id="11_cursor_outline"]
+
+[sub_resource type="ShaderMaterial" id="Material_cursor"]
+shader = ExtResource("11_cursor_outline")
 
 [sub_resource type="AtlasTexture" id="Texture_taskbar"]
 atlas = ExtResource("9_taskbar")
@@ -89,12 +94,27 @@ expand_mode = 1
 wait_time = 1.5
 one_shot = true
 
+[node name="Cursor" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+z_index = 100
+material = SubResource("Material_cursor")
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 18.0
+offset_bottom = 34.0
+mouse_filter = 2
+texture = ExtResource("10_cursor")
+expand_mode = 1
+
 [connection signal="timeout" from="WelcomeDelay" to="." method="_on_welcome_delay_timeout"]
 [connection signal="installed" from="Screens/Installation" to="." method="_on_installation_finished"]
 [connection signal="continued" from="Screens/Kratt" to="." method="_on_kratt_continued"]
 [connection signal="accepted" from="Screens/KodukaijaPrompt" to="." method="_on_kodukaija_accepted"]
 [connection signal="declined" from="Screens/KodukaijaPrompt" to="." method="_show_kodukaija_introduction"]
 [connection signal="completed" from="Screens/Viljaneitsi" to="." method="_on_viljaneitsi_completed"]
+[connection signal="started" from="Screens/Viljaneitsi" to="." method="_on_viljaneitsi_started"]
+[connection signal="won" from="Screens/Viljaneitsi" to="." method="_on_encounter_won"]
 [connection signal="failed" from="Screens/Viljaneitsi" to="." method="_on_encounter_failed"]
 [connection signal="failed" from="Screens/Kodukaija" to="." method="_on_encounter_failed"]
 [connection signal="closed" from="Screens/Kodukaija" to="." method="_on_kodukaija_closed"]

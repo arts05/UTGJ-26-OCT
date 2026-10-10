@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bny18hqhw4jro"
+path="res://.godot/imported/Windows Error.mp3-4fcdf19c78c5e6ca06c515d5998cf2d7.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Windows Error.mp3"
+dest_files=["res://.godot/imported/Windows Error.mp3-4fcdf19c78c5e6ca06c515d5998cf2d7.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

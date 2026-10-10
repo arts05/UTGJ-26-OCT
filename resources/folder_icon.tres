@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/folder.png" id="1_folder"]
+
+[resource]
+resource_name = "Folder icon - trimmed canvas"
+atlas = ExtResource("1_folder")
+region = Rect2(164, 133, 800, 740)

@@ -3,6 +3,9 @@ extends Control
 
 @export var taskbar_height: float = 28.0
 @export var artwork: TextureRect
+@export var shadow: TextureRect
+@export var shadow_offset := Vector2(6, 8)
+@export var drag_shadow_offset := Vector2(11, 14)
 @export_range(0.0, 0.5) var opening_seconds: float = 0.24
 @export_range(0.0, 8.0) var idle_float_pixels: float = 0.0
 
@@ -14,6 +17,7 @@ var frame_material: ShaderMaterial
 var opening_tween: Tween
 var highlight_tween: Tween
 var flash_tween: Tween
+var shadow_tween: Tween
 
 
 func _ready() -> void:
@@ -40,6 +44,9 @@ func _on_visibility_changed() -> void:
 		opening_tween.kill()
 	if highlight_tween:
 		highlight_tween.kill()
+	if shadow_tween:
+		shadow_tween.kill()
+	shadow.position = artwork.position + shadow_offset
 	frame_material.set_shader_parameter("highlight_amount", 0.0)
 	if not is_visible_in_tree():
 		return
@@ -52,6 +59,11 @@ func _on_visibility_changed() -> void:
 	opening_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	opening_tween.tween_property(self, "scale", Vector2.ONE, opening_seconds)
 	opening_tween.tween_property(self, "modulate:a", 1.0, opening_seconds)
+
+
+func set_artwork_texture(texture: Texture2D) -> void:
+	artwork.texture = texture
+	shadow.texture = texture
 
 
 func flash() -> void:
@@ -67,6 +79,14 @@ func _set_highlight(amount: float) -> void:
 		highlight_tween.kill()
 	highlight_tween = create_tween()
 	highlight_tween.tween_property(frame_material, "shader_parameter/highlight_amount", amount, 0.12)
+
+
+func _set_shadow_lift(lifted: bool) -> void:
+	if shadow_tween:
+		shadow_tween.kill()
+	var target_offset := drag_shadow_offset if lifted else shadow_offset
+	shadow_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	shadow_tween.tween_property(shadow, "position", artwork.position + target_offset, 0.14)
 
 
 func _on_title_bar_mouse_entered() -> void:
@@ -94,6 +114,7 @@ func _on_title_bar_gui_input(event: InputEvent) -> void:
 			resting_position = position
 			float_time = 0.0
 			_set_highlight(0.0)
+		_set_shadow_lift(dragging)
 		accept_event()
 
 	if event is InputEventMouseMotion and dragging:

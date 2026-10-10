@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ghost_release.gd" id="1_release"]
+[ext_resource type="Shader" path="res://shaders/ghost_release.gdshader" id="2_mist"]
+
+[sub_resource type="FastNoiseLite" id="Noise_mist"]
+noise_type = 1
+frequency = 0.02
+fractal_octaves = 2
+
+[sub_resource type="NoiseTexture2D" id="Texture_mist"]
+width = 256
+height = 256
+seamless = true
+noise = SubResource("Noise_mist")
+
+[sub_resource type="ShaderMaterial" id="Material_mist"]
+resource_local_to_scene = true
+shader = ExtResource("2_mist")
+shader_parameter/mist_noise = SubResource("Texture_mist")
+
+[sub_resource type="QuadMesh" id="Mesh_mist"]
+size = Vector2(0.34, 0.45)
+
+[node name="GhostRelease" type="Node3D"]
+script = ExtResource("1_release")
+
+[node name="FlashLight" type="OmniLight3D" parent="."]
+position = Vector3(0, 0, 0.08)
+light_color = Color(0.86, 0.95, 1, 1)
+light_energy = 0.0
+light_specular = 0.25
+light_cull_mask = 3
+omni_range = 3.5
+
+[node name="Mist" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("Mesh_mist")
+material_override = SubResource("Material_mist")
+cast_shadow = 0

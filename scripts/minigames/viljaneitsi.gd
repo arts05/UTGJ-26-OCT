@@ -2,6 +2,8 @@ extends Control
 
 signal completed
 signal failed
+signal started
+signal won
 
 enum Phase { FOLDER, INTRODUCTION, TYPING, SUCCESS }
 
@@ -18,7 +20,6 @@ const WOLF_EXPRESSIONS: Array[Texture2D] = [
 @onready var folder = $FolderWindow
 @onready var wheat = $FolderWindow/Contents/Wheat
 @onready var character_window: Control = $CharacterWindow
-@onready var wolf: TextureRect = $CharacterWindow/Portrait
 @onready var speech = $CharacterWindow/Speech
 @onready var action_button: Button = $CharacterWindow/Speech/Panel/Margins/Stack/Actions/ActionButton
 @onready var instruction: Label = $FolderWindow/Contents/Prompt/Instruction
@@ -43,7 +44,7 @@ func reset() -> void:
 	wheat.reset()
 	folder.show_parent_folder()
 	character_window.hide()
-	wolf.texture = WOLF_EXPRESSIONS[0]
+	character_window.set_artwork_texture(WOLF_EXPRESSIONS[0])
 	speech.say("You want me to stop growing? Ask me properly.", "Begin")
 	instruction.text = "Type this %d times to stop the new files." % required_repetitions
 	phrase_label.text = phrase
@@ -82,6 +83,7 @@ func _on_action_pressed() -> void:
 	answer.grab_focus()
 	answer.edit()
 	set_process(true)
+	started.emit()
 
 
 func _process(delta: float) -> void:
@@ -105,7 +107,8 @@ func _on_answer_submitted(text: String) -> void:
 	folder.flash()
 	character_window.flash()
 	answer.clear()
-	wolf.texture = WOLF_EXPRESSIONS[mini(accepted_repetitions, WOLF_EXPRESSIONS.size() - 1)]
+	var expression_index := mini(accepted_repetitions, WOLF_EXPRESSIONS.size() - 1)
+	character_window.set_artwork_texture(WOLF_EXPRESSIONS[expression_index])
 	feedback.text = "%d of %d." % [accepted_repetitions, required_repetitions]
 	if accepted_repetitions == required_repetitions:
 		phase = Phase.SUCCESS
@@ -116,6 +119,7 @@ func _on_answer_submitted(text: String) -> void:
 		speech.say("All right. No more grain.", "Continue")
 		feedback.text = ""
 		answer.hide()
+		won.emit()
 
 
 func _normalize_phrase(text: String) -> String:

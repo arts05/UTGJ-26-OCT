@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://bn8bbdxqf3kfb"]
+
+[ext_resource type="Texture2D" uid="uid://crqdjn46oqd5p" path="res://assets/sprites/cursor.png" id="1_cursor"]
+
+[resource]
+resource_name = "Desktop cursor"
+atlas = ExtResource("1_cursor")
+region = Rect2(0, 1, 10, 18)

@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/kalev1.png" id="3_kalev"]
 [ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="4_button"]
 [ext_resource type="Material" path="res://resources/button_highlight.tres" id="5_highlight"]
+[ext_resource type="Texture2D" path="res://resources/antivirus_logo.tres" id="6_logo"]
 
 [node name="KodukaijaPrompt" instance=ExtResource("1_frame")]
 script = ExtResource("2_prompt")
@@ -15,6 +16,16 @@ offset_top = 8.0
 offset_right = 620.0
 offset_bottom = 42.0
 text = "KalevAV"
+
+[node name="AntivirusLogo" type="TextureRect" parent="."]
+offset_left = 68.0
+offset_top = 198.0
+offset_right = 232.0
+offset_bottom = 374.0
+mouse_filter = 2
+texture = ExtResource("6_logo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Kalevipoeg" type="TextureRect" parent="."]
 layout_mode = 1

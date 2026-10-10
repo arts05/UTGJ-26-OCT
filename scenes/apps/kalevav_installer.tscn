@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="4_button"]
 [ext_resource type="Material" path="res://resources/button_highlight.tres" id="5_highlight"]
 [ext_resource type="Shader" path="res://shaders/ui_highlight.gdshader" id="6_shader"]
+[ext_resource type="Texture2D" path="res://resources/antivirus_logo.tres" id="7_logo"]
 
 [sub_resource type="ShaderMaterial" id="Material_progress"]
 shader = ExtResource("6_shader")
@@ -20,6 +21,16 @@ offset_top = 8.0
 offset_right = 620.0
 offset_bottom = 42.0
 text = "KalevAV setup"
+
+[node name="AntivirusLogo" type="TextureRect" parent="."]
+offset_left = 68.0
+offset_top = 198.0
+offset_right = 232.0
+offset_bottom = 374.0
+mouse_filter = 2
+texture = ExtResource("7_logo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Kalevipoeg" type="TextureRect" parent="."]
 layout_mode = 1

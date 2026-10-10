@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c2i1xrxtdtpg4" path="res://assets/models/laud_Wood.png" id="7_table_texture"]
 [ext_resource type="PackedScene" uid="uid://6xdn4sr6a8sv" path="res://assets/models/whisky-glass.glb" id="8_whisky"]
 [ext_resource type="Texture2D" uid="uid://ciwx82fjd856o" path="res://assets/models/whisky-glass_GlassTransparent Base Color.png" id="9_glass_texture"]
+[ext_resource type="PackedScene" path="res://scenes/pc_status_lights.tscn" id="10_status_lights"]
 
 [sub_resource type="StandardMaterial3D" id="Material_floor"]
 albedo_color = Color(0.08, 0.08, 0.08, 1)
@@ -111,6 +112,10 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -0.44, 0.955621, -0.03)
 
 [node name="Cube" parent="PCCase" index="0" unique_id=1560702609]
 material_override = SubResource("Material_case")
+
+[node name="StatusLights" parent="PCCase" instance=ExtResource("10_status_lights")]
+position = Vector3(0.2265, -0.113, 0)
+rotation_degrees = Vector3(0, 90, 0)
 
 [node name="CeilingLight" type="OmniLight3D" parent="." unique_id=1890517079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 2.2, 0.1)

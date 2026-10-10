@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://qf0jh481bffq" path="res://assets/sprites/window.png" id="2_art"]
 [ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="3_theme"]
 [ext_resource type="Shader" path="res://shaders/window_ink.gdshader" id="4_ink"]
+[ext_resource type="Material" path="res://resources/window_shadow.tres" id="5_shadow"]
 
 [sub_resource type="ShaderMaterial" id="Material_ink"]
 resource_local_to_scene = true
@@ -13,13 +14,30 @@ shader = ExtResource("4_ink")
 atlas = ExtResource("2_art")
 region = Rect2(16, 240, 1480, 1072)
 
-[node name="WindowArt" type="Control" node_paths=PackedStringArray("artwork")]
+[node name="WindowArt" type="Control" node_paths=PackedStringArray("artwork", "shadow")]
 offset_right = 900.0
 offset_bottom = 652.0
 mouse_filter = 0
 script = ExtResource("1_drag")
 theme = ExtResource("3_theme")
 artwork = NodePath("Artwork")
+shadow = NodePath("Shadow")
+
+[node name="Shadow" type="TextureRect" parent="."]
+material = ExtResource("5_shadow")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 8.0
+offset_right = 6.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("Texture_window")
+expand_mode = 1
 
 [node name="Artwork" type="TextureRect" parent="."]
 material = SubResource("Material_ink")

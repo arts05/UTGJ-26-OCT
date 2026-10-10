@@ -22,5 +22,6 @@ func set_coverage(amount: float) -> void:
 		var file: Control = WHEAT_FILE.instantiate()
 		file.get_node("Name").text = "vili_%02d.png" % (filled_cells + 1)
 		add_child(file)
-		file.position = Vector2(column, row) * cell_size
+		var cell_origin := Vector2(column, row) * cell_size
+		file.position = cell_origin + (cell_size - file.size) * 0.5
 		filled_cells += 1
