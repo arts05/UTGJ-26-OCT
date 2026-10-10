@@ -4,15 +4,17 @@ extends Node3D
 @onready var ambient_music: AudioStreamPlayer = $AmbientMusic
 @onready var desktop = $Computer/ComputerViewport/Desktop
 @onready var case_lights = $Room/PCCase/StatusLights
-@onready var ghost_release = $Room/GhostRelease
+@onready var encounter_release = $EncounterRelease
 @onready var scene_fade: SceneFade = $SceneFade
 
 
 func _ready() -> void:
 	desktop.drive_activity_changed.connect(case_lights.set_drive_busy)
 	desktop.restart_state_changed.connect(case_lights.set_restarting)
-	desktop.encounter_won.connect(ghost_release.play)
+	desktop.encounter_won.connect(encounter_release.play)
+	encounter_release.finished.connect(desktop.finish_encounter_release)
 	desktop.ending_reached.connect(ambient_music.stop)
+	desktop.ending_reached.connect($StreetAmbience.stop)
 	var target_volume_db := ambient_music.volume_db
 	ambient_music.volume_db = -80.0
 	ambient_music.play()

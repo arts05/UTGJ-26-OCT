@@ -65,7 +65,7 @@ light_cull_mask = 2
 shadow_enabled = true
 omni_range = 0.9
 
-[node name="ScreenSpill" type="OmniLight3D" parent="." node_paths=PackedStringArray("desktop_viewport", "casing_light", "screen_dust")]
+[node name="ScreenSpill" type="OmniLight3D" parent="." node_paths=PackedStringArray("desktop_viewport", "color_sample", "casing_light", "screen_dust")]
 position = Vector3(0, 0.02, 0.31)
 light_color = Color(0.55, 0.72, 1, 1)
 light_energy = 0.0
@@ -76,6 +76,7 @@ shadow_enabled = false
 omni_range = 1.5
 script = ExtResource("5_screen_light")
 desktop_viewport = NodePath("../ComputerViewport")
+color_sample = NodePath("../LightColorSample")
 casing_light = NodePath("../ScreenGlow")
 screen_dust = NodePath("../ScreenDust")
 
@@ -110,6 +111,18 @@ render_target_update_mode = 4
 canvas_item_default_texture_filter = 0
 
 [node name="Desktop" parent="ComputerViewport" instance=ExtResource("1_desktop")]
+
+[node name="LightColorSample" type="SubViewport" parent="."]
+disable_3d = true
+size = Vector2i(12, 9)
+render_target_update_mode = 0
+canvas_item_default_texture_filter = 0
+
+[node name="DesktopSample" type="TextureRect" parent="LightColorSample"]
+offset_right = 12.0
+offset_bottom = 9.0
+mouse_filter = 2
+expand_mode = 1
 
 [node name="Audio" type="Node3D" parent="."]
 position = Vector3(0, 0.035, 0.205)

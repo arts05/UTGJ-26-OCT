@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal interacted
+
 @export var movement_speed: float = 150.0
 
 var controls_enabled: bool = false
@@ -18,6 +20,11 @@ func _input(event: InputEvent) -> void:
 	var key: int = event.physical_keycode
 	if key == 0:
 		key = event.keycode
+	if key == KEY_SPACE:
+		if event.pressed:
+			interacted.emit()
+		get_viewport().set_input_as_handled()
+		return
 	if key not in [KEY_W, KEY_A, KEY_S, KEY_D, KEY_UP, KEY_LEFT, KEY_DOWN, KEY_RIGHT]:
 		return
 	if event.pressed:

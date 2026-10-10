@@ -2,14 +2,13 @@ extends OmniLight3D
 ## Lets the live desktop light the desk and props, with a softer light on the casing.
 
 @export var desktop_viewport: SubViewport
+@export var color_sample: SubViewport
 @export var casing_light: OmniLight3D
 @export var screen_dust: CPUParticles3D
 @export var maximum_energy: float = 0.35
 @export var casing_maximum_energy: float = 0.025
 @export_range(0.1, 1.0) var sample_interval: float = 0.2
 
-const SAMPLE_COLUMNS: int = 12
-const SAMPLE_ROWS: int = 9
 const FADE_SPEED: float = 8.0
 
 var seconds_until_sample: float = 0.2
@@ -23,8 +22,8 @@ func _ready() -> void:
 	if DisplayServer.get_name() == "headless":
 		return
 
-	await RenderingServer.frame_post_draw
-	_sample_screen()
+	color_sample.get_node("DesktopSample").texture = desktop_viewport.get_texture()
+	await _sample_screen()
 	seconds_until_sample = sample_interval
 	set_process(true)
 
@@ -32,8 +31,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	seconds_until_sample -= delta
 	if seconds_until_sample <= 0.0:
-		_sample_screen()
 		seconds_until_sample = sample_interval
+		_sample_screen()
 
 	var blend := 1.0 - exp(-FADE_SPEED * delta)
 	light_color = light_color.lerp(target_color, blend)
@@ -47,17 +46,17 @@ func _process(delta: float) -> void:
 
 
 func _sample_screen() -> void:
-	# Sample periodically to keep the GPU readback out of most frames.
-	var screen_image := desktop_viewport.get_texture().get_image()
+	# Downsample on the GPU; copy only 108 pixels instead of the full desktop.
+	color_sample.render_target_update_mode = SubViewport.UPDATE_ONCE
+	await RenderingServer.frame_post_draw
+	var screen_image := color_sample.get_texture().get_image()
 	var total := Color(0, 0, 0, 0)
-	for row in range(SAMPLE_ROWS):
-		for column in range(SAMPLE_COLUMNS):
-			var x := int((column + 0.5) * screen_image.get_width() / SAMPLE_COLUMNS)
-			var y := int((row + 0.5) * screen_image.get_height() / SAMPLE_ROWS)
+	for y in range(screen_image.get_height()):
+		for x in range(screen_image.get_width()):
 			total += screen_image.get_pixel(x, y).srgb_to_linear()
 
 	# Average light in linear space, then separate its hue from its intensity.
-	var average := total / float(SAMPLE_COLUMNS * SAMPLE_ROWS)
+	var average := total / float(screen_image.get_width() * screen_image.get_height())
 	target_brightness = maxf(average.r, maxf(average.g, average.b))
 	if target_brightness > 0.0:
 		target_color = Color(

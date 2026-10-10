@@ -31,6 +31,8 @@ var breathing_time: float = 0.0
 var room_motion_weight: float = 1.0
 var view_transform: Transform3D
 var returning_to_room: bool = false
+var controls_locked: bool = false
+var zoom_tween: Tween
 
 
 func _ready() -> void:
@@ -52,6 +54,8 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if controls_locked:
+		return
 	if view_mode == ViewMode.MOVING and not returning_to_room:
 		return
 
@@ -108,16 +112,29 @@ func _apply_view() -> void:
 	global_position.y += breath * room_motion_weight
 
 
-func _move_to_view(target: Marker3D, next_mode: ViewMode) -> void:
+func set_controls_locked(locked: bool) -> void:
+	controls_locked = locked
+	computer_focus_changed.emit(view_mode == ViewMode.COMPUTER and not locked)
+	# Wins come from a key or click: request capture here while browsers allow it.
+	if locked and get_window().has_focus():
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
+
+func pull_back(seconds: float) -> void:
+	_move_to_view(room_view, ViewMode.ROOM, seconds)
+
+
+func _move_to_view(target: Marker3D, next_mode: ViewMode, seconds: float = 0.0) -> void:
+	if zoom_tween:
+		zoom_tween.kill()
+	var duration := seconds if seconds > 0.0 else zoom_duration
 	view_mode = ViewMode.MOVING
 	returning_to_room = next_mode == ViewMode.ROOM
 	computer_focus_changed.emit(false)
 
 	# Capture during the key event, rather than after the animation completes.
-	if returning_to_room:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	else:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if get_window().has_focus():
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if returning_to_room else Input.MOUSE_MODE_VISIBLE
 
 	view_transform = global_transform
 	look_yaw_degrees = 0.0
@@ -127,17 +144,21 @@ func _move_to_view(target: Marker3D, next_mode: ViewMode) -> void:
 	current_roll_degrees = 0.0
 	room_motion_weight = 0.0
 
-	var tween := create_tween().set_parallel(true)
-	tween.set_trans(Tween.TRANS_SINE)
-	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(self, "view_transform", target.global_transform, zoom_duration)
+	zoom_tween = create_tween().set_parallel(true)
+	if controls_locked:
+		zoom_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	else:
+		zoom_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	zoom_tween.tween_property(self, "view_transform", target.global_transform, duration)
 	if returning_to_room:
-		tween.tween_property(self, "room_motion_weight", 1.0, zoom_duration)
-	await tween.finished
+		zoom_tween.tween_property(self, "room_motion_weight", 1.0, duration)
+	zoom_tween.finished.connect(_finish_view_move.bind(next_mode))
 
+
+func _finish_view_move(next_mode: ViewMode) -> void:
 	returning_to_room = false
 	view_mode = next_mode
-	computer_focus_changed.emit(view_mode == ViewMode.COMPUTER)
+	computer_focus_changed.emit(view_mode == ViewMode.COMPUTER and not controls_locked)
 
 
 func _on_window_focus_exited() -> void:

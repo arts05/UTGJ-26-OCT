@@ -8,6 +8,8 @@
 [ext_resource type="Shader" path="res://shaders/shadow_vignette.gdshader" id="6_shadow_vignette"]
 [ext_resource type="PackedScene" path="res://scenes/scene_fade.tscn" id="7_fade"]
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="8_pause"]
+[ext_resource type="PackedScene" path="res://scenes/street_ambience.tscn" id="9_street"]
+[ext_resource type="Script" path="res://scripts/encounter_release.gd" id="10_release_sequence"]
 
 [sub_resource type="FastNoiseLite" id="Noise_shadows"]
 noise_type = 1
@@ -45,6 +47,9 @@ bus = &"Music"
 [node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03430806, 0.020355403, -0.0025669932)
 
+[node name="StreetAmbience" parent="." instance=ExtResource("9_street")]
+position = Vector3(-3.2, 0.6, 0.1)
+
 [node name="Computer" parent="." unique_id=359784547 instance=ExtResource("1_computer")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.985, 0)
 
@@ -65,6 +70,13 @@ transform = Transform3D(1, 0, 0, 0, 0.9902681, 0.1391731, 0, -0.1391731, 0.99026
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1525173281]
 environment = SubResource("Environment_room")
+
+[node name="EncounterRelease" type="Node" parent="." node_paths=PackedStringArray("camera", "computer", "pc_case", "ghost_release")]
+script = ExtResource("10_release_sequence")
+camera = NodePath("../Camera3D")
+computer = NodePath("../Computer")
+pc_case = NodePath("../Room/PCCase")
+ghost_release = NodePath("../Room/GhostRelease")
 
 [node name="RoomAtmosphere" type="CanvasLayer" parent="."]
 

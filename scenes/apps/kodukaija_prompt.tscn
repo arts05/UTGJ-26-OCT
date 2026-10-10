@@ -98,7 +98,7 @@ offset_bottom = 145.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_font_sizes/font_size = 22
-text = "Move through the house with WASD or the arrow keys.\n\nIf the screen goes dark, KalevAV will restart this file."
+text = "Find its name.\n\nWASD / arrows · Space"
 autowrap_mode = 2
 
 [connection signal="pressed" from="YesButton" to="." method="_on_run_pressed"]

@@ -3,6 +3,9 @@
 [ext_resource type="Script" path="res://scripts/minigames/house_player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/minigames/house_ghost.gd" id="2_ghost"]
 
+[ext_resource type="Script" path="res://scripts/minigames/house_navigation.gd" id="3_navigation"]
+[ext_resource type="Script" path="res://scripts/minigames/house_clue.gd" id="4_clue"]
+
 [sub_resource type="CircleShape2D" id="Shape_player"]
 radius = 12.0
 
@@ -13,6 +16,7 @@ radius = 15.0
 radius = 25.0
 
 [node name="House" type="Node2D"]
+script = ExtResource("3_navigation")
 
 [node name="Floors" type="Node2D" parent="."]
 
@@ -368,13 +372,15 @@ color = Color(0.38, 0.68, 0.9, 1)
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(2.5, 2.5)
 
-[node name="Ghost" type="CharacterBody2D" parent="." node_paths=PackedStringArray("patrol_points")]
+[node name="Ghost" type="CharacterBody2D" parent="." node_paths=PackedStringArray("patrol_points", "player", "house")]
 position = Vector2(820, 460)
 collision_layer = 4
 collision_mask = 1
 motion_mode = 1
 script = ExtResource("2_ghost")
 patrol_points = NodePath("../GhostPatrol")
+player = NodePath("../Player")
+house = NodePath("..")
 
 [node name="Shape" type="CollisionShape2D" parent="Ghost"]
 shape = SubResource("Shape_ghost")
@@ -390,4 +396,58 @@ collision_mask = 2
 [node name="Shape" type="CollisionShape2D" parent="Ghost/Contact"]
 shape = SubResource("Shape_contact")
 
-[connection signal="body_entered" from="Ghost/Contact" to="Ghost" method="_on_contact_body_entered"]
+
+
+[node name="Clues" type="Node2D" parent="."]
+
+[node name="Kitchen" type="Marker2D" parent="Clues"]
+position = Vector2(140, 330)
+script = ExtResource("4_clue")
+name_fragment = "JU"
+
+[node name="Paper" type="Polygon2D" parent="Clues/Kitchen"]
+polygon = PackedVector2Array(-11, -15, 11, -15, 11, 15, -11, 15)
+color = Color(0.93, 0.84, 0.57, 1)
+
+[node name="Writing" type="Line2D" parent="Clues/Kitchen/Paper"]
+points = PackedVector2Array(-6, -7, 6, -7, -6, 0, 6, 0, -6, 7, 3, 7)
+width = 2.0
+default_color = Color(0.25, 0.22, 0.17, 1)
+
+[node name="Bedroom" type="Marker2D" parent="Clues"]
+position = Vector2(520, 180)
+script = ExtResource("4_clue")
+name_fragment = "HA"
+
+[node name="Paper" type="Polygon2D" parent="Clues/Bedroom"]
+polygon = PackedVector2Array(-11, -15, 11, -15, 11, 15, -11, 15)
+color = Color(0.93, 0.84, 0.57, 1)
+
+[node name="Writing" type="Line2D" parent="Clues/Bedroom/Paper"]
+points = PackedVector2Array(-6, -7, 6, -7, -6, 0, 6, 0, -6, 7, 3, 7)
+width = 2.0
+default_color = Color(0.25, 0.22, 0.17, 1)
+
+[node name="LastLetter" type="Marker2D" parent="Clues"]
+position = Vector2(825, 105)
+script = ExtResource("4_clue")
+name_fragment = "N"
+
+[node name="Paper" type="Polygon2D" parent="Clues/LastLetter"]
+polygon = PackedVector2Array(-11, -15, 11, -15, 11, 15, -11, 15)
+color = Color(0.93, 0.84, 0.57, 1)
+
+[node name="Writing" type="Line2D" parent="Clues/LastLetter/Paper"]
+points = PackedVector2Array(-6, -7, 6, -7, -6, 0, 6, 0, -6, 7, 3, 7)
+width = 2.0
+default_color = Color(0.25, 0.22, 0.17, 1)
+
+[node name="Exit" type="Marker2D" parent="."]
+position = Vector2(845, 730)
+
+[node name="Door" type="Polygon2D" parent="Exit"]
+polygon = PackedVector2Array(-5, -30, 18, -30, 18, 30, -5, 30)
+color = Color(0.24, 0.55, 0.41, 1)
+
+[node name="SummoningPoint" type="Marker2D" parent="."]
+position = Vector2(755, 200)

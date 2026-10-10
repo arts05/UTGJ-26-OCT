@@ -186,7 +186,7 @@ position = Vector3(0.2265, -0.101, -0.035)
 rotation_degrees = Vector3(0, 90, 0)
 
 [node name="GhostRelease" parent="." instance=ExtResource("11_ghost_release")]
-position = Vector3(0.16, 1.16, -0.1)
+position = Vector3(-0.034, 1.02, 0.2)
 
 [node name="CeilingLight" type="OmniLight3D" parent="." unique_id=1890517079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6, 2.2, 0.1)

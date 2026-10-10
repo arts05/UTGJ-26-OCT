@@ -41,7 +41,6 @@ enum Stage {
 @onready var crash_screen = $Screens/CrashScreen
 @onready var kratt_delay: Timer = $KrattDelay
 @onready var victory_pause: Timer = $VictoryPause
-@onready var transitions: AnimationPlayer = $Transitions
 @onready var taskbar: TextureRect = $Taskbar
 @onready var cursor: TextureRect = $Cursor
 
@@ -137,18 +136,21 @@ func _on_carl_accepted() -> void:
 
 
 func _on_carl_declined() -> void:
-	stage = Stage.VILJANEITSI
-	_show_screen(viljaneitsi)
+	if skip_kodukaija_for_carl_testing:
+		stage = Stage.VILJANEITSI
+		_show_screen(viljaneitsi)
+	else:
+		stage = Stage.KODUKAIJA
+		_show_screen(kodukaija)
 
 
 func _on_carl_won() -> void:
 	stage = Stage.CARL_VICTORY
 	_on_encounter_won()
-	transitions.play(&"carl_victory")
 
 
-func _on_transition_finished(animation_name: StringName) -> void:
-	if animation_name == &"carl_victory":
+func finish_encounter_release() -> void:
+	if stage == Stage.CARL_VICTORY:
 		_show_screen(null)
 		victory_pause.start()
 
@@ -195,6 +197,11 @@ func _on_kodukaija_accepted() -> void:
 	stage = Stage.KODUKAIJA
 	kodukaija.reset()
 	_show_screen(kodukaija)
+
+
+func _on_kodukaija_completed() -> void:
+	stage = Stage.CARL_PROMPT
+	_show_screen(carl_prompt)
 
 
 func _on_encounter_failed() -> void:

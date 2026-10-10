@@ -1,0 +1,9 @@
+Godot Engine Logo
+Copyright (c) 2017 Andrea Calabró
+
+Licensed under Creative Commons Attribution 4.0 International:
+https://creativecommons.org/licenses/by/4.0/
+
+Unmodified monochrome logo from the official Godot press kit:
+https://godotengine.org/assets/press/logo_large_monochrome_dark.svg
+https://godotengine.org/press/
