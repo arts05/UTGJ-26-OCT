@@ -20,21 +20,23 @@ shader = ExtResource("2_mist")
 shader_parameter/mist_noise = SubResource("Texture_mist")
 
 [sub_resource type="QuadMesh" id="Mesh_mist"]
-size = Vector2(0.34, 0.45)
+size = Vector2(0.26, 0.48)
 
 [node name="GhostRelease" type="Node3D"]
 script = ExtResource("1_release")
 
 [node name="FlashLight" type="OmniLight3D" parent="."]
-position = Vector3(0, 0, 0.08)
+position = Vector3(-0.12, 0.35, 0.02)
 light_color = Color(0.86, 0.95, 1, 1)
 light_energy = 0.0
 light_specular = 0.25
-light_cull_mask = 3
-omni_range = 3.5
+light_cull_mask = 1
+shadow_enabled = true
+omni_range = 4.0
 
 [node name="Mist" type="MeshInstance3D" parent="."]
 visible = false
+rotation_degrees = Vector3(0, -25, 0)
 mesh = SubResource("Mesh_mist")
 material_override = SubResource("Material_mist")
 cast_shadow = 0

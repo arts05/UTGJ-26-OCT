@@ -4,6 +4,8 @@ extends Control
 signal encounter_won
 signal drive_activity_changed(busy: bool)
 signal restart_state_changed(restarting: bool)
+signal button_clicked
+signal notification_requested
 
 enum Stage {
 	DESKTOP,
@@ -18,13 +20,14 @@ enum Stage {
 
 @export var cursor_hotspot: Vector2 = Vector2(2, 2)
 
+@onready var installer_shortcut: Button = $InstallerShortcut
 @onready var installation = $Screens/Installation
 @onready var kratt = $Screens/Kratt
 @onready var viljaneitsi = $Screens/Viljaneitsi
 @onready var kodukaija_prompt = $Screens/KodukaijaPrompt
 @onready var kodukaija = $Screens/Kodukaija
 @onready var crash_screen = $Screens/CrashScreen
-@onready var welcome_delay: Timer = $WelcomeDelay
+@onready var kratt_delay: Timer = $KrattDelay
 @onready var taskbar: TextureRect = $Taskbar
 @onready var cursor: TextureRect = $Cursor
 
@@ -32,19 +35,18 @@ var stage: Stage = Stage.DESKTOP
 var active_screen: Control
 var retry_screen: Control
 var computer_focused: bool = false
-var startup_started: bool = false
 var pointer_position := Vector2(-1, -1)
 
 
 func _ready() -> void:
+	# Sound follows button activation, so dragging and disabled buttons stay quiet.
+	for button: BaseButton in find_children("*", "BaseButton", true, false):
+		button.pressed.connect(button_clicked.emit)
 	_show_screen(null)
 
 
 func set_computer_focused(focused: bool) -> void:
 	computer_focused = focused
-	if focused and stage == Stage.DESKTOP and not startup_started:
-		startup_started = true
-		welcome_delay.start()
 	if active_screen == viljaneitsi:
 		viljaneitsi.set_computer_focused(focused)
 	elif active_screen == kodukaija:
@@ -67,21 +69,30 @@ func _show_screen(next_screen: Control) -> void:
 		screen.process_mode = Node.PROCESS_MODE_DISABLED
 	active_screen = next_screen
 	taskbar.visible = next_screen != crash_screen and next_screen != kodukaija
+	installer_shortcut.visible = taskbar.visible
+	installer_shortcut.disabled = stage != Stage.DESKTOP
 	if active_screen != null:
 		active_screen.show()
 		active_screen.process_mode = Node.PROCESS_MODE_INHERIT
+	if next_screen == kratt or next_screen == kodukaija_prompt:
+		notification_requested.emit()
 	set_cursor_position(pointer_position)
 	set_computer_focused(computer_focused)
 
 
-func _on_welcome_delay_timeout() -> void:
+func _on_installer_shortcut_pressed() -> void:
 	stage = Stage.INSTALLATION
 	_show_screen(installation)
 
 
 func _on_installation_finished() -> void:
 	stage = Stage.DISK_WARNING
-	kratt.say("Your disk is full.\n\nThe Viljaneitsi folder is taking up the space. Let's open it.", "Show folder", 0)
+	_show_screen(null)
+	kratt_delay.start()
+
+
+func _on_kratt_delay_timeout() -> void:
+	kratt.say("Your disk is full.\n\nThe Viljaneitsi folder is taking up the space. Let's speak to her first.", "Meet Viljaneitsi", 0)
 	_show_screen(kratt)
 
 

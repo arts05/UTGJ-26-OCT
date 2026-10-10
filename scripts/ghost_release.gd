@@ -1,10 +1,10 @@
 extends Node3D
-## A brief burst of room light, followed by a wisp rising out of the glass.
+## A room light pulse and a wisp drifting up behind the computer.
 
-@export var flash_energy: float = 1.1
+@export var flash_energy: float = 1.0
 @export_range(0.5, 5.0) var release_seconds: float = 2.4
-@export var rise_distance: float = 0.65
-@export_range(0.0, 1.0) var mist_opacity: float = 0.42
+@export var drift_offset: Vector3 = Vector3(0.3, 0.65, -0.18)
+@export_range(0.0, 1.0) var mist_opacity: float = 0.33
 
 const FLASH_RISE_SECONDS: float = 0.08
 const FLASH_FADE_START: float = 0.2
@@ -36,8 +36,8 @@ func play() -> void:
 	mist.show()
 	_set_effect_progress(0.0)
 
-	var mist_end_position := mist_start_position + Vector3(0, rise_distance, 0.06)
-	var mist_end_scale := mist_start_scale * Vector3(2.2, 1.6, 1)
+	var mist_end_position := mist_start_position + drift_offset
+	var mist_end_scale := mist_start_scale * Vector3(1.6, 1.7, 1)
 	release_tween = create_tween().set_parallel()
 	release_tween.tween_property(mist, "position", mist_end_position, release_seconds)
 	release_tween.tween_property(mist, "scale", mist_end_scale, release_seconds)

@@ -1,6 +1,7 @@
 extends "res://scripts/apps/window_art.gd"
 
 signal installed
+signal installation_completed
 
 enum Page { WELCOME, EXPLANATION, INSTALLING, COMPLETE }
 
@@ -60,3 +61,4 @@ func _process(delta: float) -> void:
 		status.text = "KalevAV is ready.\n\nKratt has something to show you."
 		install_button.disabled = false
 		install_button.text = "Finish"
+		installation_completed.emit()

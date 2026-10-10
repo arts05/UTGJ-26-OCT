@@ -11,6 +11,20 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/desktopbar.png" id="9_taskbar"]
 [ext_resource type="Texture2D" path="res://resources/desktop_cursor.tres" id="10_cursor"]
 [ext_resource type="Shader" path="res://shaders/cursor_outline.gdshader" id="11_cursor_outline"]
+[ext_resource type="Texture2D" path="res://resources/antivirus_logo.tres" id="12_installer_icon"]
+
+[sub_resource type="StyleBoxEmpty" id="Style_shortcut_clear"]
+
+[sub_resource type="StyleBoxFlat" id="Style_shortcut_hover"]
+bg_color = Color(0.2, 0.4, 0.75, 0.25)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.75, 0.85, 1, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="Style_shortcut_pressed"]
+bg_color = Color(0.12, 0.3, 0.65, 0.5)
 
 [sub_resource type="ShaderMaterial" id="Material_cursor"]
 shader = ExtResource("11_cursor_outline")
@@ -39,6 +53,42 @@ mouse_filter = 2
 texture = ExtResource("7_background")
 expand_mode = 1
 
+[node name="InstallerShortcut" type="Button" parent="."]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 120.0
+offset_bottom = 132.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("Style_shortcut_clear")
+theme_override_styles/hover = SubResource("Style_shortcut_hover")
+theme_override_styles/pressed = SubResource("Style_shortcut_pressed")
+theme_override_styles/disabled = SubResource("Style_shortcut_clear")
+
+[node name="Icon" type="TextureRect" parent="InstallerShortcut"]
+texture_filter = 1
+offset_left = 16.0
+offset_top = 4.0
+offset_right = 80.0
+offset_bottom = 72.0
+mouse_filter = 2
+texture = ExtResource("12_installer_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="InstallerShortcut"]
+offset_top = 78.0
+offset_right = 96.0
+offset_bottom = 104.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 20
+text = "KalevAV"
+horizontal_alignment = 1
+
 [node name="Screens" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -66,9 +116,9 @@ offset_bottom = 860.0
 [node name="KodukaijaPrompt" parent="Screens" instance=ExtResource("8_prompt")]
 visible = false
 offset_left = 150.0
-offset_top = 110.0
+offset_top = 186.0
 offset_right = 1050.0
-offset_bottom = 762.0
+offset_bottom = 686.0
 
 [node name="Viljaneitsi" parent="Screens" instance=ExtResource("4_viljaneitsi")]
 visible = false
@@ -90,8 +140,8 @@ grow_vertical = 0
 texture = SubResource("Texture_taskbar")
 expand_mode = 1
 
-[node name="WelcomeDelay" type="Timer" parent="."]
-wait_time = 1.5
+[node name="KrattDelay" type="Timer" parent="."]
+wait_time = 1.0
 one_shot = true
 
 [node name="Cursor" type="TextureRect" parent="."]
@@ -107,7 +157,8 @@ mouse_filter = 2
 texture = ExtResource("10_cursor")
 expand_mode = 1
 
-[connection signal="timeout" from="WelcomeDelay" to="." method="_on_welcome_delay_timeout"]
+[connection signal="pressed" from="InstallerShortcut" to="." method="_on_installer_shortcut_pressed"]
+[connection signal="timeout" from="KrattDelay" to="." method="_on_kratt_delay_timeout"]
 [connection signal="installed" from="Screens/Installation" to="." method="_on_installation_finished"]
 [connection signal="continued" from="Screens/Kratt" to="." method="_on_kratt_continued"]
 [connection signal="accepted" from="Screens/KodukaijaPrompt" to="." method="_on_kodukaija_accepted"]

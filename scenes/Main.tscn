@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cciot774okn1k" path="res://scenes/Computer.tscn" id="1_computer"]
 [ext_resource type="Script" uid="uid://bgm102ufcprno" path="res://scripts/camera.gd" id="2_rvslj"]
 [ext_resource type="PackedScene" uid="uid://dn32y2jhevf8h" path="res://scenes/Room.tscn" id="3_room"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="4_main"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -14,6 +15,7 @@ ambient_light_energy = 0.055
 reflected_light_source = 1
 
 [node name="main" type="Node3D" unique_id=763560267]
+script = ExtResource("4_main")
 
 [node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03430806, 0.020355403, -0.0025669932)

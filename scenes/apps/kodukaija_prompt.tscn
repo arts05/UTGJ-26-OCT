@@ -2,94 +2,110 @@
 
 [ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_frame"]
 [ext_resource type="Script" path="res://scripts/apps/kodukaija_prompt.gd" id="2_prompt"]
-[ext_resource type="Texture2D" path="res://assets/sprites/kalev1.png" id="3_kalev"]
-[ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="4_button"]
-[ext_resource type="Material" path="res://resources/button_highlight.tres" id="5_highlight"]
-[ext_resource type="Texture2D" path="res://resources/antivirus_logo.tres" id="6_logo"]
+[ext_resource type="Texture2D" path="res://resources/kodukaija_installer.tres" id="3_artwork"]
+
+[sub_resource type="StyleBoxEmpty" id="Style_clear"]
+
+[sub_resource type="StyleBoxFlat" id="Style_hover"]
+bg_color = Color(1, 1, 1, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.3, 0.45, 0.65)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="Style_pressed"]
+bg_color = Color(0, 0, 0, 0.12)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_left = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="Theme" id="Theme_drawn_buttons"]
+Button/styles/normal = SubResource("Style_clear")
+Button/styles/hover = SubResource("Style_hover")
+Button/styles/pressed = SubResource("Style_pressed")
+Button/styles/hover_pressed = SubResource("Style_pressed")
+Button/styles/focus = SubResource("Style_clear")
+Button/styles/disabled = SubResource("Style_clear")
 
 [node name="KodukaijaPrompt" instance=ExtResource("1_frame")]
+offset_bottom = 500.0
+theme = SubResource("Theme_drawn_buttons")
 script = ExtResource("2_prompt")
 
-[node name="Title" type="Label" parent="."]
-offset_left = 36.0
-offset_top = 8.0
-offset_right = 620.0
-offset_bottom = 42.0
-text = "KalevAV"
+[node name="Shadow" parent="." index="0"]
+texture = ExtResource("3_artwork")
 
-[node name="AntivirusLogo" type="TextureRect" parent="."]
-offset_left = 68.0
-offset_top = 198.0
-offset_right = 232.0
-offset_bottom = 374.0
+[node name="Artwork" parent="." index="1"]
+texture = ExtResource("3_artwork")
+
+[node name="TitleBar" parent="." index="2"]
+offset_right = -76.0
+offset_bottom = 53.0
+
+[node name="YesButton" type="Button" parent="."]
+offset_left = 569.0
+offset_top = 342.0
+offset_right = 709.0
+offset_bottom = 385.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "Run Kodukäija.exe"
+
+[node name="NoButton" type="Button" parent="."]
+offset_left = 727.0
+offset_top = 342.0
+offset_right = 867.0
+offset_bottom = 385.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "Return to Kratt"
+
+[node name="CloseButton" type="Button" parent="."]
+offset_left = 825.0
+offset_top = 18.0
+offset_right = 885.0
+offset_bottom = 52.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+tooltip_text = "Close"
+
+[node name="DetailsButton" type="Button" parent="."]
+offset_left = 32.0
+offset_top = 342.0
+offset_right = 236.0
+offset_bottom = 387.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+toggle_mode = true
+tooltip_text = "Show or hide the controls"
+
+[node name="Details" type="ColorRect" parent="."]
+visible = false
+offset_left = 20.0
+offset_top = 160.0
+offset_right = 880.0
+offset_bottom = 317.0
 mouse_filter = 2
-texture = ExtResource("6_logo")
-expand_mode = 1
-stretch_mode = 5
+color = Color(1, 1, 1, 1)
 
-[node name="Kalevipoeg" type="TextureRect" parent="."]
-layout_mode = 1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 18.0
-offset_top = -272.0
-offset_right = 276.0
-offset_bottom = -14.0
-grow_vertical = 0
+[node name="Instructions" type="Label" parent="Details"]
+offset_left = 88.0
+offset_top = 15.0
+offset_right = 804.0
+offset_bottom = 145.0
 mouse_filter = 2
-texture = ExtResource("3_kalev")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
-
-[node name="Content" type="MarginContainer" parent="."]
-offset_left = 294.0
-offset_top = 194.0
-offset_right = 852.0
-offset_bottom = 632.0
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="Stack" type="VBoxContainer" parent="Content"]
-layout_mode = 2
-theme_override_constants/separation = 18
-
-[node name="Heading" type="Label" parent="Content/Stack"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "Open Kodukäija.exe?"
-
-[node name="Instructions" type="Label" parent="Content/Stack"]
-custom_minimum_size = Vector2(0, 160)
-layout_mode = 2
-size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
+theme_override_font_sizes/font_size = 22
 text = "Move through the house with WASD or the arrow keys.\n\nIf the screen goes dark, KalevAV will restart this file."
 autowrap_mode = 2
 
-[node name="Actions" type="HBoxContainer" parent="Content/Stack"]
-layout_mode = 2
-theme_override_constants/separation = 18
-alignment = 2
-
-[node name="BackButton" type="Button" parent="Content/Stack/Actions"]
-material = ExtResource("5_highlight")
-custom_minimum_size = Vector2(170, 54)
-layout_mode = 2
-focus_mode = 0
-mouse_default_cursor_shape = 2
-script = ExtResource("4_button")
-text = "Back"
-
-[node name="RunButton" type="Button" parent="Content/Stack/Actions"]
-material = ExtResource("5_highlight")
-custom_minimum_size = Vector2(170, 54)
-layout_mode = 2
-focus_mode = 0
-mouse_default_cursor_shape = 2
-script = ExtResource("4_button")
-text = "Run"
-
-[connection signal="pressed" from="Content/Stack/Actions/BackButton" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Content/Stack/Actions/RunButton" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="YesButton" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="NoButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="CloseButton" to="." method="_on_back_pressed"]
+[connection signal="toggled" from="DetailsButton" to="." method="_on_details_toggled"]

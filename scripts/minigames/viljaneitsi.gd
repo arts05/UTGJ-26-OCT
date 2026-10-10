@@ -4,8 +4,10 @@ signal completed
 signal failed
 signal started
 signal won
+signal answer_accepted
+signal answer_rejected
 
-enum Phase { FOLDER, INTRODUCTION, TYPING, SUCCESS }
+enum Phase { INTRODUCTION, READY, TYPING, SUCCESS }
 
 @export_range(5.0, 180.0) var time_limit_seconds: float = 60.0
 @export_range(1, 10) var required_repetitions: int = 3
@@ -27,7 +29,7 @@ const WOLF_EXPRESSIONS: Array[Texture2D] = [
 @onready var answer: LineEdit = $FolderWindow/Contents/Prompt/Answer
 @onready var feedback: Label = $FolderWindow/Contents/Prompt/Feedback
 
-var phase: Phase = Phase.FOLDER
+var phase: Phase = Phase.INTRODUCTION
 var elapsed_seconds: float = 0.0
 var accepted_repetitions: int = 0
 
@@ -38,14 +40,15 @@ func _ready() -> void:
 
 func reset() -> void:
 	set_process(false)
-	phase = Phase.FOLDER
+	phase = Phase.INTRODUCTION
 	elapsed_seconds = 0.0
 	accepted_repetitions = 0
 	wheat.reset()
+	folder.hide()
 	folder.show_parent_folder()
-	character_window.hide()
+	character_window.show()
 	character_window.set_artwork_texture(WOLF_EXPRESSIONS[0])
-	speech.say("You want me to stop growing? Ask me properly.", "Begin")
+	speech.say("I am Viljaneitsi.\n\nThis disk is my field. Every grain I grow becomes another file.", "Open my folder")
 	instruction.text = "Type this %d times to stop the new files." % required_repetitions
 	phrase_label.text = phrase
 	feedback.text = "Press Enter after each line."
@@ -54,15 +57,19 @@ func reset() -> void:
 
 
 func restart() -> void:
-	# A crash retries this folder, without replaying installation or Kratt's introduction.
+	# A crash returns to the instructions without replaying the introductions.
 	reset()
+	_show_folder()
+
+
+func _show_folder() -> void:
+	phase = Phase.READY
 	folder.open_folder()
-	_on_folder_opened()
-
-
-func _on_folder_opened() -> void:
-	phase = Phase.INTRODUCTION
-	character_window.show()
+	folder.show()
+	speech.say(
+		"Want me to stop growing?\n\nType the line %d times before my files fill this folder." % required_repetitions,
+		"Begin"
+	)
 
 
 func set_computer_focused(focused: bool) -> void:
@@ -74,9 +81,16 @@ func set_computer_focused(focused: bool) -> void:
 
 
 func _on_action_pressed() -> void:
-	if phase == Phase.SUCCESS:
-		completed.emit()
-		return
+	match phase:
+		Phase.INTRODUCTION:
+			_show_folder()
+		Phase.READY:
+			_start_typing()
+		Phase.SUCCESS:
+			completed.emit()
+
+
+func _start_typing() -> void:
 	phase = Phase.TYPING
 	speech.say("More files. More grain.")
 	answer.show()
@@ -101,9 +115,11 @@ func _on_answer_submitted(text: String) -> void:
 	if _normalize_phrase(text) != _normalize_phrase(phrase):
 		feedback.text = "Try that line again."
 		answer.select_all()
+		answer_rejected.emit()
 		return
 
 	accepted_repetitions += 1
+	answer_accepted.emit()
 	folder.flash()
 	character_window.flash()
 	answer.clear()

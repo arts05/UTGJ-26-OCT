@@ -25,6 +25,7 @@ theme = ExtResource("4_theme")
 script = ExtResource("1_game")
 
 [node name="FolderWindow" parent="." instance=ExtResource("5_folder")]
+visible = false
 offset_left = 30.0
 offset_top = 95.0
 offset_right = 810.0
@@ -89,7 +90,6 @@ theme_override_font_sizes/font_size = 21
 text = "Press Enter after each line."
 
 [node name="CharacterWindow" type="Control" parent="." node_paths=PackedStringArray("artwork", "shadow")]
-visible = false
 offset_left = 830.0
 offset_top = 180.0
 offset_right = 1180.0
@@ -130,7 +130,6 @@ offset_right = 350.0
 offset_bottom = 565.0
 tail_above = true
 
-[connection signal="folder_opened" from="FolderWindow" to="." method="_on_folder_opened"]
 [connection signal="gui_input" from="CharacterWindow/TitleBar" to="CharacterWindow" method="_on_title_bar_gui_input"]
 [connection signal="action_pressed" from="CharacterWindow/Speech" to="." method="_on_action_pressed"]
 [connection signal="text_submitted" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_submitted"]

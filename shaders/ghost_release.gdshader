@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_add, cull_disabled, depth_draw_never, fog_disabled;
+render_mode unshaded, blend_mix, cull_disabled, depth_draw_never, fog_disabled;
 
 uniform sampler2D mist_noise : repeat_enable, filter_linear;
 uniform vec4 mist_color : source_color = vec4(0.86, 0.95, 1.0, 1.0);
