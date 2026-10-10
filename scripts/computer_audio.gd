@@ -12,6 +12,8 @@ func _ready() -> void:
 	desktop.installation.installation_completed.connect($Notification.play)
 	desktop.viljaneitsi.answer_accepted.connect($CorrectAnswer.play)
 	desktop.viljaneitsi.answer_rejected.connect(_on_answer_rejected)
+	desktop.carl.answer_accepted.connect($CorrectAnswer.play)
+	desktop.carl.answer_rejected.connect(_on_answer_rejected)
 	desktop.restart_state_changed.connect(_on_restart_state_changed)
 	desktop.crash_screen.shutdown_started.connect($Shutdown.play)
 	desktop.crash_screen.screen_power_changed.connect(_on_screen_power_changed)
