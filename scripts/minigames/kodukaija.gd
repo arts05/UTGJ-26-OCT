@@ -2,7 +2,6 @@ extends Control
 ## Search the panorama, recover a name, and look away when its owner watches.
 
 signal failed
-signal closed
 signal won
 signal completed
 signal clue_found
@@ -304,8 +303,3 @@ func _on_ghost_attacked() -> void:
 	outcome_tween = create_tween()
 	outcome_tween.tween_property(self, "light_amount", 0.0, failure_seconds)
 	outcome_tween.tween_callback(failed.emit)
-
-
-func _on_close_pressed() -> void:
-	ghost.reset()
-	closed.emit()

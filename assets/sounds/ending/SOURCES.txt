@@ -10,3 +10,19 @@ FootstepTiming's approach animation holds the individual step cues.
 
 The title now uses the user's ../tsitsor.ogg, played in full by EndingMusic.
 title_impact.wav is the earlier placeholder and is no longer used by the scene.
+
+Archive sources credited in the ending:
+- Liivi rahvalaul "Tšitšor-linnud"
+  https://arhiiv.err.ee/audio/vaata/linnukuu-laulud
+- Ray Charles (reklaam)
+  https://arhiiv.err.ee/audio/vaata/ray-charles-reklaam
+- Külmale maale (1965), Roots Heiki — sample at 51:10
+  https://arhiiv.err.ee/video/vaata/kulmale-maale
+
+Font source credited in the ending:
+- Modern Notes — kurutik
+  https://kurutik.itch.io/free-handwritten-font
+
+Character model source credited in the ending:
+- PSX Casual Male Character — Vinrax
+  https://vinrax.itch.io/psx-casual-male-character

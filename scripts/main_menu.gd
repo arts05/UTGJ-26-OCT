@@ -2,8 +2,14 @@ extends Control
 
 @export_file("*.tscn") var game_scene_path: String = "res://scenes/Main.tscn"
 
-@onready var menu: VBoxContainer = $Center/Menu
-@onready var options: OptionsMenu = $Center/Options
+const MENU_REFERENCE_HEIGHT: float = 720.0
+
+@onready var menu: Control = $Menu
+@onready var options: OptionsMenu = $OptionsLayer/Anchor/Options
+@onready var options_layer: Control = $OptionsLayer
+@onready var portraits: Control = $MenuPortraits
+@onready var background_material: ShaderMaterial = $Background.material
+@onready var selection: ColorRect = $Menu/Navigation/Selection
 @onready var play_button: Button = %PlayButton
 @onready var options_button: Button = %OptionsButton
 @onready var quit_button: Button = %QuitButton
@@ -13,6 +19,7 @@ extends Control
 
 var loading_game: bool = false
 var menu_volume_db: float
+var selection_tween: Tween
 
 
 func _ready() -> void:
@@ -22,10 +29,44 @@ func _ready() -> void:
 	menu_music.volume_db = -80.0
 	menu_music.play()
 	create_tween().tween_property(menu_music, "volume_db", menu_volume_db, scene_fade.fade_seconds)
-	play_button.grab_focus()
 	if OS.has_feature("web"):
 		quit_button.disabled = true
 		quit_button.tooltip_text = "Close the game tab to quit."
+	for button in [play_button, options_button, quit_button]:
+		button.mouse_entered.connect(_on_button_hovered.bind(button))
+		button.focus_entered.connect(_move_selection.bind(button))
+	resized.connect(_update_layout)
+	options.minimum_size_changed.connect(_update_layout.call_deferred)
+	_update_layout.call_deferred()
+	play_button.grab_focus()
+	_move_selection.call_deferred(play_button)
+
+
+func _process(_delta: float) -> void:
+	background_material.set_shader_parameter("interference", 0.0 if portraits.quiet else portraits.interference)
+
+
+func _update_layout() -> void:
+	# The authored menu keeps its proportions inside smaller itch embeds.
+	menu.scale = Vector2.ONE * clampf(size.y / MENU_REFERENCE_HEIGHT, 0.45, 1.3)
+	options.reset_size()
+	var available_size := size - Vector2(80.0, 80.0)
+	var options_scale := minf(available_size.x / options.size.x, available_size.y / options.size.y)
+	options.scale = Vector2.ONE * minf(1.0, options_scale)
+	options.pivot_offset = options.size * 0.5
+	options.position = -options.size * 0.5
+
+
+func _on_button_hovered(button: Button) -> void:
+	if not button.disabled and not loading_game:
+		button.grab_focus()
+
+
+func _move_selection(button: Button) -> void:
+	if selection_tween:
+		selection_tween.kill()
+	selection_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	selection_tween.tween_property(selection, "position:y", button.position.y, 0.12)
 
 
 func _on_play_pressed() -> void:
@@ -33,6 +74,7 @@ func _on_play_pressed() -> void:
 		return
 	loading_game = true
 	play_button.disabled = true
+	portraits.set_quiet(true)
 	create_tween().tween_property(menu_music, "volume_db", -80.0, scene_fade.fade_seconds)
 	if RoomStartup.prepared_room == null:
 		# F6 on the menu, or a new game after returning from the room.
@@ -78,6 +120,7 @@ func _on_loading_back_pressed() -> void:
 	loading_game = false
 	play_button.disabled = false
 	play_button.grab_focus()
+	portraits.set_quiet(false)
 	menu_music.volume_db = menu_volume_db
 	menu_music.play()
 
@@ -93,12 +136,19 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_options_pressed() -> void:
+	if scene_fade.is_fading or loading_game:
+		return
 	menu.hide()
+	options_layer.show()
 	options.open()
+	portraits.set_quiet(true)
+	_update_layout.call_deferred()
 
 
 func _on_options_closed() -> void:
+	options_layer.hide()
 	menu.show()
+	portraits.set_quiet(false)
 	options_button.grab_focus()
 
 

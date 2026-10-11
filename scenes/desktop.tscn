@@ -233,5 +233,4 @@ expand_mode = 1
 [connection signal="failed" from="Screens/Kodukaija" to="." method="_on_encounter_failed"]
 [connection signal="won" from="Screens/Kodukaija" to="." method="_on_encounter_won"]
 [connection signal="completed" from="Screens/Kodukaija" to="." method="_on_kodukaija_completed"]
-[connection signal="closed" from="Screens/Kodukaija" to="." method="_on_kodukaija_closed"]
 [connection signal="restarted" from="Screens/CrashScreen" to="." method="_on_restart_finished"]

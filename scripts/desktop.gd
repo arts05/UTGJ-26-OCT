@@ -305,7 +305,3 @@ func _on_restart_finished() -> void:
 		stage = Stage.KODUKAIJA
 		kodukaija.reset()
 	_show_screen(retry_screen)
-
-
-func _on_kodukaija_closed() -> void:
-	_show_kodukaija_introduction()
