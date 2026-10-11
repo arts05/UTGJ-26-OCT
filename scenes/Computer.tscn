@@ -36,6 +36,10 @@ shader_parameter/vignette_strength = 0.24
 shader_parameter/rolling_band_strength = 0.12
 shader_parameter/rolling_band_speed = 0.08
 shader_parameter/color_bleed_strength = 0.16
+shader_parameter/halation_strength = 0.18
+shader_parameter/halation_radius_pixels = 3.0
+shader_parameter/glass_sheen_strength = 0.045
+shader_parameter/glass_light_direction = Vector3(-0.8, 0.4, 0.7)
 
 [sub_resource type="ShaderMaterial" id="Material_dust"]
 resource_name = "Faint dust in the CRT light"
@@ -64,10 +68,10 @@ script = ExtResource("2_screen_input")
 [node name="Model" parent="." unique_id=1130252239 instance=ExtResource("3_model")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
 
-[node name="Body" parent="Model" index="0" unique_id=1416049710]
+[node name="Body" parent="Model" index="0" unique_id=837287692]
 layers = 2
 
-[node name="Screen" parent="Model" index="1" unique_id=932379973]
+[node name="Screen" parent="Model" index="1" unique_id=792167589]
 material_override = SubResource("ShaderMaterial_cwhfi")
 cast_shadow = 0
 
@@ -192,14 +196,14 @@ bus = &"Computer"
 
 [node name="Shutdown" type="AudioStreamPlayer3D" parent="Audio" unique_id=1586197597]
 stream = ExtResource("11_shutdown")
-volume_db = -12.0
+volume_db = -17.385
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"
 
 [node name="Startup" type="AudioStreamPlayer3D" parent="Audio" unique_id=1134207793]
 stream = ExtResource("12_startup")
-volume_db = -12.0
+volume_db = -18.923
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"

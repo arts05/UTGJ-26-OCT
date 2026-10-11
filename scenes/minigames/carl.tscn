@@ -1,13 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cde7kiem7o3oe"]
 
-[ext_resource type="Script" path="res://scripts/minigames/carl.gd" id="1_game"]
+[ext_resource type="Script" uid="uid://c8ymiey5bfiaf" path="res://scripts/minigames/carl.gd" id="1_game"]
 [ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="2_frame"]
-[ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="3_theme"]
-[ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="5_button"]
+[ext_resource type="Theme" uid="uid://cqrr0s3epjvkp" path="res://resources/desktop_theme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://cso0av86dk451" path="res://scripts/apps/button_feedback.gd" id="5_button"]
 [ext_resource type="Material" path="res://resources/button_highlight.tres" id="6_highlight"]
-
-[sub_resource type="ButtonGroup" id="Group_answers"]
-resource_local_to_scene = true
 
 [sub_resource type="StyleBoxFlat" id="Style_placeholder"]
 bg_color = Color(0.82, 0.82, 0.78, 1)
@@ -30,7 +27,9 @@ content_margin_right = 8.0
 content_margin_bottom = 4.0
 bg_color = Color(0.68, 0.74, 0.86, 0.22)
 
-[node name="Carl" type="Control"]
+[sub_resource type="ButtonGroup" id="Group_answers"]
+
+[node name="Carl" type="Control" unique_id=1404872975]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,20 +39,23 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_game")
 
-[node name="QuizWindow" parent="." instance=ExtResource("2_frame")]
+[node name="QuizWindow" parent="." unique_id=1254157673 instance=ExtResource("2_frame")]
+anchors_preset = 0
 offset_left = 80.0
 offset_top = 75.0
 offset_right = 1120.0
 offset_bottom = 825.0
 
-[node name="Title" type="Label" parent="QuizWindow"]
+[node name="Title" type="Label" parent="QuizWindow" unique_id=375544334]
+layout_mode = 0
 offset_left = 36.0
 offset_top = 8.0
 offset_right = 620.0
 offset_bottom = 42.0
 text = "Carl.exe"
 
-[node name="CarlPlaceholder" type="Panel" parent="QuizWindow"]
+[node name="CarlPlaceholder" type="Panel" parent="QuizWindow" unique_id=1143572367]
+layout_mode = 0
 offset_left = 52.0
 offset_top = 416.0
 offset_right = 286.0
@@ -61,7 +63,7 @@ offset_bottom = 715.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_placeholder")
 
-[node name="Label" type="Label" parent="QuizWindow/CarlPlaceholder"]
+[node name="Label" type="Label" parent="QuizWindow/CarlPlaceholder" unique_id=203790330]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -72,26 +74,30 @@ offset_right = -12.0
 offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-text = "Carl\n\nPortrait placeholder"
+text = "Carl
+
+Portrait placeholder"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Quiz" type="Control" parent="QuizWindow"]
+[node name="Quiz" type="Control" parent="QuizWindow" unique_id=519570709]
+anchors_preset = 0
 offset_left = 350.0
 offset_top = 220.0
 offset_right = 996.0
 offset_bottom = 714.0
 mouse_filter = 1
 
-[node name="QuestionNumber" type="Label" parent="QuizWindow/Quiz"]
+[node name="QuestionNumber" type="Label" parent="QuizWindow/Quiz" unique_id=62981550]
+layout_mode = 0
 offset_right = 646.0
 offset_bottom = 32.0
 theme_override_font_sizes/font_size = 24
 text = "QUESTION 1 OF 4"
 
-[node name="Question" type="Label" parent="QuizWindow/Quiz"]
+[node name="Question" type="Label" parent="QuizWindow/Quiz" unique_id=1615324875]
+layout_mode = 0
 offset_top = 44.0
 offset_right = 646.0
 offset_bottom = 140.0
@@ -99,20 +105,21 @@ theme_override_font_sizes/font_size = 24
 text = "What words must one utter to compel a Viljaneitsi to take her leave?"
 autowrap_mode = 2
 
-[node name="Answers" type="VBoxContainer" parent="QuizWindow/Quiz"]
+[node name="Answers" type="VBoxContainer" parent="QuizWindow/Quiz" unique_id=1933793865]
+layout_mode = 0
 offset_top = 150.0
 offset_right = 646.0
 offset_bottom = 398.0
 theme_override_constants/separation = 8
 
-[node name="Answer1" type="CheckBox" parent="QuizWindow/Quiz/Answers"]
+[node name="Answer1" type="CheckBox" parent="QuizWindow/Quiz/Answers" unique_id=802349620]
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
-theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.09, 0.11, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("Style_answer")
@@ -123,14 +130,14 @@ button_group = SubResource("Group_answers")
 text = "Dear maidens, do no evil!"
 autowrap_mode = 2
 
-[node name="Answer2" type="CheckBox" parent="QuizWindow/Quiz/Answers"]
+[node name="Answer2" type="CheckBox" parent="QuizWindow/Quiz/Answers" unique_id=1108148098]
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
-theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.09, 0.11, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("Style_answer")
@@ -141,14 +148,14 @@ button_group = SubResource("Group_answers")
 text = "Placeholder answer 1"
 autowrap_mode = 2
 
-[node name="Answer3" type="CheckBox" parent="QuizWindow/Quiz/Answers"]
+[node name="Answer3" type="CheckBox" parent="QuizWindow/Quiz/Answers" unique_id=518578857]
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
-theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.09, 0.11, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("Style_answer")
@@ -159,14 +166,14 @@ button_group = SubResource("Group_answers")
 text = "Placeholder answer 2"
 autowrap_mode = 2
 
-[node name="Answer4" type="CheckBox" parent="QuizWindow/Quiz/Answers"]
+[node name="Answer4" type="CheckBox" parent="QuizWindow/Quiz/Answers" unique_id=2021528732]
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
-theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.09, 0.11, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("Style_answer")
@@ -177,15 +184,17 @@ button_group = SubResource("Group_answers")
 text = "Placeholder answer 3"
 autowrap_mode = 2
 
-[node name="Feedback" type="Label" parent="QuizWindow/Quiz"]
+[node name="Feedback" type="Label" parent="QuizWindow/Quiz" unique_id=443010590]
+layout_mode = 0
 offset_top = 414.0
 offset_right = 646.0
 offset_bottom = 442.0
 theme_override_font_sizes/font_size = 22
 
-[node name="ContinueButton" type="Button" parent="QuizWindow/Quiz"]
+[node name="ContinueButton" type="Button" parent="QuizWindow/Quiz" unique_id=370677306]
 visible = false
 material = ExtResource("6_highlight")
+layout_mode = 0
 offset_left = 490.0
 offset_top = 450.0
 offset_right = 646.0
@@ -193,12 +202,13 @@ offset_bottom = 494.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 22
-script = ExtResource("5_button")
 disabled = true
 text = "Continue"
+script = ExtResource("5_button")
 
-[node name="ResultMessage" type="Label" parent="QuizWindow"]
+[node name="ResultMessage" type="Label" parent="QuizWindow" unique_id=1080198331]
 visible = false
+layout_mode = 0
 offset_left = 350.0
 offset_top = 264.0
 offset_right = 996.0

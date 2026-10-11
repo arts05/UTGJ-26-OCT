@@ -1,23 +1,40 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bbxe38ylb6hqr"]
 
 [ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_frame"]
-[ext_resource type="Script" path="res://scripts/apps/carl_prompt.gd" id="2_prompt"]
-[ext_resource type="Texture2D" path="res://assets/sprites/kalev1.png" id="3_kalev"]
-[ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="4_button"]
+[ext_resource type="Script" uid="uid://mfuml27evqk2" path="res://scripts/apps/carl_prompt.gd" id="2_prompt"]
+[ext_resource type="Shader" uid="uid://pl367p45ao67" path="res://shaders/window_ink.gdshader" id="3_5uu8h"]
+[ext_resource type="Texture2D" uid="uid://ciehsdtj7iybv" path="res://assets/sprites/kalev1.png" id="3_kalev"]
+[ext_resource type="Script" uid="uid://cso0av86dk451" path="res://scripts/apps/button_feedback.gd" id="4_button"]
 [ext_resource type="Material" path="res://resources/button_highlight.tres" id="5_highlight"]
 [ext_resource type="Texture2D" path="res://resources/antivirus_logo.tres" id="6_logo"]
 
-[node name="CarlPrompt" instance=ExtResource("1_frame")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tytqc"]
+resource_local_to_scene = true
+shader = ExtResource("3_5uu8h")
+shader_parameter/highlight_amount = 0.0
+shader_parameter/flash_amount = 0.0
+shader_parameter/edge_width = 3.0
+shader_parameter/sheen_strength = 0.12
+shader_parameter/success_sweep_strength = 0.22
+
+[node name="CarlPrompt" unique_id=337943317 instance=ExtResource("1_frame")]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("2_prompt")
 
-[node name="Title" type="Label" parent="."]
+[node name="Artwork" parent="." index="1"]
+material = SubResource("ShaderMaterial_tytqc")
+
+[node name="Title" type="Label" parent="." index="3" unique_id=520363509]
+layout_mode = 0
 offset_left = 36.0
 offset_top = 8.0
 offset_right = 620.0
 offset_bottom = 42.0
 text = "KalevAV"
 
-[node name="AntivirusLogo" type="TextureRect" parent="."]
+[node name="AntivirusLogo" type="TextureRect" parent="." index="4" unique_id=1551921798]
+layout_mode = 0
 offset_left = 68.0
 offset_top = 198.0
 offset_right = 232.0
@@ -27,8 +44,9 @@ texture = ExtResource("6_logo")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Kalevipoeg" type="TextureRect" parent="."]
+[node name="Kalevipoeg" type="TextureRect" parent="." index="5" unique_id=911411325]
 layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 18.0
@@ -42,7 +60,8 @@ expand_mode = 1
 stretch_mode = 5
 flip_h = true
 
-[node name="Content" type="MarginContainer" parent="."]
+[node name="Content" type="MarginContainer" parent="." index="6" unique_id=1300197602]
+layout_mode = 0
 offset_left = 294.0
 offset_top = 194.0
 offset_right = 852.0
@@ -52,44 +71,46 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="Stack" type="VBoxContainer" parent="Content"]
+[node name="Stack" type="VBoxContainer" parent="Content" index="0" unique_id=1418739490]
 layout_mode = 2
 theme_override_constants/separation = 18
 
-[node name="Heading" type="Label" parent="Content/Stack"]
+[node name="Heading" type="Label" parent="Content/Stack" index="0" unique_id=489681385]
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Open Carl.exe?"
 
-[node name="Instructions" type="Label" parent="Content/Stack"]
+[node name="Instructions" type="Label" parent="Content/Stack" index="1" unique_id=675534429]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_vertical = 3
-text = "Answer all four questions.\n\nYou need at least three correct answers to pass."
+text = "Answer all five questions.
+
+You need at least three correct answers to pass."
 autowrap_mode = 2
 
-[node name="Actions" type="HBoxContainer" parent="Content/Stack"]
+[node name="Actions" type="HBoxContainer" parent="Content/Stack" index="2" unique_id=1672013904]
 layout_mode = 2
 theme_override_constants/separation = 18
 alignment = 2
 
-[node name="BackButton" type="Button" parent="Content/Stack/Actions"]
+[node name="BackButton" type="Button" parent="Content/Stack/Actions" index="0" unique_id=1952654031]
 material = ExtResource("5_highlight")
 custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
-script = ExtResource("4_button")
 text = "Back"
+script = ExtResource("4_button")
 
-[node name="RunButton" type="Button" parent="Content/Stack/Actions"]
+[node name="RunButton" type="Button" parent="Content/Stack/Actions" index="1" unique_id=925338782]
 material = ExtResource("5_highlight")
 custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 focus_mode = 0
 mouse_default_cursor_shape = 2
-script = ExtResource("4_button")
 text = "Run"
+script = ExtResource("4_button")
 
 [connection signal="pressed" from="Content/Stack/Actions/BackButton" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Content/Stack/Actions/RunButton" to="." method="_on_run_pressed"]

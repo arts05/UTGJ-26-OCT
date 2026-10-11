@@ -12,23 +12,31 @@ enum Phase { QUESTION, SUCCESS, FAILURE }
 const QUESTIONS: Array[Dictionary] = [
 	{
 		"question": "What words must one utter to compel a Viljaneitsi to take her leave?",
-		"answers": ["Dear maidens, do no evil!", "Placeholder answer 1", "Placeholder answer 2", "Placeholder answer 3"],
+		"answers": ["Dear maidens, do no evil!", "Dear maidens, fear no evil!", "Maiden, please leave.", "The land upon which you stand belongs to the Estonian people."],
 		"correct_index": 0,
 	},
 	{
-		"question": "What earthly guises might a Grain Maiden deign to reveal herself?",
-		"answers": ["Placeholder answer 1", "Wolf and Fairy.", "Placeholder answer 2", "Placeholder answer 3"],
+		"question": "What earthly guises might a Viljaneitsi deign to reveal herself?",
+		"answers": ["Fox and Siren.", "Wolf and Fairy.", "Sheep and Cat.", "Hawk and Human."],
 		"correct_index": 1,
 	},
 	{
-		"question": "Where is one most likely to encounter a Revenant?",
-		"answers": ["Placeholder answer 1", "Placeholder answer 2", "A revenant haunts its former place of residence.", "Placeholder answer 3"],
-		"correct_index": 2,
+		"question": "Where is one most likely to encounter a Kodukäija?",
+		"answers": ["A Kodukäija roams around the town hall.", "A Kodukäija haunts its former place of residence.",
+		 "A Kodukäija spends its life living under a bridge.", "A Kodukäija torments the local well."],
+		"correct_index": 1,
 	},
 	{
-		"question": "Which of these four remedies might grant one the means of escaping the clutches of a Revenant?",
-		"answers": ["Placeholder answer 1", "Placeholder answer 2", "Placeholder answer 3", "Speak its name."],
+		"question": "Which of these four remedies might grant one the means of escaping the clutches of a Kodukäija?",
+		"answers": ["Fighting a Kodukäija with a birch bundle.", "Look them deep in their eyes.", "Start singing the national anthem of Estonia.",
+		"Speak its name."],
 		"correct_index": 3,
+	},
+	{
+		"question": "What is the name of Kalevipoeg's assistant?",
+		"answers": ["Kalev.", "Scrat.", "Kratt.",
+		"Vahur."],
+		"correct_index": 2,
 	},
 ]
 
