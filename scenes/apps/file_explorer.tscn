@@ -1,13 +1,25 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dxhlt1lpudy6w"]
 
 [ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_frame"]
-[ext_resource type="Script" path="res://scripts/apps/file_explorer.gd" id="2_explorer"]
-[ext_resource type="Script" path="res://scripts/apps/button_feedback.gd" id="3_button"]
+[ext_resource type="Script" uid="uid://cai6b05r5w1fg" path="res://scripts/apps/file_explorer.gd" id="2_explorer"]
+[ext_resource type="Script" uid="uid://cso0av86dk451" path="res://scripts/apps/button_feedback.gd" id="3_button"]
 [ext_resource type="Material" path="res://resources/button_highlight.tres" id="4_highlight"]
+[ext_resource type="Shader" uid="uid://pl367p45ao67" path="res://shaders/window_ink.gdshader" id="4_jn7q5"]
 [ext_resource type="Texture2D" path="res://resources/folder_icon.tres" id="5_folder_icon"]
 [ext_resource type="Texture2D" path="res://resources/window_blank.tres" id="6_blank_window"]
 
-[node name="FileExplorer" instance=ExtResource("1_frame")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1rbb1"]
+resource_local_to_scene = true
+shader = ExtResource("4_jn7q5")
+shader_parameter/highlight_amount = 0.0
+shader_parameter/flash_amount = 0.0
+shader_parameter/edge_width = 3.0
+shader_parameter/sheen_strength = 0.12
+shader_parameter/success_sweep_strength = 0.22
+
+[node name="FileExplorer" unique_id=469105872 instance=ExtResource("1_frame")]
+layout_mode = 3
+anchors_preset = 0
 offset_right = 780.0
 offset_bottom = 730.0
 script = ExtResource("2_explorer")
@@ -16,9 +28,18 @@ script = ExtResource("2_explorer")
 texture = ExtResource("6_blank_window")
 
 [node name="Artwork" parent="." index="1"]
+material = SubResource("ShaderMaterial_1rbb1")
 texture = ExtResource("6_blank_window")
 
-[node name="Title" type="Label" parent="."]
+[node name="TitleBar" parent="." index="2"]
+anchors_preset = 10
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+
+[node name="Title" type="Label" parent="." index="3" unique_id=861965574]
 layout_mode = 1
 offset_left = 36.0
 offset_top = 8.0
@@ -26,7 +47,7 @@ offset_right = 620.0
 offset_bottom = 42.0
 text = "File Explorer"
 
-[node name="Address" type="ColorRect" parent="."]
+[node name="Address" type="ColorRect" parent="." index="4" unique_id=1609185694]
 layout_mode = 1
 offset_left = 92.0
 offset_top = 82.0
@@ -35,7 +56,7 @@ offset_bottom = 109.0
 mouse_filter = 2
 color = Color(0.96, 0.96, 0.94, 1)
 
-[node name="Path" type="Label" parent="Address"]
+[node name="Path" type="Label" parent="Address" index="0" unique_id=1582172751]
 layout_mode = 1
 offset_left = 8.0
 offset_right = 548.0
@@ -43,21 +64,21 @@ offset_bottom = 27.0
 theme_override_font_sizes/font_size = 20
 text = "C:\\"
 
-[node name="Folder" type="Button" parent="."]
-layout_mode = 1
+[node name="Folder" type="Button" parent="." index="5" unique_id=2050310639]
 material = ExtResource("4_highlight")
+layout_mode = 1
 offset_left = 48.0
 offset_top = 156.0
 offset_right = 198.0
 offset_bottom = 280.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
-script = ExtResource("3_button")
 flat = true
+script = ExtResource("3_button")
 
-[node name="Icon" type="TextureRect" parent="Folder"]
-layout_mode = 1
+[node name="Icon" type="TextureRect" parent="Folder" index="0" unique_id=377560321]
 use_parent_material = true
+layout_mode = 1
 offset_left = 33.0
 offset_top = 4.0
 offset_right = 117.0
@@ -67,27 +88,26 @@ texture = ExtResource("5_folder_icon")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Name" type="Label" parent="Folder"]
+[node name="Name" type="Label" parent="Folder" index="1" unique_id=1545250401]
 layout_mode = 1
 offset_top = 86.0
 offset_right = 150.0
 offset_bottom = 120.0
 theme_override_font_sizes/font_size = 22
-text = "Viljaneitsi"
 horizontal_alignment = 1
 
-[node name="Contents" type="Control" parent="."]
+[node name="Contents" type="Control" parent="." index="6" unique_id=1529032647]
+visible = false
+clip_contents = true
 layout_mode = 1
 anchors_preset = 0
-visible = false
 offset_left = 48.0
 offset_top = 156.0
 offset_right = 732.0
 offset_bottom = 646.0
-clip_contents = true
 mouse_filter = 1
 
-[node name="Status" type="Label" parent="."]
+[node name="Status" type="Label" parent="." index="7" unique_id=1145868003]
 layout_mode = 1
 offset_left = 48.0
 offset_top = 660.0

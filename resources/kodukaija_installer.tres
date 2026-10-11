@@ -1,8 +1,8 @@
-[gd_resource type="AtlasTexture" format=3]
+[gd_resource type="AtlasTexture" format=3 uid="uid://niyqhckwh5bq"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/kodukaiinstall.png" id="1_installer"]
+[ext_resource type="Texture2D" uid="uid://b7yk7y1lgt2cf" path="res://assets/sprites/kodukaiinstall.png" id="1_installer"]
 
 [resource]
 resource_name = "Kodukäija installer - trimmed canvas"
 atlas = ExtResource("1_installer")
-region = Rect2(10.666667, 214.666667, 982, 545.333333)
+region = Rect2(10.666667, 214.66667, 982, 545.3333)

@@ -1,8 +1,8 @@
-[gd_resource type="AtlasTexture" format=3]
+[gd_resource type="AtlasTexture" format=3 uid="uid://cghjafaxklfvm"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/windowblank.png" id="1_window"]
+[ext_resource type="Texture2D" uid="uid://bpfaiyrbtcjsu" path="res://assets/sprites/windowblank.png" id="1_window"]
 
 [resource]
 resource_name = "Blank window - trimmed canvas"
 atlas = ExtResource("1_window")
-region = Rect2(10.666667, 160, 986.666667, 714.666667)
+region = Rect2(10.666667, 160, 986.6667, 714.6667)
