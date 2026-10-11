@@ -8,7 +8,7 @@
 [ext_resource type="Shader" uid="uid://byreyxmi852ow" path="res://shaders/shadow_vignette.gdshader" id="6_shadow_vignette"]
 [ext_resource type="PackedScene" path="res://scenes/scene_fade.tscn" id="7_fade"]
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="8_pause"]
-[ext_resource type="PackedScene" uid="uid://dvx5lluh72gh6" path="res://scenes/street_ambience.tscn" id="9_street"]
+[ext_resource type="PackedScene" path="res://scenes/street_ambience.tscn" id="9_street"]
 [ext_resource type="Script" uid="uid://exakxc3w284" path="res://scripts/encounter_release.gd" id="10_release_sequence"]
 
 [sub_resource type="Environment" id="Environment_room"]

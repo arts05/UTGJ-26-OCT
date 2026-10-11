@@ -12,7 +12,17 @@ enum Phase { INTRODUCTION, READY, TYPING, SUCCESS }
 
 @export_range(5.0, 180.0) var time_limit_seconds: float = 60.0
 @export_range(1, 10) var required_repetitions: int = 3
-@export var phrase: String = "Kulla neitsid, ärge tehke paha!"
+@export var phrase: String = "Dear maidens, do no evil!"
+@export var sentences_good: Array[String] = [
+	"You flatter me.",
+	"Keep typing. I have more files to destroy.",
+	"Say my name."
+]
+@export var sentences_bad: Array[String] = [
+	"Wrong. Try again.",
+	"That is not the line I asked for.",
+	"Keep trying."
+]
 
 @export_group("Folder feedback")
 @export_range(0.1, 1.5, 0.05) var answer_effect_seconds: float = 0.65
@@ -54,12 +64,13 @@ func reset() -> void:
 	elapsed_seconds = 0.0
 	accepted_repetitions = 0
 	wheat.reset()
+	wheat.set_coverage(1.0)
 	folder.hide()
 	folder.show_parent_folder()
 	character_window.show()
 	character_window.set_artwork_texture(WOLF_EXPRESSIONS[0])
-	speech.say("I am Viljaneitsi.\n\nThis disk is my field. Every grain I grow becomes another file.", "Open my folder")
-	instruction.text = "Type this %d times to stop the new files." % required_repetitions
+	speech.say("I am Viljahunt.\n\nA fairy turned wolf, because a sacrifice was not made in my name. There will be consequences.", "Open the folder.")
+	instruction.text = "Type this %d times to stop me from destroying your files." % required_repetitions
 	phrase_label.text = phrase
 	feedback.text = "Press Enter after each line."
 	answer.clear()
@@ -77,7 +88,7 @@ func _show_folder() -> void:
 	folder.open_folder()
 	folder.show()
 	speech.say(
-		"Want me to stop growing?\n\nType the line %d times before my files fill this folder." % required_repetitions,
+		"Want me to be merciful?\n\nType the line %d times before I destory this folder." % required_repetitions,
 		"Begin"
 	)
 
@@ -102,7 +113,7 @@ func _on_action_pressed() -> void:
 
 func _start_typing() -> void:
 	phase = Phase.TYPING
-	speech.say("More files. More grain.")
+	speech.say("Less files. More destruction.")
 	answer.show()
 	answer.grab_focus()
 	answer.edit()
@@ -112,7 +123,7 @@ func _start_typing() -> void:
 
 func _process(delta: float) -> void:
 	elapsed_seconds = minf(elapsed_seconds + delta, time_limit_seconds)
-	wheat.set_coverage(elapsed_seconds / time_limit_seconds)
+	wheat.set_coverage(1.0 - elapsed_seconds / time_limit_seconds)
 	field_material.set_shader_parameter("pressure", elapsed_seconds / time_limit_seconds)
 	folder.status.text = "%d files" % wheat.filled_cells
 	if elapsed_seconds >= time_limit_seconds:
@@ -133,13 +144,17 @@ func _on_answer_gui_input(event: InputEvent) -> void:
 func _on_answer_submitted(text: String) -> void:
 	if phase != Phase.TYPING:
 		return
-	if _normalize_phrase(text) != _normalize_phrase(phrase):
+	if text != phrase:
 		feedback.text = "Try that line again."
+		if not sentences_bad.is_empty():
+			speech.say(sentences_bad.pick_random())
 		answer.select_all()
 		answer_rejected.emit()
 		return
 
 	accepted_repetitions += 1
+	if not sentences_good.is_empty():
+		speech.say(sentences_good.pick_random())
 	answer_accepted.emit()
 	folder.flash()
 	character_window.flash()
@@ -155,7 +170,7 @@ func _on_answer_submitted(text: String) -> void:
 		answer_tween.parallel().tween_property(field_material, "shader_parameter/pressure", 0.0, answer_effect_seconds)
 		folder.status.text = "0 files"
 		instruction.text = "The folder is clear."
-		speech.say("All right. No more grain.", "Continue")
+		speech.say("All right. No more destruction.", "Continue")
 		feedback.text = ""
 		answer.hide()
 		won.emit()
@@ -167,11 +182,3 @@ func _play_answer_effect() -> void:
 	field_material.set_shader_parameter("success_amount", 1.0)
 	answer_tween = create_tween()
 	answer_tween.tween_property(field_material, "shader_parameter/success_amount", 0.0, answer_effect_seconds)
-
-
-func _normalize_phrase(text: String) -> String:
-	# Keep Estonian letters, but don't punish capitalization, punctuation, or extra spaces.
-	var normalized := text.to_lower().strip_edges()
-	for punctuation in [",", ".", "!", "?", "\"", "“", "”", "„"]:
-		normalized = normalized.replace(punctuation, "")
-	return " ".join(normalized.split(" ", false))

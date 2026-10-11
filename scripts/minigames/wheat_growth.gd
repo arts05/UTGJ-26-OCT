@@ -25,3 +25,8 @@ func set_coverage(amount: float) -> void:
 		var cell_origin := Vector2(column, row) * cell_size
 		file.position = cell_origin + (cell_size - file.size) * 0.5
 		filled_cells += 1
+	while filled_cells > target_count:
+		var file := get_child(filled_cells - 1)
+		remove_child(file)
+		file.queue_free()
+		filled_cells -= 1

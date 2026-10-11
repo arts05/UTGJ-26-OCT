@@ -1,25 +1,52 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cx0drxit0wat4"]
 
-[ext_resource type="Script" path="res://scripts/minigames/viljaneitsi.gd" id="1_game"]
-[ext_resource type="Script" path="res://scripts/minigames/wheat_growth.gd" id="2_wheat"]
-[ext_resource type="Texture2D" path="res://assets/sprites/vilja1.png" id="3_wolf"]
-[ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="4_theme"]
+[ext_resource type="Script" uid="uid://c4rmopfmlglgd" path="res://scripts/minigames/viljaneitsi.gd" id="1_game"]
+[ext_resource type="Script" uid="uid://v5f8kxlpciyr" path="res://scripts/minigames/wheat_growth.gd" id="2_wheat"]
+[ext_resource type="Texture2D" uid="uid://b1nbvat6nlb2" path="res://assets/sprites/vilja1.png" id="3_wolf"]
+[ext_resource type="Theme" uid="uid://cqrr0s3epjvkp" path="res://resources/desktop_theme.tres" id="4_theme"]
 [ext_resource type="PackedScene" path="res://scenes/apps/file_explorer.tscn" id="5_folder"]
-[ext_resource type="Script" path="res://scripts/apps/window_art.gd" id="6_drag"]
+[ext_resource type="Shader" uid="uid://baqp7pjuodck2" path="res://shaders/ui_highlight.gdshader" id="5_fwplv"]
+[ext_resource type="Script" uid="uid://deufwkf8yj74d" path="res://scripts/apps/window_art.gd" id="6_drag"]
 [ext_resource type="PackedScene" path="res://scenes/apps/speech_bubble.tscn" id="7_speech"]
-[ext_resource type="Shader" path="res://shaders/window_ink.gdshader" id="8_ink"]
+[ext_resource type="Shader" uid="uid://pl367p45ao67" path="res://shaders/window_ink.gdshader" id="8_ink"]
 [ext_resource type="Material" path="res://resources/window_shadow.tres" id="9_shadow"]
-[ext_resource type="Shader" path="res://shaders/wheat_field.gdshader" id="10_field"]
+[ext_resource type="Shader" uid="uid://mwa5hodj7dw6" path="res://shaders/wheat_field.gdshader" id="10_field"]
 
-[sub_resource type="ShaderMaterial" id="Material_character"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fwplv"]
 resource_local_to_scene = true
 shader = ExtResource("8_ink")
+shader_parameter/highlight_amount = 0.0
+shader_parameter/flash_amount = 0.0
+shader_parameter/edge_width = 3.0
+shader_parameter/sheen_strength = 0.12
+shader_parameter/success_sweep_strength = 0.22
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hb5tj"]
+resource_local_to_scene = true
+shader = ExtResource("5_fwplv")
+shader_parameter/hover_amount = 0.0
+shader_parameter/flash_amount = 0.0
+shader_parameter/highlight_color = Color(1, 0.91, 0.63, 1)
 
 [sub_resource type="ShaderMaterial" id="Material_field"]
 resource_local_to_scene = true
 shader = ExtResource("10_field")
+shader_parameter/pressure = 0.0
+shader_parameter/success_amount = 0.0
+shader_parameter/activity_strength = 0.6
+shader_parameter/success_strength = 0.5
+shader_parameter/grain_color = Color(0.66, 0.48, 0.14, 1)
 
-[node name="Viljaneitsi" type="Control"]
+[sub_resource type="ShaderMaterial" id="Material_character"]
+resource_local_to_scene = true
+shader = ExtResource("8_ink")
+shader_parameter/highlight_amount = 0.0
+shader_parameter/flash_amount = 0.0
+shader_parameter/edge_width = 3.0
+shader_parameter/sheen_strength = 0.12
+shader_parameter/success_sweep_strength = 0.22
+
+[node name="Viljaneitsi" type="Control" unique_id=1675603054]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,79 +56,106 @@ grow_vertical = 2
 theme = ExtResource("4_theme")
 script = ExtResource("1_game")
 
-[node name="FolderWindow" parent="." instance=ExtResource("5_folder")]
+[node name="FolderWindow" parent="." unique_id=870343721 instance=ExtResource("5_folder")]
 visible = false
+anchors_preset = 0
 offset_left = 30.0
 offset_top = 95.0
 offset_right = 810.0
 offset_bottom = 825.0
 
-[node name="FieldEffect" type="ColorRect" parent="FolderWindow/Contents"]
+[node name="Artwork" parent="FolderWindow" index="1"]
+material = SubResource("ShaderMaterial_fwplv")
+
+[node name="Folder" parent="FolderWindow" index="5"]
+material = SubResource("ShaderMaterial_hb5tj")
+
+[node name="Name" parent="FolderWindow/Folder" index="1"]
+text = "Viljahunt"
+
+[node name="FieldEffect" type="ColorRect" parent="FolderWindow/Contents" index="0" unique_id=918091151]
 material = SubResource("Material_field")
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 256.0
+grow_horizontal = 2
 mouse_filter = 2
 
-[node name="Wheat" type="Control" parent="FolderWindow/Contents"]
+[node name="Wheat" type="Control" parent="FolderWindow/Contents" index="1" unique_id=712095023]
+clip_contents = true
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 256.0
-clip_contents = true
+grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_wheat")
 
-[node name="Separator" type="ColorRect" parent="FolderWindow/Contents"]
+[node name="Separator" type="ColorRect" parent="FolderWindow/Contents" index="2" unique_id=510823309]
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_top = 268.0
 offset_bottom = 269.0
+grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.64, 0.65, 0.64, 1)
 
-[node name="Prompt" type="Control" parent="FolderWindow/Contents"]
+[node name="Prompt" type="Control" parent="FolderWindow/Contents" index="3" unique_id=484427956]
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_top = 280.0
 offset_bottom = 468.0
+grow_horizontal = 2
 mouse_filter = 1
 
-[node name="Instruction" type="Label" parent="FolderWindow/Contents/Prompt"]
+[node name="Instruction" type="Label" parent="FolderWindow/Contents/Prompt" unique_id=323017356]
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 40.0
+grow_horizontal = 2
 theme_override_font_sizes/font_size = 22
 text = "Type this 3 times to stop the new files."
 autowrap_mode = 2
 
-[node name="Phrase" type="Label" parent="FolderWindow/Contents/Prompt"]
+[node name="Phrase" type="Label" parent="FolderWindow/Contents/Prompt" unique_id=1059100232]
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_top = 44.0
 offset_bottom = 78.0
+grow_horizontal = 2
 theme_override_font_sizes/font_size = 24
-text = "Kulla neitsid, ärge tehke paha!"
+text = "Dear maidens, do no evil!"
 
-[node name="Answer" type="LineEdit" parent="FolderWindow/Contents/Prompt"]
+[node name="Answer" type="LineEdit" parent="FolderWindow/Contents/Prompt" unique_id=1802558966]
 visible = false
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_top = 88.0
 offset_bottom = 130.0
+grow_horizontal = 2
 theme_override_font_sizes/font_size = 24
+placeholder_text = "Type here"
 max_length = 120
 keep_editing_on_text_submit = true
-placeholder_text = "Type here"
 
-[node name="Feedback" type="Label" parent="FolderWindow/Contents/Prompt"]
+[node name="Feedback" type="Label" parent="FolderWindow/Contents/Prompt" unique_id=270387715]
 layout_mode = 1
+anchors_preset = 10
 anchor_right = 1.0
 offset_top = 138.0
 offset_bottom = 174.0
+grow_horizontal = 2
 theme_override_font_sizes/font_size = 21
 text = "Press Enter after each line."
 
-[node name="CharacterWindow" type="Control" parent="." node_paths=PackedStringArray("artwork", "shadow")]
+[node name="CharacterWindow" type="Control" parent="." unique_id=1993049299 node_paths=PackedStringArray("artwork", "shadow")]
+anchors_preset = 0
 offset_left = 830.0
 offset_top = 180.0
 offset_right = 1180.0
@@ -111,8 +165,9 @@ artwork = NodePath("Portrait")
 shadow = NodePath("Shadow")
 idle_float_pixels = 2.5
 
-[node name="Shadow" type="TextureRect" parent="CharacterWindow"]
+[node name="Shadow" type="TextureRect" parent="CharacterWindow" unique_id=1493314217]
 material = ExtResource("9_shadow")
+layout_mode = 0
 offset_left = 6.0
 offset_top = 8.0
 offset_right = 356.0
@@ -121,30 +176,33 @@ mouse_filter = 2
 texture = ExtResource("3_wolf")
 expand_mode = 1
 
-[node name="Portrait" type="TextureRect" parent="CharacterWindow"]
+[node name="Portrait" type="TextureRect" parent="CharacterWindow" unique_id=581936784]
 material = SubResource("Material_character")
+layout_mode = 0
 offset_right = 350.0
 offset_bottom = 350.0
 mouse_filter = 2
 texture = ExtResource("3_wolf")
 expand_mode = 1
 
-[node name="TitleBar" type="Control" parent="CharacterWindow"]
+[node name="TitleBar" type="Control" parent="CharacterWindow" unique_id=39077728]
+anchors_preset = 0
 offset_left = 24.0
 offset_top = 115.0
 offset_right = 245.0
 offset_bottom = 143.0
 mouse_default_cursor_shape = 6
 
-[node name="Speech" parent="CharacterWindow" instance=ExtResource("7_speech")]
+[node name="Speech" parent="CharacterWindow" unique_id=258729499 instance=ExtResource("7_speech")]
+anchors_preset = 0
 offset_top = 365.0
 offset_right = 350.0
 offset_bottom = 565.0
 tail_above = true
 
+[connection signal="gui_input" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_gui_input"]
+[connection signal="text_submitted" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_submitted"]
 [connection signal="gui_input" from="CharacterWindow/TitleBar" to="CharacterWindow" method="_on_title_bar_gui_input"]
 [connection signal="action_pressed" from="CharacterWindow/Speech" to="." method="_on_action_pressed"]
-[connection signal="text_submitted" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_submitted"]
-[connection signal="gui_input" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_gui_input"]
 
 [editable path="FolderWindow"]

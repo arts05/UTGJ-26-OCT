@@ -106,7 +106,7 @@ func _on_installation_finished() -> void:
 
 
 func _on_kratt_delay_timeout() -> void:
-	kratt.say("Your disk is full.\n\nThe Viljaneitsi folder is taking up the space. Let's speak to her first.", "Meet Viljaneitsi", 0)
+	kratt.say("Your disk is full.\n\nThe Viljahunt folder is taking up the space. Let's speak to her first.", "Meet Viljahunt", 0)
 	_show_screen(kratt)
 
 

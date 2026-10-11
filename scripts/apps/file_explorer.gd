@@ -16,7 +16,7 @@ func show_parent_folder() -> void:
 
 
 func open_folder() -> void:
-	address.text = "C:\\Viljaneitsi"
+	address.text = "C:\\Viljahunt"
 	folder_button.hide()
 	contents.show()
 	status.text = "0 files"
