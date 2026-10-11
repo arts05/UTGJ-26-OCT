@@ -3,29 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://cciot774okn1k" path="res://scenes/Computer.tscn" id="1_computer"]
 [ext_resource type="Script" uid="uid://bgm102ufcprno" path="res://scripts/camera.gd" id="2_rvslj"]
 [ext_resource type="PackedScene" uid="uid://dn32y2jhevf8h" path="res://scenes/Room.tscn" id="3_room"]
-[ext_resource type="Script" path="res://scripts/main.gd" id="4_main"]
-[ext_resource type="AudioStream" path="res://assets/sounds/ambi.ogg" id="5_ambient_music"]
-[ext_resource type="Shader" path="res://shaders/shadow_vignette.gdshader" id="6_shadow_vignette"]
+[ext_resource type="Script" uid="uid://bkvpbs43lbsus" path="res://scripts/main.gd" id="4_main"]
+[ext_resource type="AudioStream" uid="uid://bu2aws1n4fkb0" path="res://assets/sounds/ambi.ogg" id="5_ambient_music"]
+[ext_resource type="Shader" uid="uid://byreyxmi852ow" path="res://shaders/shadow_vignette.gdshader" id="6_shadow_vignette"]
 [ext_resource type="PackedScene" path="res://scenes/scene_fade.tscn" id="7_fade"]
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="8_pause"]
-[ext_resource type="PackedScene" path="res://scenes/street_ambience.tscn" id="9_street"]
-[ext_resource type="Script" path="res://scripts/encounter_release.gd" id="10_release_sequence"]
-
-[sub_resource type="FastNoiseLite" id="Noise_shadows"]
-noise_type = 1
-frequency = 0.009
-fractal_octaves = 3
-
-[sub_resource type="NoiseTexture2D" id="Texture_shadows"]
-width = 256
-height = 256
-seamless = true
-noise = SubResource("Noise_shadows")
-
-[sub_resource type="ShaderMaterial" id="Material_shadow_vignette"]
-resource_name = "Subtle moving shadows - preserves bright areas"
-shader = ExtResource("6_shadow_vignette")
-shader_parameter/shadow_noise = SubResource("Texture_shadows")
+[ext_resource type="PackedScene" uid="uid://dvx5lluh72gh6" path="res://scenes/street_ambience.tscn" id="9_street"]
+[ext_resource type="Script" uid="uid://exakxc3w284" path="res://scripts/encounter_release.gd" id="10_release_sequence"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -36,19 +20,37 @@ ambient_light_sky_contribution = 0.0
 ambient_light_energy = 0.055
 reflected_light_source = 1
 
+[sub_resource type="FastNoiseLite" id="Noise_shadows"]
+frequency = 0.009
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="Texture_shadows"]
+width = 256
+height = 256
+noise = SubResource("Noise_shadows")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="Material_shadow_vignette"]
+resource_name = "Subtle moving shadows - preserves bright areas"
+shader = ExtResource("6_shadow_vignette")
+shader_parameter/shadow_noise = SubResource("Texture_shadows")
+shader_parameter/edge_darkness = 0.18
+shader_parameter/moving_shadow_strength = 0.04
+shader_parameter/drift = Vector2(0.006, -0.003)
+
 [node name="main" type="Node3D" unique_id=763560267]
 script = ExtResource("4_main")
 
-[node name="AmbientMusic" type="AudioStreamPlayer" parent="."]
+[node name="AmbientMusic" type="AudioStreamPlayer" parent="." unique_id=920604659]
 stream = ExtResource("5_ambient_music")
 volume_db = -12.0
 bus = &"Music"
 
 [node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03430806, 0.020355403, -0.0025669932)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.034818277, 0.026319742, -0.002541244)
 
-[node name="StreetAmbience" parent="." instance=ExtResource("9_street")]
-position = Vector3(-3.2, 0.6, 0.1)
+[node name="StreetAmbience" parent="." unique_id=191285622 instance=ExtResource("9_street")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1988332, 0.603809, 0.09955416)
 
 [node name="Computer" parent="." unique_id=359784547 instance=ExtResource("1_computer")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.985, 0)
@@ -71,16 +73,16 @@ transform = Transform3D(1, 0, 0, 0, 0.9902681, 0.1391731, 0, -0.1391731, 0.99026
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1525173281]
 environment = SubResource("Environment_room")
 
-[node name="EncounterRelease" type="Node" parent="." node_paths=PackedStringArray("camera", "computer", "pc_case", "ghost_release")]
+[node name="EncounterRelease" type="Node" parent="." unique_id=218231476 node_paths=PackedStringArray("camera", "computer", "pc_case", "ghost_release")]
 script = ExtResource("10_release_sequence")
 camera = NodePath("../Camera3D")
 computer = NodePath("../Computer")
 pc_case = NodePath("../Room/PCCase")
 ghost_release = NodePath("../Room/GhostRelease")
 
-[node name="RoomAtmosphere" type="CanvasLayer" parent="."]
+[node name="RoomAtmosphere" type="CanvasLayer" parent="." unique_id=557333433]
 
-[node name="ShadowVignette" type="ColorRect" parent="RoomAtmosphere"]
+[node name="ShadowVignette" type="ColorRect" parent="RoomAtmosphere" unique_id=1721357607]
 material = SubResource("Material_shadow_vignette")
 anchors_preset = 15
 anchor_right = 1.0
@@ -89,10 +91,10 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="PauseMenu" parent="." node_paths=PackedStringArray("computer", "scene_fade") instance=ExtResource("8_pause")]
+[node name="PauseMenu" parent="." unique_id=168662833 node_paths=PackedStringArray("computer", "scene_fade") instance=ExtResource("8_pause")]
 computer = NodePath("../Computer")
 scene_fade = NodePath("../SceneFade")
 
-[node name="SceneFade" parent="." instance=ExtResource("7_fade")]
+[node name="SceneFade" parent="." unique_id=487456550 instance=ExtResource("7_fade")]
 
 [connection signal="computer_focus_changed" from="Camera3D" to="Computer" method="set_interactive"]

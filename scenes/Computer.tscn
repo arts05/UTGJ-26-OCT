@@ -5,34 +5,44 @@
 [ext_resource type="PackedScene" uid="uid://dukou628xvxld" path="res://assets/models/arvuti.glb" id="3_model"]
 [ext_resource type="Shader" uid="uid://oi82vxldqge6" path="res://shaders/crt_screen.gdshader" id="4_crt_shader"]
 [ext_resource type="Script" uid="uid://bsnciprxvlt2i" path="res://scripts/screen_light.gd" id="5_screen_light"]
-[ext_resource type="Script" path="res://scripts/computer_audio.gd" id="6_audio"]
-[ext_resource type="AudioStream" path="res://assets/sounds/CRT v1.mp3" id="7_crt_sound"]
-[ext_resource type="AudioStream" path="res://assets/sounds/Windows Click.mp3" id="8_click"]
-[ext_resource type="AudioStream" path="res://assets/sounds/Windows Ding.mp3" id="9_ding"]
-[ext_resource type="AudioStream" path="res://assets/sounds/Windows Error.mp3" id="10_error"]
-[ext_resource type="AudioStream" path="res://assets/sounds/Windows Shutdown.mp3" id="11_shutdown"]
-[ext_resource type="AudioStream" path="res://assets/sounds/Windows Startup.mp3" id="12_startup"]
-[ext_resource type="AudioStream" path="res://assets/sounds/keyboardkey.wav" id="13_keyboard"]
-[ext_resource type="Shader" path="res://shaders/crt_dust.gdshader" id="14_dust"]
+[ext_resource type="Script" uid="uid://wmgki0m85dd1" path="res://scripts/computer_audio.gd" id="6_audio"]
+[ext_resource type="AudioStream" uid="uid://8cdl7cia0ys1" path="res://assets/sounds/CRT v1.mp3" id="7_crt_sound"]
+[ext_resource type="AudioStream" uid="uid://cccpx6tv2br1j" path="res://assets/sounds/Windows Click.mp3" id="8_click"]
+[ext_resource type="AudioStream" uid="uid://dpxyo1p4458e1" path="res://assets/sounds/Windows Ding.mp3" id="9_ding"]
+[ext_resource type="AudioStream" uid="uid://bny18hqhw4jro" path="res://assets/sounds/Windows Error.mp3" id="10_error"]
+[ext_resource type="AudioStream" uid="uid://bjdu54xgckatt" path="res://assets/sounds/Windows Shutdown.mp3" id="11_shutdown"]
+[ext_resource type="AudioStream" uid="uid://dg260x4r63ag7" path="res://assets/sounds/Windows Startup.mp3" id="12_startup"]
+[ext_resource type="AudioStream" uid="uid://doy732507v3p3" path="res://assets/sounds/keyboardkey.wav" id="13_keyboard"]
+[ext_resource type="Shader" uid="uid://mnm0hof35ux6" path="res://shaders/crt_dust.gdshader" id="14_dust"]
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_keyboard"]
-random_pitch = 1.08
-random_volume_offset_db = 1.5
-streams_count = 1
-stream_0/stream = ExtResource("13_keyboard")
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_desktop"]
-resource_local_to_scene = true
+[sub_resource type="ViewportTexture" id="ViewportTexture_1x23v"]
 viewport_path = NodePath("../ComputerViewport")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_screen"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cwhfi"]
 resource_local_to_scene = true
+render_priority = 0
 shader = ExtResource("4_crt_shader")
-shader_parameter/desktop_texture = SubResource("ViewportTexture_desktop")
+shader_parameter/desktop_texture = SubResource("ViewportTexture_1x23v")
+shader_parameter/effects_enabled = true
+shader_parameter/border_pixels = 28.0
+shader_parameter/brightness = 1.1
+shader_parameter/scanline_strength = 0.18
+shader_parameter/scanline_count = 450.0
+shader_parameter/phosphor_strength = 0.18
+shader_parameter/phosphor_columns = 300.0
+shader_parameter/grain_strength = 0.006
+shader_parameter/flicker_strength = 0.012
+shader_parameter/vignette_strength = 0.24
+shader_parameter/rolling_band_strength = 0.12
+shader_parameter/rolling_band_speed = 0.08
+shader_parameter/color_bleed_strength = 0.16
 
 [sub_resource type="ShaderMaterial" id="Material_dust"]
 resource_name = "Faint dust in the CRT light"
+render_priority = 0
 shader = ExtResource("14_dust")
+shader_parameter/opacity = 0.18
+shader_parameter/drift_distance = 0.025
 
 [sub_resource type="QuadMesh" id="Mesh_dust"]
 material = SubResource("Material_dust")
@@ -42,22 +52,27 @@ size = Vector2(0.005, 0.005)
 offsets = PackedFloat32Array(0, 0.15, 0.8, 1)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_keyboard"]
+random_pitch = 1.08
+random_volume_offset_db = 1.5
+streams_count = 1
+stream_0/stream = ExtResource("13_keyboard")
+
 [node name="Computer" type="Node3D" unique_id=978978962]
 script = ExtResource("2_screen_input")
 
-[node name="Model" parent="." instance=ExtResource("3_model")]
+[node name="Model" parent="." unique_id=1130252239 instance=ExtResource("3_model")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 0, 0, 0)
 
-; The casing receives its own softer light; the stronger spill lights the room.
-[node name="Body" parent="Model" index="0"]
+[node name="Body" parent="Model" index="0" unique_id=1416049710]
 layers = 2
 
-[node name="Screen" parent="Model" index="1"]
+[node name="Screen" parent="Model" index="1" unique_id=932379973]
+material_override = SubResource("ShaderMaterial_cwhfi")
 cast_shadow = 0
-material_override = SubResource("ShaderMaterial_screen")
 
-[node name="ScreenGlow" type="OmniLight3D" parent="."]
-position = Vector3(0, 0.035, 0.205)
+[node name="ScreenGlow" type="OmniLight3D" parent="." unique_id=867549992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0.205)
 light_color = Color(0.8, 0.9, 1, 1)
 light_energy = 0.015
 light_specular = 0.0
@@ -65,14 +80,12 @@ light_cull_mask = 2
 shadow_enabled = true
 omni_range = 0.9
 
-[node name="ScreenSpill" type="OmniLight3D" parent="." node_paths=PackedStringArray("desktop_viewport", "color_sample", "casing_light", "screen_dust")]
-position = Vector3(0, 0.02, 0.31)
+[node name="ScreenSpill" type="OmniLight3D" parent="." unique_id=1386966558 node_paths=PackedStringArray("desktop_viewport", "color_sample", "casing_light", "screen_dust")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0.31)
 light_color = Color(0.55, 0.72, 1, 1)
 light_energy = 0.0
 light_specular = 0.0
 light_cull_mask = 1
-; Broad, unshadowed screen spill; the ceiling light supplies the sharper shadows.
-shadow_enabled = false
 omni_range = 1.5
 script = ExtResource("5_screen_light")
 desktop_viewport = NodePath("../ComputerViewport")
@@ -80,71 +93,68 @@ color_sample = NodePath("../LightColorSample")
 casing_light = NodePath("../ScreenGlow")
 screen_dust = NodePath("../ScreenDust")
 
-[node name="ScreenDust" type="CPUParticles3D" parent="."]
-position = Vector3(0, 0.055, 0.4)
+[node name="ScreenDust" type="CPUParticles3D" parent="." unique_id=1838175570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, 0.4)
 cast_shadow = 0
 extra_cull_margin = 0.05
 amount = 60
 lifetime = 14.0
 preprocess = 14.0
-local_coords = true
 fixed_fps = 30
+local_coords = true
 draw_order = 2
 mesh = SubResource("Mesh_dust")
 emission_shape = 3
 emission_box_extents = Vector3(0.43, 0.2, 0.15)
 direction = Vector3(0.15, 1, 0)
-spread = 45.0
 gravity = Vector3(0, 0, 0)
 initial_velocity_min = 0.004
 initial_velocity_max = 0.01
 angle_max = 360.0
 scale_amount_min = 0.45
-scale_amount_max = 1.0
 color = Color(0.55, 0.72, 1, 0)
 color_ramp = SubResource("Gradient_dust_lifetime")
 
 [node name="ComputerViewport" type="SubViewport" parent="." unique_id=1137603431]
 disable_3d = true
+canvas_item_default_texture_filter = 0
 size = Vector2i(1200, 900)
 render_target_update_mode = 4
-canvas_item_default_texture_filter = 0
 
-[node name="Desktop" parent="ComputerViewport" instance=ExtResource("1_desktop")]
+[node name="Desktop" parent="ComputerViewport" unique_id=1317746621 instance=ExtResource("1_desktop")]
 
-[node name="LightColorSample" type="SubViewport" parent="."]
+[node name="LightColorSample" type="SubViewport" parent="." unique_id=1129332279]
 disable_3d = true
+canvas_item_default_texture_filter = 0
 size = Vector2i(12, 9)
 render_target_update_mode = 0
-canvas_item_default_texture_filter = 0
 
-[node name="DesktopSample" type="TextureRect" parent="LightColorSample"]
+[node name="DesktopSample" type="TextureRect" parent="LightColorSample" unique_id=1749880748]
 offset_right = 12.0
 offset_bottom = 9.0
 mouse_filter = 2
 expand_mode = 1
 
-[node name="Audio" type="Node3D" parent="."]
-position = Vector3(0, 0.035, 0.205)
+[node name="Audio" type="Node3D" parent="." unique_id=2055273620]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0.205)
 script = ExtResource("6_audio")
 
-[node name="CRTLoop" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="CRTLoop" type="AudioStreamPlayer3D" parent="Audio" unique_id=1004804748]
 stream = ExtResource("7_crt_sound")
 volume_db = -21.0
 unit_size = 0.5
-max_db = 12.0
 autoplay = true
 bus = &"CRT"
 
-[node name="Click" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="Click" type="AudioStreamPlayer3D" parent="Audio" unique_id=973797048]
 stream = ExtResource("8_click")
 volume_db = -3.0
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"
 
-[node name="KeyboardKey" type="AudioStreamPlayer3D" parent="Audio"]
-position = Vector3(0.035, -0.255, 0.21)
+[node name="KeyboardKey" type="AudioStreamPlayer3D" parent="Audio" unique_id=1850252091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.035, -0.255, 0.21)
 stream = SubResource("AudioStreamRandomizer_keyboard")
 volume_db = -20.0
 unit_size = 0.5
@@ -152,42 +162,42 @@ max_db = 12.0
 max_polyphony = 6
 bus = &"Computer"
 
-[node name="Notification" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="Notification" type="AudioStreamPlayer3D" parent="Audio" unique_id=758373306]
 stream = ExtResource("9_ding")
 volume_db = -12.0
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"
 
-[node name="CorrectAnswer" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="CorrectAnswer" type="AudioStreamPlayer3D" parent="Audio" unique_id=1537344458]
 stream = ExtResource("9_ding")
 volume_db = -14.0
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"
 
-[node name="WrongAnswer" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="WrongAnswer" type="AudioStreamPlayer3D" parent="Audio" unique_id=1287023959]
 stream = ExtResource("10_error")
 volume_db = -20.0
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"
 
-[node name="Crash" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="Crash" type="AudioStreamPlayer3D" parent="Audio" unique_id=2019995090]
 stream = ExtResource("10_error")
 volume_db = -12.0
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"
 
-[node name="Shutdown" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="Shutdown" type="AudioStreamPlayer3D" parent="Audio" unique_id=1586197597]
 stream = ExtResource("11_shutdown")
 volume_db = -12.0
 unit_size = 0.5
 max_db = 12.0
 bus = &"Computer"
 
-[node name="Startup" type="AudioStreamPlayer3D" parent="Audio"]
+[node name="Startup" type="AudioStreamPlayer3D" parent="Audio" unique_id=1134207793]
 stream = ExtResource("12_startup")
 volume_db = -12.0
 unit_size = 0.5

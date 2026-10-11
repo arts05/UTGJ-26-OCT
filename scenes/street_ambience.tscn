@@ -1,54 +1,55 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dvx5lluh72gh6"]
 
-[ext_resource type="Script" path="res://scripts/street_ambience.gd" id="1_ambience"]
-[ext_resource type="AudioStream" path="res://assets/sounds/walker.mp3" id="2_walker"]
-[ext_resource type="AudioStream" path="res://assets/sounds/copcar.mp3" id="3_car"]
-[ext_resource type="AudioStream" path="res://assets/sounds/outside_cough.mp3" id="4_cough"]
-[ext_resource type="AudioStream" path="res://assets/sounds/famous_person.mp3" id="5_voice"]
+[ext_resource type="Script" uid="uid://hw0v73ph7cw4" path="res://scripts/street_ambience.gd" id="1_ambience"]
+[ext_resource type="AudioStream" uid="uid://cfaxsl2dg1kh0" path="res://assets/sounds/walker.mp3" id="2_walker"]
+[ext_resource type="AudioStream" uid="uid://cqymmqjfur64s" path="res://assets/sounds/copcar.mp3" id="3_car"]
+[ext_resource type="AudioStream" uid="uid://be73r2k5or55t" path="res://assets/sounds/outside_cough.mp3" id="4_cough"]
+[ext_resource type="AudioStream" uid="uid://csjwb55du3uxl" path="res://assets/sounds/famous_person.mp3" id="5_voice"]
 
-[node name="StreetAmbience" type="Node3D"]
+[node name="StreetAmbience" type="Node3D" unique_id=256131626]
 script = ExtResource("1_ambience")
 
-[node name="NextSound" type="Timer" parent="."]
+[node name="NextSound" type="Timer" parent="." unique_id=1749604217]
 one_shot = true
 
-[node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="." unique_id=1917700282]
+transform = Transform3D(1, 0, 0, 0, 0.9984974, 0.05479894, 0, -0.05479894, 0.9984974, 6.5587387, 0, 0)
 stream = ExtResource("2_walker")
-volume_db = -14.0
+volume_db = -12.948
 unit_size = 4.0
 max_distance = 25.0
+bus = &"Ambience"
 attenuation_filter_cutoff_hz = 2500.0
 attenuation_filter_db = -8.0
-bus = &"Ambience"
 
-[node name="Car" type="AudioStreamPlayer3D" parent="."]
-position = Vector3(-1, -0.6, -1.5)
+[node name="Car" type="AudioStreamPlayer3D" parent="." unique_id=720285950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.6, -1.5)
 stream = ExtResource("3_car")
 volume_db = 20.0
 unit_size = 4.0
 max_distance = 30.0
+bus = &"Ambience"
 attenuation_filter_cutoff_hz = 2500.0
 attenuation_filter_db = -8.0
-bus = &"Ambience"
 
-[node name="Cough" type="AudioStreamPlayer3D" parent="."]
-position = Vector3(0, 0, 0.5)
+[node name="Cough" type="AudioStreamPlayer3D" parent="." unique_id=2051251961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
 stream = ExtResource("4_cough")
 volume_db = 4.0
 unit_size = 4.0
 max_distance = 25.0
+bus = &"Ambience"
 attenuation_filter_cutoff_hz = 2500.0
 attenuation_filter_db = -8.0
-bus = &"Ambience"
 
-[node name="DistantVoice" type="AudioStreamPlayer3D" parent="."]
-position = Vector3(-0.8, 0, -0.8)
+[node name="DistantVoice" type="AudioStreamPlayer3D" parent="." unique_id=1559159501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, -0.8)
 stream = ExtResource("5_voice")
 volume_db = -4.0
 unit_size = 4.0
 max_distance = 25.0
+bus = &"Ambience"
 attenuation_filter_cutoff_hz = 2200.0
 attenuation_filter_db = -8.0
-bus = &"Ambience"
 
 [connection signal="timeout" from="NextSound" to="." method="_on_next_sound_timeout"]
