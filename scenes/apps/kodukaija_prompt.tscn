@@ -1,8 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dh8obk3tx0w82"]
 
 [ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_frame"]
-[ext_resource type="Script" path="res://scripts/apps/kodukaija_prompt.gd" id="2_prompt"]
+[ext_resource type="Script" uid="uid://bjlv6as8bhiav" path="res://scripts/apps/kodukaija_prompt.gd" id="2_prompt"]
 [ext_resource type="Texture2D" path="res://resources/kodukaija_installer.tres" id="3_artwork"]
+[ext_resource type="Shader" uid="uid://b6vo6b22lr846" path="res://shaders/kodukaija_details_reveal.gdshader" id="4_details_shader"]
+[ext_resource type="Shader" uid="uid://pl367p45ao67" path="res://shaders/window_ink.gdshader" id="4_vechx"]
 
 [sub_resource type="StyleBoxEmpty" id="Style_clear"]
 
@@ -15,40 +17,60 @@ border_width_bottom = 1
 border_color = Color(0.2, 0.3, 0.45, 0.65)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="Style_pressed"]
 bg_color = Color(0, 0, 0, 0.12)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
-corner_radius_bottom_left = 5
 corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="Theme" id="Theme_drawn_buttons"]
-Button/styles/normal = SubResource("Style_clear")
-Button/styles/hover = SubResource("Style_hover")
-Button/styles/pressed = SubResource("Style_pressed")
-Button/styles/hover_pressed = SubResource("Style_pressed")
-Button/styles/focus = SubResource("Style_clear")
 Button/styles/disabled = SubResource("Style_clear")
+Button/styles/focus = SubResource("Style_clear")
+Button/styles/hover = SubResource("Style_hover")
+Button/styles/hover_pressed = SubResource("Style_pressed")
+Button/styles/normal = SubResource("Style_clear")
+Button/styles/pressed = SubResource("Style_pressed")
 
-[node name="KodukaijaPrompt" instance=ExtResource("1_frame")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rveer"]
+resource_local_to_scene = true
+shader = ExtResource("4_vechx")
+shader_parameter/highlight_amount = 0.0
+shader_parameter/flash_amount = 0.0
+shader_parameter/edge_width = 3.0
+shader_parameter/sheen_strength = 0.12
+shader_parameter/success_sweep_strength = 0.22
+
+[sub_resource type="ShaderMaterial" id="Material_details_reveal"]
+resource_local_to_scene = true
+shader = ExtResource("4_details_shader")
+shader_parameter/reveal_amount = 0.0
+shader_parameter/edge_softness = 0.035
+
+[node name="KodukaijaPrompt" unique_id=926444433 instance=ExtResource("1_frame")]
+layout_mode = 3
+anchors_preset = 0
 offset_bottom = 500.0
 theme = SubResource("Theme_drawn_buttons")
 script = ExtResource("2_prompt")
+metadata_display_seconds = 1.5
 
 [node name="Shadow" parent="." index="0"]
 texture = ExtResource("3_artwork")
 
 [node name="Artwork" parent="." index="1"]
+material = SubResource("ShaderMaterial_rveer")
 texture = ExtResource("3_artwork")
 
 [node name="TitleBar" parent="." index="2"]
 offset_right = -76.0
 offset_bottom = 53.0
 
-[node name="YesButton" type="Button" parent="."]
+[node name="YesButton" type="Button" parent="." index="3" unique_id=74531283]
+layout_mode = 0
 offset_left = 569.0
 offset_top = 342.0
 offset_right = 709.0
@@ -56,7 +78,8 @@ offset_bottom = 385.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 
-[node name="NoButton" type="Button" parent="."]
+[node name="NoButton" type="Button" parent="." index="4" unique_id=1369913674]
+layout_mode = 0
 offset_left = 727.0
 offset_top = 342.0
 offset_right = 867.0
@@ -64,7 +87,8 @@ offset_bottom = 385.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 
-[node name="CloseButton" type="Button" parent="."]
+[node name="CloseButton" type="Button" parent="." index="5" unique_id=1200643139]
+layout_mode = 0
 offset_left = 825.0
 offset_top = 18.0
 offset_right = 885.0
@@ -72,36 +96,48 @@ offset_bottom = 52.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 
-[node name="DetailsButton" type="Button" parent="."]
+[node name="DetailsButton" type="Button" parent="." index="6" unique_id=1448573358]
+layout_mode = 0
 offset_left = 32.0
 offset_top = 342.0
 offset_right = 236.0
 offset_bottom = 387.0
 focus_mode = 0
+mouse_filter = 2
 mouse_default_cursor_shape = 2
-toggle_mode = true
 
-[node name="Details" type="ColorRect" parent="."]
+[node name="Details" type="ColorRect" parent="." index="7" unique_id=308958242]
 visible = false
+material = SubResource("Material_details_reveal")
+layout_mode = 0
 offset_left = 20.0
 offset_top = 160.0
 offset_right = 880.0
 offset_bottom = 317.0
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
-[node name="Instructions" type="Label" parent="Details"]
+[node name="Instructions" type="Label" parent="Details" index="0" unique_id=1353886438]
+layout_mode = 0
 offset_left = 88.0
 offset_top = 15.0
 offset_right = 804.0
 offset_bottom = 145.0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
 theme_override_font_sizes/font_size = 22
-text = "Find its name.\n\nWASD / arrows · Space"
+text = "Find its name.
+
+WASD / arrows · Space"
 autowrap_mode = 2
+
+[node name="ButtonsCover" type="ColorRect" parent="." index="8" unique_id=299256432]
+layout_mode = 0
+offset_left = 560.0
+offset_top = 330.0
+offset_right = 876.0
+offset_bottom = 397.0
+mouse_filter = 2
+color = Color(0.91, 0.91, 0.91, 1)
 
 [connection signal="pressed" from="YesButton" to="." method="_on_run_pressed"]
 [connection signal="pressed" from="NoButton" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="CloseButton" to="." method="_on_back_pressed"]
-[connection signal="toggled" from="DetailsButton" to="." method="_on_details_toggled"]
