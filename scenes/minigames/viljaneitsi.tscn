@@ -9,10 +9,15 @@
 [ext_resource type="PackedScene" path="res://scenes/apps/speech_bubble.tscn" id="7_speech"]
 [ext_resource type="Shader" path="res://shaders/window_ink.gdshader" id="8_ink"]
 [ext_resource type="Material" path="res://resources/window_shadow.tres" id="9_shadow"]
+[ext_resource type="Shader" path="res://shaders/wheat_field.gdshader" id="10_field"]
 
 [sub_resource type="ShaderMaterial" id="Material_character"]
 resource_local_to_scene = true
 shader = ExtResource("8_ink")
+
+[sub_resource type="ShaderMaterial" id="Material_field"]
+resource_local_to_scene = true
+shader = ExtResource("10_field")
 
 [node name="Viljaneitsi" type="Control"]
 layout_mode = 3
@@ -30,6 +35,13 @@ offset_left = 30.0
 offset_top = 95.0
 offset_right = 810.0
 offset_bottom = 825.0
+
+[node name="FieldEffect" type="ColorRect" parent="FolderWindow/Contents"]
+material = SubResource("Material_field")
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 256.0
+mouse_filter = 2
 
 [node name="Wheat" type="Control" parent="FolderWindow/Contents"]
 layout_mode = 1
@@ -134,3 +146,5 @@ tail_above = true
 [connection signal="action_pressed" from="CharacterWindow/Speech" to="." method="_on_action_pressed"]
 [connection signal="text_submitted" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_submitted"]
 [connection signal="gui_input" from="FolderWindow/Contents/Prompt/Answer" to="." method="_on_answer_gui_input"]
+
+[editable path="FolderWindow"]

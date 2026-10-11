@@ -6,6 +6,7 @@ uniform vec4 glow_color : source_color = vec4(0.09, 0.2, 0.17, 1.0);
 uniform float glow_strength : hint_range(0.0, 1.0) = 0.55;
 uniform float scanline_strength : hint_range(0.0, 0.2) = 0.04;
 uniform float rolling_band_strength : hint_range(0.0, 0.2) = 0.06;
+uniform float filament_strength : hint_range(0.0, 0.5, 0.01) = 0.22;
 
 void fragment() {
 	vec2 drift = vec2(TIME * 0.012, -TIME * 0.007);
@@ -20,5 +21,8 @@ void fragment() {
 
 	// The signal lives behind the menu, so text and buttons remain sharp and still.
 	vec3 glow = glow_color.rgb * halo * (mist * glow_strength + rolling_band * rolling_band_strength);
+	float filaments = 1.0 - smoothstep(0.02, 0.1, abs(broad_noise - fine_noise));
+	filaments *= smoothstep(0.25, 0.75, fine_noise);
+	glow += glow_color.rgb * halo * filaments * filament_strength;
 	COLOR = vec4((vec3(0.002, 0.004, 0.004) + glow) * scanlines, 1.0);
 }
