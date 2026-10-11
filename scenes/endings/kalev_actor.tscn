@@ -4,6 +4,7 @@
 [ext_resource type="AnimationLibrary" path="res://resources/ending_actor_animations.tres" id="2_animations"]
 [ext_resource type="Shader" path="res://shaders/room_opaque.gdshader" id="3_surface"]
 [ext_resource type="Texture2D" path="res://assets/models/male_casual/man_tex.png" id="4_texture"]
+[ext_resource type="Texture2D" path="res://resources/kalev_face.tres" id="5_face"]
 
 [sub_resource type="ShaderMaterial" id="Material_actor"]
 shader = ExtResource("3_surface")
@@ -27,13 +28,17 @@ use_external_skeleton = true
 external_skeleton = NodePath("../Model/rig/Skeleton3D")
 
 [node name="FacePortrait" type="Sprite3D" parent="HeadAttachment"]
-editor_description = "Assign Kalev's transparent face PNG to Texture. Pixel Size controls its physical size; Position and Scale adjust the fit. This portrait follows the head bone."
-transform = Transform3D(1, 0, 0, 0, 0.98875, 0.149579, 0, -0.149579, 0.98875, 0, 0.087445, 0.118768)
-pixel_size = 0.001
+editor_description = "Kalev's face, cropped from kalev1.png by the AtlasTexture resource. Adjust Position, Scale, and Pixel Size here; the portrait follows the animated head bone."
+position = Vector3(0, 0.075, 0.15)
+rotation = Vector3(0.150142, 0, 0)
+scale = Vector3(0.86, 1.15, 1)
+pixel_size = 0.00095
 layers = 4
 texture_filter = 0
 shaded = true
 double_sided = false
+texture = ExtResource("5_face")
+flip_h = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {&"": ExtResource("2_animations")}

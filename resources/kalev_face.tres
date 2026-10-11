@@ -1,0 +1,9 @@
+[gd_resource type="AtlasTexture" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/kalev1.png" id="1_portrait"]
+
+[resource]
+resource_name = "Kalev face"
+atlas = ExtResource("1_portrait")
+region = Rect2(194, 8, 198, 192)
+filter_clip = true
