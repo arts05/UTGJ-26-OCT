@@ -5,9 +5,13 @@ signal failed
 signal answer_accepted
 signal answer_rejected
 
-enum Phase { QUESTION, SUCCESS, FAILURE }
+enum Phase { QUESTION, RESPONSE, SUCCESS, FAILURE }
 
 @export_range(1, 4) var passing_score: int = 3
+
+const CARL_QUESTION_SPRITE: Texture2D = preload("res://assets/sprites/carl1.png")
+const CARL_LAST_ANSWER_CORRECT_SPRITE: Texture2D = preload("res://assets/sprites/carl3.png")
+const CARL_LAST_ANSWER_WRONG_SPRITE: Texture2D = preload("res://assets/sprites/carl2.png")
 
 const QUESTIONS: Array[Dictionary] = [
 	{
@@ -40,6 +44,14 @@ const QUESTIONS: Array[Dictionary] = [
 	},
 ]
 
+const RESPONSE_LINES: Array[String] = [
+	"Viljaneitsi, often referred to as the Guardian of the Grain, is said to bestow prosperity and vigour upon the crops, provided that proper offerings are made both ere the harvest and upon its conclusion.",
+	"It is said that Viljaneitsi assumes the guise of a wolf only when her intentions are of a most malevolent nature, seeking to bring misfortune and harm upon the unfortunate.",
+	"There exists yet another manifestation of the Kodukäija, known as Kääbas, whose restless spirit is most commonly found haunting the very grounds upon which its mortal life was brought to an end.",
+	"One may also seek to ward off or diminish the dreadful influence of a Kodukäija through the employment of silver, or by seeking refuge in the blessed light of the morning sun.",
+	"A Kratt must, under all circumstances, be furnished with labour by its creator, for should the creature find itself without purpose, it shall inevitably turn its wrath upon the very master who brought it into existence.",
+]
+
 @onready var quiz_window = $QuizWindow
 @onready var quiz: Control = $QuizWindow/Quiz
 @onready var question_number: Label = $QuizWindow/Quiz/QuestionNumber
@@ -50,9 +62,11 @@ const QUESTIONS: Array[Dictionary] = [
 	$QuizWindow/Quiz/Answers/Answer3,
 	$QuizWindow/Quiz/Answers/Answer4,
 ]
+@onready var answers_container: Control = $QuizWindow/Quiz/Answers
 @onready var feedback: Label = $QuizWindow/Quiz/Feedback
 @onready var continue_button: Button = $QuizWindow/Quiz/ContinueButton
 @onready var result_message: Label = $QuizWindow/ResultMessage
+@onready var carl_portrait: TextureRect = $QuizWindow/CarlPortrait
 
 var phase: Phase = Phase.QUESTION
 var question_index: int = 0
@@ -82,6 +96,7 @@ func reset() -> void:
 	phase = Phase.QUESTION
 	question_index = 0
 	correct_answers = 0
+	carl_portrait.texture = CARL_QUESTION_SPRITE
 	quiz.show()
 	result_message.hide()
 	_show_question()
@@ -89,11 +104,13 @@ func reset() -> void:
 
 func _show_question() -> void:
 	var current_question: Dictionary = QUESTIONS[question_index]
+	carl_portrait.texture = CARL_QUESTION_SPRITE
+	answers_container.show()
 	question_number.text = "QUESTION %d OF %d" % [question_index + 1, QUESTIONS.size()]
 	question_label.text = current_question["question"]
 	for index in range(answer_buttons.size()):
 		answer_buttons[index].text = current_question["answers"][index]
-	feedback.text = "" if question_index == 0 else "Answer recorded."
+	feedback.text = ""
 	_clear_selection()
 
 
@@ -115,18 +132,39 @@ func _on_answer_selected(button: BaseButton) -> void:
 
 
 func _on_continue_pressed() -> void:
+	if phase == Phase.RESPONSE:
+		_advance_after_response()
+		return
 	if phase != Phase.QUESTION or selected_answer < 0:
 		return
-	if selected_answer == QUESTIONS[question_index]["correct_index"]:
+	var was_correct: bool = selected_answer == QUESTIONS[question_index]["correct_index"]
+	if was_correct:
 		correct_answers += 1
 		answer_accepted.emit()
 		quiz_window.flash()
+		carl_portrait.texture = CARL_LAST_ANSWER_CORRECT_SPRITE
 	else:
 		answer_rejected.emit()
+		carl_portrait.texture = CARL_LAST_ANSWER_WRONG_SPRITE
 	question_index += 1
-	if question_index == QUESTIONS.size():
+	phase = Phase.RESPONSE
+	answers_container.hide()
+	question_number.text = "Carl's sage of reflection: "
+	question_label.text = RESPONSE_LINES[question_index - 1]
+	feedback.text = ""
+	selected_answer = -1
+	for button in answer_buttons:
+		button.set_pressed_no_signal(false)
+	continue_button.text = "Continue"
+	continue_button.disabled = false
+	continue_button.show()
+
+
+func _advance_after_response() -> void:
+	if question_index >= QUESTIONS.size():
 		_finish_quiz()
 	else:
+		phase = Phase.QUESTION
 		_show_question()
 
 

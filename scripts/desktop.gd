@@ -16,6 +16,7 @@ enum Stage {
 	KODUKAIJA_INTRO,
 	KODUKAIJA_PROMPT,
 	KODUKAIJA,
+	CARL_INTRO,
 	CARL_PROMPT,
 	CARL,
 	CARL_VICTORY,
@@ -119,12 +120,14 @@ func _on_kratt_continued() -> void:
 		Stage.KODUKAIJA_INTRO:
 			stage = Stage.KODUKAIJA_PROMPT
 			_show_screen(kodukaija_prompt)
+		Stage.CARL_INTRO:
+			stage = Stage.CARL_PROMPT
+			_show_screen(carl_prompt)
 
 
 func _on_viljaneitsi_completed() -> void:
 	if skip_kodukaija_for_carl_testing:
-		stage = Stage.CARL_PROMPT
-		_show_screen(carl_prompt)
+		_show_carl_introduction()
 	else:
 		_show_kodukaija_introduction()
 
@@ -200,8 +203,13 @@ func _on_kodukaija_accepted() -> void:
 
 
 func _on_kodukaija_completed() -> void:
-	stage = Stage.CARL_PROMPT
-	_show_screen(carl_prompt)
+	_show_carl_introduction()
+
+
+func _show_carl_introduction() -> void:
+	stage = Stage.CARL_INTRO
+	kratt.say("I found the final file that you should check out.", "Inspect file", 1)
+	_show_screen(kratt)
 
 
 func _on_encounter_failed() -> void:

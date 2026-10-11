@@ -2,115 +2,160 @@
 
 [ext_resource type="PackedScene" path="res://scenes/apps/window_art.tscn" id="1_frame"]
 [ext_resource type="Script" uid="uid://mfuml27evqk2" path="res://scripts/apps/carl_prompt.gd" id="2_prompt"]
-[ext_resource type="Shader" uid="uid://pl367p45ao67" path="res://shaders/window_ink.gdshader" id="3_5uu8h"]
-[ext_resource type="Texture2D" uid="uid://ciehsdtj7iybv" path="res://assets/sprites/kalev1.png" id="3_kalev"]
-[ext_resource type="Script" uid="uid://cso0av86dk451" path="res://scripts/apps/button_feedback.gd" id="4_button"]
-[ext_resource type="Material" path="res://resources/button_highlight.tres" id="5_highlight"]
-[ext_resource type="Texture2D" path="res://resources/antivirus_logo.tres" id="6_logo"]
+[ext_resource type="Texture2D" path="res://resources/kodukaija_installer.tres" id="3_artwork"]
+[ext_resource type="Shader" uid="uid://b6vo6b22lr846" path="res://shaders/kodukaija_details_reveal.gdshader" id="4_details_shader"]
+[ext_resource type="Shader" uid="uid://pl367p45ao67" path="res://shaders/window_ink.gdshader" id="4_vechx"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tytqc"]
+[sub_resource type="StyleBoxEmpty" id="Style_clear"]
+
+[sub_resource type="StyleBoxFlat" id="Style_hover"]
+bg_color = Color(1, 1, 1, 0.15)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.3, 0.45, 0.65)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="Style_pressed"]
+bg_color = Color(0, 0, 0, 0.12)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_drawn_buttons"]
+Button/styles/disabled = SubResource("Style_clear")
+Button/styles/focus = SubResource("Style_clear")
+Button/styles/hover = SubResource("Style_hover")
+Button/styles/hover_pressed = SubResource("Style_pressed")
+Button/styles/normal = SubResource("Style_clear")
+Button/styles/pressed = SubResource("Style_pressed")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rveer"]
 resource_local_to_scene = true
-shader = ExtResource("3_5uu8h")
+shader = ExtResource("4_vechx")
 shader_parameter/highlight_amount = 0.0
 shader_parameter/flash_amount = 0.0
 shader_parameter/edge_width = 3.0
 shader_parameter/sheen_strength = 0.12
 shader_parameter/success_sweep_strength = 0.22
 
-[node name="CarlPrompt" unique_id=337943317 instance=ExtResource("1_frame")]
+[sub_resource type="ShaderMaterial" id="Material_details_reveal"]
+resource_local_to_scene = true
+shader = ExtResource("4_details_shader")
+shader_parameter/reveal_amount = 0.0
+shader_parameter/edge_softness = 0.035
+
+[node name="CarlPrompt" unique_id=926444433 instance=ExtResource("1_frame")]
 layout_mode = 3
 anchors_preset = 0
+offset_bottom = 500.0
+theme = SubResource("Theme_drawn_buttons")
 script = ExtResource("2_prompt")
+metadata_display_seconds = 1.5
+
+[node name="Shadow" parent="." index="0"]
+texture = ExtResource("3_artwork")
 
 [node name="Artwork" parent="." index="1"]
-material = SubResource("ShaderMaterial_tytqc")
+material = SubResource("ShaderMaterial_rveer")
+texture = ExtResource("3_artwork")
 
-[node name="Title" type="Label" parent="." index="3" unique_id=520363509]
-layout_mode = 0
-offset_left = 36.0
-offset_top = 8.0
-offset_right = 620.0
-offset_bottom = 42.0
-text = "KalevAV"
+[node name="TitleBar" parent="." index="2"]
+offset_right = -76.0
+offset_bottom = 53.0
 
-[node name="AntivirusLogo" type="TextureRect" parent="." index="4" unique_id=1551921798]
+[node name="YesButton" type="Button" parent="." index="3" unique_id=74531283]
 layout_mode = 0
-offset_left = 68.0
+offset_left = 569.0
+offset_top = 342.0
+offset_right = 709.0
+offset_bottom = 385.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+
+[node name="NoButton" type="Button" parent="." index="4" unique_id=1369913674]
+layout_mode = 0
+offset_left = 727.0
+offset_top = 342.0
+offset_right = 867.0
+offset_bottom = 385.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+
+[node name="CloseButton" type="Button" parent="." index="5" unique_id=1200643139]
+layout_mode = 0
+offset_left = 825.0
+offset_top = 18.0
+offset_right = 885.0
+offset_bottom = 52.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+
+[node name="DetailsButton" type="Button" parent="." index="6" unique_id=1448573358]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 342.0
+offset_right = 236.0
+offset_bottom = 387.0
+focus_mode = 0
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+
+[node name="CarlProgramNameCover" type="ColorRect" parent="." index="7"]
+layout_mode = 0
+offset_left = 301.0
+offset_top = 195.0
+offset_right = 485.0
+offset_bottom = 230.0
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="CarlProgramName" type="Label" parent="." index="8"]
+layout_mode = 0
+offset_left = 306.0
 offset_top = 198.0
-offset_right = 232.0
-offset_bottom = 374.0
+offset_right = 508.0
+offset_bottom = 233.0
 mouse_filter = 2
-texture = ExtResource("6_logo")
-expand_mode = 1
-stretch_mode = 5
+theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
+theme_override_font_sizes/font_size = 22
+text = "Carl.exe"
 
-[node name="Kalevipoeg" type="TextureRect" parent="." index="5" unique_id=911411325]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 18.0
-offset_top = -272.0
-offset_right = 276.0
-offset_bottom = -14.0
-grow_vertical = 0
-mouse_filter = 2
-texture = ExtResource("3_kalev")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
-
-[node name="Content" type="MarginContainer" parent="." index="6" unique_id=1300197602]
+[node name="Details" type="ColorRect" parent="." index="9" unique_id=308958242]
+visible = false
+material = SubResource("Material_details_reveal")
 layout_mode = 0
-offset_left = 294.0
-offset_top = 194.0
-offset_right = 852.0
-offset_bottom = 632.0
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+offset_left = 20.0
+offset_top = 160.0
+offset_right = 880.0
+offset_bottom = 317.0
+mouse_filter = 2
 
-[node name="Stack" type="VBoxContainer" parent="Content" index="0" unique_id=1418739490]
-layout_mode = 2
-theme_override_constants/separation = 18
-
-[node name="Heading" type="Label" parent="Content/Stack" index="0" unique_id=489681385]
-layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "Open Carl.exe?"
-
-[node name="Instructions" type="Label" parent="Content/Stack" index="1" unique_id=675534429]
-custom_minimum_size = Vector2(0, 160)
-layout_mode = 2
-size_flags_vertical = 3
-text = "Answer all five questions.
-
-You need at least three correct answers to pass."
+[node name="Instructions" type="Label" parent="Details" index="0" unique_id=1353886438]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 15.0
+offset_right = 804.0
+offset_bottom = 145.0
+theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
+theme_override_font_sizes/font_size = 22
+text = "Answer all five questions. You need at least three correct answers out of five to pass."
 autowrap_mode = 2
 
-[node name="Actions" type="HBoxContainer" parent="Content/Stack" index="2" unique_id=1672013904]
-layout_mode = 2
-theme_override_constants/separation = 18
-alignment = 2
+[node name="ButtonsCover" type="ColorRect" parent="." index="10" unique_id=299256432]
+layout_mode = 0
+offset_left = 560.0
+offset_top = 330.0
+offset_right = 876.0
+offset_bottom = 397.0
+mouse_filter = 2
+color = Color(0.91, 0.91, 0.91, 1)
 
-[node name="BackButton" type="Button" parent="Content/Stack/Actions" index="0" unique_id=1952654031]
-material = ExtResource("5_highlight")
-custom_minimum_size = Vector2(170, 54)
-layout_mode = 2
-focus_mode = 0
-mouse_default_cursor_shape = 2
-text = "Back"
-script = ExtResource("4_button")
-
-[node name="RunButton" type="Button" parent="Content/Stack/Actions" index="1" unique_id=925338782]
-material = ExtResource("5_highlight")
-custom_minimum_size = Vector2(170, 54)
-layout_mode = 2
-focus_mode = 0
-mouse_default_cursor_shape = 2
-text = "Run"
-script = ExtResource("4_button")
-
-[connection signal="pressed" from="Content/Stack/Actions/BackButton" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="Content/Stack/Actions/RunButton" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="YesButton" to="." method="_on_run_pressed"]
+[connection signal="pressed" from="NoButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="CloseButton" to="." method="_on_back_pressed"]

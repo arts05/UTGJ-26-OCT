@@ -128,9 +128,9 @@ offset_bottom = 686.0
 [node name="CarlPrompt" parent="Screens" instance=ExtResource("12_carl_prompt")]
 visible = false
 offset_left = 150.0
-offset_top = 110.0
+offset_top = 186.0
 offset_right = 1050.0
-offset_bottom = 762.0
+offset_bottom = 686.0
 
 [node name="Viljaneitsi" parent="Screens" instance=ExtResource("4_viljaneitsi")]
 visible = false

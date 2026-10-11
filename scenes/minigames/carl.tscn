@@ -5,14 +5,7 @@
 [ext_resource type="Theme" uid="uid://cqrr0s3epjvkp" path="res://resources/desktop_theme.tres" id="3_theme"]
 [ext_resource type="Script" uid="uid://cso0av86dk451" path="res://scripts/apps/button_feedback.gd" id="5_button"]
 [ext_resource type="Material" path="res://resources/button_highlight.tres" id="6_highlight"]
-
-[sub_resource type="StyleBoxFlat" id="Style_placeholder"]
-bg_color = Color(0.82, 0.82, 0.78, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.3, 0.32, 0.35, 1)
+[ext_resource type="Texture2D" path="res://assets/sprites/carl1.png" id="7_carl_default"]
 
 [sub_resource type="StyleBoxEmpty" id="Style_answer"]
 content_margin_left = 8.0
@@ -54,32 +47,16 @@ offset_right = 620.0
 offset_bottom = 42.0
 text = "Carl.exe"
 
-[node name="CarlPlaceholder" type="Panel" parent="QuizWindow" unique_id=1143572367]
+[node name="CarlPortrait" type="TextureRect" parent="QuizWindow" unique_id=1143572367]
 layout_mode = 0
 offset_left = 52.0
 offset_top = 416.0
 offset_right = 286.0
 offset_bottom = 715.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("Style_placeholder")
-
-[node name="Label" type="Label" parent="QuizWindow/CarlPlaceholder" unique_id=203790330]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 12.0
-offset_top = 12.0
-offset_right = -12.0
-offset_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Carl
-
-Portrait placeholder"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
+texture = ExtResource("7_carl_default")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Quiz" type="Control" parent="QuizWindow" unique_id=519570709]
 anchors_preset = 0
