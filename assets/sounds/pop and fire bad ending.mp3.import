@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://un1m23kj3niu"
+path="res://.godot/imported/pop and fire bad ending.mp3-1036def7a7e502b350ee07bb43afff51.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/pop and fire bad ending.mp3"
+dest_files=["res://.godot/imported/pop and fire bad ending.mp3-1036def7a7e502b350ee07bb43afff51.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
