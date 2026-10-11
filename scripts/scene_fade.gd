@@ -3,6 +3,7 @@ extends CanvasLayer
 ## A black curtain shared by the menu and room scenes.
 
 @export_range(0.1, 2.0, 0.05) var fade_seconds: float = 0.6
+@export var fade_on_ready: bool = true
 
 @onready var black: ColorRect = $Black
 
@@ -11,7 +12,8 @@ var is_fading: bool = false
 
 func _ready() -> void:
 	black.modulate.a = 1.0
-	fade_from_black()
+	if fade_on_ready:
+		fade_from_black()
 
 
 func _input(_event: InputEvent) -> void:

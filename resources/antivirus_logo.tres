@@ -5,4 +5,4 @@
 [resource]
 resource_name = "KalevAV shield - trimmed canvas"
 atlas = ExtResource("1_logo")
-region = Rect2(176, 180, 1130, 1210)
+region = Rect2(44, 45, 282.5, 302.5)

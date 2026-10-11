@@ -15,17 +15,23 @@
 [ext_resource type="PackedScene" uid="uid://b5nypb45srn6r" path="res://assets/models/arvutihiir.glb" id="14_mouse"]
 [ext_resource type="Texture2D" uid="uid://clrnxmaijbl5a" path="res://assets/models/arvutihiir_Plastic Base Color.png" id="15_mouse_texture"]
 
-[sub_resource type="StandardMaterial3D" id="Material_floor"]
-albedo_color = Color(0.08, 0.08, 0.08, 1)
-roughness = 0.83
+[ext_resource type="Shader" path="res://shaders/room_opaque.gdshader" id="room_opaque_shader"]
+[ext_resource type="Shader" path="res://shaders/room_glass.gdshader" id="room_glass_shader"]
+
+[sub_resource type="ShaderMaterial" id="Material_floor"]
+shader = ExtResource("room_opaque_shader")
+shader_parameter/surface_color = Color(0.08, 0.08, 0.08, 1)
+shader_parameter/surface_roughness = 0.83
 
 [sub_resource type="BoxMesh" id="Mesh_floor"]
 size = Vector3(5, 0.1, 5)
 
-[sub_resource type="StandardMaterial3D" id="Material_black_walls"]
+[sub_resource type="ShaderMaterial" id="Material_black_walls"]
+shader = ExtResource("room_opaque_shader")
 resource_name = "Matte black walls and ceiling"
-albedo_color = Color(0, 0, 0, 1)
-metallic_specular = 0.0
+shader_parameter/surface_color = Color(0, 0, 0, 1)
+shader_parameter/surface_specular = 0.0
+shader_parameter/surface_roughness = 1.0
 
 [sub_resource type="BoxMesh" id="Mesh_ceiling"]
 size = Vector3(5, 0.1, 5)
@@ -48,42 +54,36 @@ size = Vector3(0.1, 0.044, 1)
 [sub_resource type="BoxMesh" id="Mesh_side_wall"]
 size = Vector3(0.1, 2.8, 5)
 
-[sub_resource type="StandardMaterial3D" id="Material_table"]
+[sub_resource type="ShaderMaterial" id="Material_table"]
+shader = ExtResource("room_opaque_shader")
 resource_name = "Table - nearest filtering"
-cull_mode = 2
-albedo_texture = ExtResource("7_table_texture")
-roughness = 0.8
-texture_filter = 0
+shader_parameter/surface_texture = ExtResource("7_table_texture")
+shader_parameter/surface_roughness = 0.8
 
-[sub_resource type="StandardMaterial3D" id="Material_keyboard"]
+[sub_resource type="ShaderMaterial" id="Material_keyboard"]
+shader = ExtResource("room_opaque_shader")
 resource_name = "Keyboard - nearest filtering"
-cull_mode = 2
-albedo_texture = ExtResource("5_keyboard_texture")
-roughness = 0.5
-texture_filter = 0
+shader_parameter/surface_texture = ExtResource("5_keyboard_texture")
+shader_parameter/surface_roughness = 0.5
 
-[sub_resource type="StandardMaterial3D" id="Material_glass"]
+[sub_resource type="ShaderMaterial" id="Material_glass"]
+shader = ExtResource("room_glass_shader")
 resource_name = "Whisky glass - nearest filtering"
-transparency = 1
-cull_mode = 2
-albedo_color = Color(1, 1, 1, 0.18)
-albedo_texture = ExtResource("9_glass_texture")
-roughness = 0.032663
-texture_filter = 0
+shader_parameter/surface_color = Color(1, 1, 1, 0.18)
+shader_parameter/surface_texture = ExtResource("9_glass_texture")
+shader_parameter/surface_roughness = 0.032663
 
-[sub_resource type="StandardMaterial3D" id="Material_mouse"]
+[sub_resource type="ShaderMaterial" id="Material_mouse"]
+shader = ExtResource("room_opaque_shader")
 resource_name = "Mouse - nearest filtering"
-cull_mode = 2
-albedo_texture = ExtResource("15_mouse_texture")
-roughness = 0.55
-texture_filter = 0
+shader_parameter/surface_texture = ExtResource("15_mouse_texture")
+shader_parameter/surface_roughness = 0.55
 
-[sub_resource type="StandardMaterial3D" id="Material_case"]
+[sub_resource type="ShaderMaterial" id="Material_case"]
+shader = ExtResource("room_opaque_shader")
 resource_name = "PC case - nearest filtering"
-cull_mode = 2
-albedo_texture = ExtResource("3_case_texture")
-roughness = 0.5
-texture_filter = 0
+shader_parameter/surface_texture = ExtResource("3_case_texture")
+shader_parameter/surface_roughness = 0.5
 
 [node name="Room" type="Node3D" unique_id=897806313]
 

@@ -5,4 +5,4 @@
 [resource]
 resource_name = "Kodukäija installer - trimmed canvas"
 atlas = ExtResource("1_installer")
-region = Rect2(16, 322, 1473, 818)
+region = Rect2(10.666667, 214.666667, 982, 545.333333)

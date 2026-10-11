@@ -12,7 +12,7 @@ shader = ExtResource("4_ink")
 
 [sub_resource type="AtlasTexture" id="Texture_window"]
 atlas = ExtResource("2_art")
-region = Rect2(16, 240, 1480, 1072)
+region = Rect2(10.666667, 160, 986.666667, 714.666667)
 
 [node name="WindowArt" type="Control" node_paths=PackedStringArray("artwork", "shadow")]
 offset_right = 900.0

@@ -1,5 +1,8 @@
+class_name GameRoom
 extends Node3D
 ## Connects desktop events to the room effects and level music.
+
+@export var start_on_ready: bool = true
 
 @onready var ambient_music: AudioStreamPlayer = $AmbientMusic
 @onready var desktop = $Computer/ComputerViewport/Desktop
@@ -15,6 +18,19 @@ func _ready() -> void:
 	encounter_release.finished.connect(desktop.finish_encounter_release)
 	desktop.ending_reached.connect(ambient_music.stop)
 	desktop.ending_reached.connect($StreetAmbience.stop)
+	if start_on_ready:
+		start_game()
+
+
+func start_game() -> void:
+	process_mode = Node.PROCESS_MODE_INHERIT
+	$Computer/ComputerViewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	$Computer/Audio/CRTLoop.play()
+	$StreetAmbience.start()
+	start_ambient_music()
+
+
+func start_ambient_music() -> void:
 	var target_volume_db := ambient_music.volume_db
 	ambient_music.volume_db = -80.0
 	ambient_music.play()

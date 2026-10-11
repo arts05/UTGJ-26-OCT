@@ -5,4 +5,4 @@
 [resource]
 resource_name = "Blank window - trimmed canvas"
 atlas = ExtResource("1_window")
-region = Rect2(16, 240, 1480, 1072)
+region = Rect2(10.666667, 160, 986.666667, 714.666667)

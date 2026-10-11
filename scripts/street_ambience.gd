@@ -12,12 +12,16 @@ extends Node3D
 @onready var distant_voice: AudioStreamPlayer3D = $DistantVoice
 
 var last_sound: AudioStreamPlayer3D
-var stopped: bool = false
+var stopped: bool = true
 
 
 func _ready() -> void:
 	for player in [footsteps, car, cough, distant_voice]:
 		player.finished.connect(_schedule_next)
+
+
+func start() -> void:
+	stopped = false
 	_schedule_next()
 
 

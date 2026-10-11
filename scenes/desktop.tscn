@@ -36,7 +36,7 @@ shader = ExtResource("11_cursor_outline")
 
 [sub_resource type="AtlasTexture" id="Texture_taskbar"]
 atlas = ExtResource("9_taskbar")
-region = Rect2(0, 909, 2400, 53)
+region = Rect2(0, 454.5, 1200, 26.5)
 
 [node name="Desktop" type="Control" unique_id=884689875]
 layout_mode = 3

@@ -7,6 +7,7 @@
 
 [ext_resource type="Theme" path="res://resources/menu_theme.tres" id="5_theme"]
 [ext_resource type="PackedScene" path="res://scenes/options_menu.tscn" id="6_options"]
+[ext_resource type="PackedScene" path="res://scenes/loading_screen.tscn" id="7_loading"]
 
 [sub_resource type="FastNoiseLite" id="Noise_signal"]
 noise_type = 1
@@ -95,7 +96,10 @@ layout_mode = 2
 
 [node name="SceneFade" parent="." instance=ExtResource("4_fade")]
 
+[node name="LoadingScreen" parent="." instance=ExtResource("7_loading")]
+
 [connection signal="pressed" from="Center/Menu/Buttons/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Center/Menu/Buttons/OptionsButton" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Center/Menu/Buttons/QuitButton" to="." method="_on_quit_pressed"]
 [connection signal="closed" from="Center/Options" to="." method="_on_options_closed"]
+[connection signal="pressed" from="LoadingScreen/Panel/Center/Content/Back" to="." method="_on_loading_back_pressed"]

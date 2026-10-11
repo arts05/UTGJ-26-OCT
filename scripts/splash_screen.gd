@@ -9,6 +9,7 @@ extends Control
 @onready var start_prompt: Label = $StartPrompt
 @onready var animation: AnimationPlayer = $AnimationPlayer
 @onready var splash_audio: AudioStreamPlayer = $SplashAudio
+@onready var loading_screen: GameLoadingScreen = $LoadingScreen
 
 var waiting_for_input: bool = false
 var menu_scene: PackedScene
@@ -22,6 +23,26 @@ func _ready() -> void:
 	logo.modulate.a = 0.0
 	godot_logo.modulate.a = 0.0
 	placeholder.visible = artwork.texture == null
+	_prepare_startup()
+
+
+func _prepare_startup() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	loading_screen.message.text = "Loading…"
+	loading_screen.back_button.text = "Retry"
+	loading_screen.back_button.hide()
+	loading_screen.progress.show()
+	loading_screen.show()
+	var error := await RoomStartup.prepare()
+	if error != OK:
+		loading_screen.message.text = "Could not prepare the room."
+		loading_screen.progress.hide()
+		loading_screen.back_button.show()
+		loading_screen.back_button.grab_focus()
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		push_error("Startup preparation failed: " + error_string(error))
+		return
+	loading_screen.hide()
 	if OS.has_feature("web"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		waiting_for_input = true
@@ -55,7 +76,7 @@ func _start_intro() -> void:
 	splash_audio.play()
 	animation.play(&"intro")
 	await animation.animation_finished
-	# Both logos finish at 5.4 s. The menu's 0.6 s fade fits inside the 6.14 s jingle.
+	# The splash finishes at 5.4 s; the menu fade fits inside the 6.14 s jingle.
 	# Keep the audio alive across the scene change, then free it when its tail ends.
 	splash_audio.reparent(get_tree().root)
 	splash_audio.finished.connect(splash_audio.queue_free)

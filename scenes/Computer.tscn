@@ -149,6 +149,7 @@ volume_db = -21.0
 unit_size = 0.5
 autoplay = true
 bus = &"CRT"
+playback_type = 1
 
 [node name="Click" type="AudioStreamPlayer3D" parent="Audio" unique_id=973797048]
 stream = ExtResource("8_click")

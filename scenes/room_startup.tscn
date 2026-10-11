@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/room_startup.gd" id="1_startup"]
+
+[node name="RoomStartup" type="Node"]
+script = ExtResource("1_startup")
+
+[node name="WarmupViewport" type="SubViewport" parent="."]
+gui_disable_input = true
+own_world_3d = true
+size = Vector2i(1152, 648)
+render_target_update_mode = 0

@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/loading_screen.gd" id="1_loading"]
+[ext_resource type="Theme" path="res://resources/menu_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="Style_track"]
+bg_color = Color(0.012, 0.015, 0.02, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.2, 0.24, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_fill"]
+bg_color = Color(0.23, 0.42, 0.72, 1)
+
+[node name="LoadingScreen" type="CanvasLayer"]
+layer = 200
+visible = false
+script = ExtResource("1_loading")
+
+[node name="Panel" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+color = Color(0, 0, 0, 1)
+
+[node name="Center" type="CenterContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="Panel/Center"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Message" type="Label" parent="Panel/Center/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.73, 1)
+theme_override_font_sizes/font_size = 18
+text = "Loading…"
+horizontal_alignment = 1
+
+[node name="Progress" type="ProgressBar" parent="Panel/Center/Content"]
+custom_minimum_size = Vector2(220, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("Style_track")
+theme_override_styles/fill = SubResource("Style_fill")
+show_percentage = false
+
+[node name="Back" type="Button" parent="Panel/Center/Content"]
+visible = false
+layout_mode = 2
+text = "Back"

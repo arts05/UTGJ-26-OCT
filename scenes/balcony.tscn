@@ -10,29 +10,28 @@
 [ext_resource type="Shader" path="res://shaders/snowflake.gdshader" id="8_snow"]
 [ext_resource type="PackedScene" path="res://scenes/neighbour_building.tscn" id="9_building"]
 
-[sub_resource type="StandardMaterial3D" id="Material_balcony"]
+[ext_resource type="Shader" path="res://shaders/room_opaque.gdshader" id="room_opaque_shader"]
+[ext_resource type="Shader" path="res://shaders/room_glass.gdshader" id="room_glass_shader"]
+
+[sub_resource type="ShaderMaterial" id="Material_balcony"]
+shader = ExtResource("room_opaque_shader")
 resource_name = "Balcony - nearest filtering"
-cull_mode = 2
-albedo_texture = ExtResource("2_balcony_texture")
-roughness = 0.86
-texture_filter = 0
+shader_parameter/surface_texture = ExtResource("2_balcony_texture")
+shader_parameter/surface_roughness = 0.86
 
-[sub_resource type="StandardMaterial3D" id="Material_frame"]
+[sub_resource type="ShaderMaterial" id="Material_frame"]
+shader = ExtResource("room_opaque_shader")
 resource_name = "Door frame - nearest filtering"
-cull_mode = 2
-albedo_texture = ExtResource("3_frame_texture")
-roughness = 0.65
-texture_filter = 0
+shader_parameter/surface_texture = ExtResource("3_frame_texture")
+shader_parameter/surface_roughness = 0.65
 
-[sub_resource type="StandardMaterial3D" id="Material_glass"]
+[sub_resource type="ShaderMaterial" id="Material_glass"]
+shader = ExtResource("room_glass_shader")
 resource_name = "Balcony glass"
 render_priority = 1
-transparency = 1
-cull_mode = 2
-albedo_color = Color(1, 1, 1, 0.1)
-albedo_texture = ExtResource("4_glass_texture")
-roughness = 0.16
-texture_filter = 0
+shader_parameter/surface_color = Color(1, 1, 1, 0.1)
+shader_parameter/surface_texture = ExtResource("4_glass_texture")
+shader_parameter/surface_roughness = 0.16
 
 [sub_resource type="FastNoiseLite" id="Noise_fog"]
 noise_type = 1

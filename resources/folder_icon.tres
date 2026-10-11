@@ -5,4 +5,4 @@
 [resource]
 resource_name = "Folder icon - trimmed canvas"
 atlas = ExtResource("1_folder")
-region = Rect2(164, 133, 800, 740)
+region = Rect2(41, 33.25, 200, 185)

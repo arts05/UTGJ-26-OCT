@@ -6,6 +6,7 @@ extends EditorScenePostImport
 # Its front faces +X, and the monitor leans back by 8 degrees.
 const GLASS_UV_REGION := Rect2(0.0, 0.0, 0.2, 0.27)
 const SCREEN_TILT_DEGREES: float = 8.0
+const ROOM_MATERIAL_IMPORT = preload("res://scripts/import/room_material_import.gd")
 
 
 func _post_import(scene: Node) -> Object:
@@ -36,7 +37,7 @@ func _post_import(scene: Node) -> Object:
 	assert(not screen_indices.is_empty(), "No CRT glass found. Update the importer if the model or its UV atlas changed.")
 	monitor.name = "Body"
 	monitor.mesh = _build_mesh(arrays, body_indices)
-	monitor.mesh.surface_set_material(0, plastic)
+	monitor.mesh.surface_set_material(0, ROOM_MATERIAL_IMPORT.make_room_material(plastic))
 
 	var screen_arrays := arrays.duplicate()
 	screen_arrays[Mesh.ARRAY_TEX_UV] = _make_screen_uvs(arrays[Mesh.ARRAY_VERTEX], screen_indices)
@@ -48,7 +49,7 @@ func _post_import(scene: Node) -> Object:
 	glass.albedo_color = Color.BLACK
 	glass.roughness = 0.15
 	glass.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
-	screen.mesh.surface_set_material(0, glass)
+	screen.mesh.surface_set_material(0, ROOM_MATERIAL_IMPORT.make_room_material(glass))
 	scene.add_child(screen)
 	screen.owner = scene
 	return scene

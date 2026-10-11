@@ -13,8 +13,8 @@ extends Node3D
 @export var restart_emission_energy: float = 2.0
 @export var restart_light_energy: float = 0.0025
 
-@onready var drive_material: StandardMaterial3D = $Drive/Lens.material_override
-@onready var restart_material: StandardMaterial3D = $Restart/Lens.material_override
+@onready var drive_material: ShaderMaterial = $Drive/Lens.material_override
+@onready var restart_material: ShaderMaterial = $Restart/Lens.material_override
 @onready var drive_light: OmniLight3D = $Drive/Light
 @onready var restart_light: OmniLight3D = $Restart/Light
 
@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 
 	var target_brightness := 1.0 if drive_on else 0.0
 	drive_brightness = move_toward(drive_brightness, target_brightness, delta * 45.0)
-	drive_material.emission_energy_multiplier = drive_brightness * drive_emission_energy
+	drive_material.set_shader_parameter("glow_strength", drive_brightness * drive_emission_energy)
 	drive_light.light_energy = drive_brightness * drive_light_energy
 
 
@@ -54,7 +54,7 @@ func set_restarting(active: bool) -> void:
 	drive_on = false
 	drive_brightness = 0.0
 	seconds_to_toggle = idle_pause.x
-	drive_material.emission_energy_multiplier = 0.0
+	drive_material.set_shader_parameter("glow_strength", 0.0)
 	drive_light.light_energy = 0.0
-	restart_material.emission_energy_multiplier = restart_emission_energy if active else 0.0
+	restart_material.set_shader_parameter("glow_strength", restart_emission_energy if active else 0.0)
 	restart_light.light_energy = restart_light_energy if active else 0.0

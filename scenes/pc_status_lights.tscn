@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" path="res://scripts/pc_status_lights.gd" id="1_lights"]
 
-[sub_resource type="StandardMaterial3D" id="Material_mount"]
-albedo_color = Color(0.055, 0.05, 0.035, 1)
-roughness = 0.7
+[ext_resource type="Shader" path="res://shaders/room_opaque.gdshader" id="room_opaque_shader"]
+
+[sub_resource type="ShaderMaterial" id="Material_mount"]
+shader = ExtResource("room_opaque_shader")
+shader_parameter/surface_color = Color(0.055, 0.05, 0.035, 1)
+shader_parameter/surface_roughness = 0.7
 
 [sub_resource type="CylinderMesh" id="Mesh_mount"]
 top_radius = 0.006
@@ -19,21 +22,19 @@ height = 0.009
 radial_segments = 16
 rings = 8
 
-[sub_resource type="StandardMaterial3D" id="Material_green"]
+[sub_resource type="ShaderMaterial" id="Material_green"]
 resource_local_to_scene = true
-albedo_color = Color(0.02, 0.08, 0.01, 1)
-roughness = 0.25
-emission_enabled = true
-emission = Color(0.2, 1, 0.04, 1)
-emission_energy_multiplier = 0.0
+shader = ExtResource("room_opaque_shader")
+shader_parameter/surface_color = Color(0.02, 0.08, 0.01, 1)
+shader_parameter/surface_roughness = 0.25
+shader_parameter/glow_color = Color(0.2, 1, 0.04, 1)
 
-[sub_resource type="StandardMaterial3D" id="Material_amber"]
+[sub_resource type="ShaderMaterial" id="Material_amber"]
 resource_local_to_scene = true
-albedo_color = Color(0.09, 0.04, 0.005, 1)
-roughness = 0.25
-emission_enabled = true
-emission = Color(1, 0.38, 0.015, 1)
-emission_energy_multiplier = 0.0
+shader = ExtResource("room_opaque_shader")
+shader_parameter/surface_color = Color(0.09, 0.04, 0.005, 1)
+shader_parameter/surface_roughness = 0.25
+shader_parameter/glow_color = Color(1, 0.38, 0.015, 1)
 
 [node name="StatusLights" type="Node3D"]
 script = ExtResource("1_lights")
