@@ -14,6 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://dg260x4r63ag7" path="res://assets/sounds/Windows Startup.mp3" id="12_startup"]
 [ext_resource type="AudioStream" uid="uid://doy732507v3p3" path="res://assets/sounds/keyboardkey.wav" id="13_keyboard"]
 [ext_resource type="Shader" uid="uid://mnm0hof35ux6" path="res://shaders/crt_dust.gdshader" id="14_dust"]
+[ext_resource type="PackedScene" path="res://scenes/computer_glow.tscn" id="15_failure_glow"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_1x23v"]
 viewport_path = NodePath("../ComputerViewport")
@@ -118,6 +119,8 @@ angle_max = 360.0
 scale_amount_min = 0.45
 color = Color(0.55, 0.72, 1, 0)
 color_ramp = SubResource("Gradient_dust_lifetime")
+
+[node name="FailureGlow" parent="." instance=ExtResource("15_failure_glow")]
 
 [node name="ComputerViewport" type="SubViewport" parent="." unique_id=1137603431]
 disable_3d = true

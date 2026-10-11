@@ -4,6 +4,7 @@ extends Control
 signal encounter_won
 signal ending_reached
 signal good_ending_requested
+signal bad_ending_requested
 signal drive_activity_changed(busy: bool)
 signal restart_state_changed(restarting: bool)
 signal button_clicked
@@ -40,7 +41,6 @@ enum Stage {
 @onready var carl_prompt = $Screens/CarlPrompt
 @onready var carl = $Screens/Carl
 @onready var congratulations = $Screens/Congratulations
-@onready var bad_ending: Control = $Screens/BadEnding
 @onready var crash_screen = $Screens/CrashScreen
 @onready var kratt_delay: Timer = $KrattDelay
 @onready var victory_pause: Timer = $VictoryPause
@@ -241,8 +241,13 @@ func _begin_ending(good: bool) -> void:
 		_show_screen(null)
 		good_ending_requested.emit()
 	else:
-		_show_screen(bad_ending)
-		bad_ending.get_node("AnimationPlayer").play(&"reveal")
+		# Leave the failed quiz on the glass while the physical computer burns out.
+		start_menu.close(true)
+		active_screen.process_mode = Node.PROCESS_MODE_DISABLED
+		taskbar.hide()
+		installer_shortcut.hide()
+		cursor.hide()
+		bad_ending_requested.emit()
 
 
 func _on_viljaneitsi_started() -> void:

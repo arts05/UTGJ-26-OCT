@@ -1,0 +1,240 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ending_credits.gd" id="1_credits"]
+[ext_resource type="Theme" path="res://resources/menu_theme.tres" id="4_theme"]
+[ext_resource type="AudioStream" path="res://assets/sounds/tsitsor.ogg" id="6_music"]
+[ext_resource type="FontFile" path="res://assets/fonts/tahoma.ttf" id="8_tahoma"]
+
+[sub_resource type="Theme" id="Theme_sources"]
+default_font = ExtResource("8_tahoma")
+default_font_size = 24
+Label/colors/font_color = Color(0.85, 0.88, 0.86, 1)
+
+[node name="EndingCredits" type="CanvasLayer"]
+layer = 20
+script = ExtResource("1_credits")
+editor_description = "The same hard title cut, complete song, and credits for both endings. Adjust card durations here and audio volume on Music."
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_music")
+volume_db = -6.0
+bus = &"Music"
+playback_type = 1
+editor_description = "Starts on the title cut. Its finished signal returns to the menu after the entire clip; the last credit card holds until then."
+
+[node name="Black" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("4_theme")
+color = Color(0, 0, 0, 1)
+
+[node name="Title" type="Label" parent="Black"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_tahoma")
+theme_override_font_sizes/font_size = 84
+text = "Project Kalev"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Team" type="Label" parent="Black"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("8_tahoma")
+theme_override_font_sizes/font_size = 56
+text = "PAPADOPOULOS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Credits" type="VBoxContainer" parent="Black"]
+visible = false
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.25
+anchor_right = 0.9
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Engine" type="Label" parent="Black/Credits"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Created with Godot"
+horizontal_alignment = 1
+
+[node name="Thanks" type="Label" parent="Black/Credits"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Thank you for playing."
+horizontal_alignment = 1
+
+[node name="HeritageSources" type="VBoxContainer" parent="Black"]
+visible = false
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.04
+anchor_right = 0.9
+anchor_bottom = 0.96
+mouse_filter = 2
+theme = SubResource("Theme_sources")
+theme_override_constants/separation = 16
+alignment = 1
+editor_description = "Heritage sources supplied by the team. This card appears before the separate itch.io asset credits."
+
+[node name="Heading" type="Label" parent="Black/HeritageSources"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Heritage sources — ERR archive"
+horizontal_alignment = 1
+
+[node name="FolkSong" type="VBoxContainer" parent="Black/HeritageSources"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Black/HeritageSources/FolkSong"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Liivi rahvalaul \"Tšitšor-linnud\""
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ArchiveLink" type="Label" parent="Black/HeritageSources/FolkSong"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "https://arhiiv.err.ee/audio/vaata/linnukuu-laulud"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Advertisement" type="VBoxContainer" parent="Black/HeritageSources"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Black/HeritageSources/Advertisement"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Ray Charles (reklaam)"
+horizontal_alignment = 1
+
+[node name="ArchiveLink" type="Label" parent="Black/HeritageSources/Advertisement"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "https://arhiiv.err.ee/audio/vaata/ray-charles-reklaam"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Film" type="VBoxContainer" parent="Black/HeritageSources"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Black/HeritageSources/Film"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Külmale maale (1965) — Roots Heiki — 51:10"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="ArchiveLink" type="Label" parent="Black/HeritageSources/Film"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "https://arhiiv.err.ee/video/vaata/kulmale-maale"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Jingle" type="VBoxContainer" parent="Black/HeritageSources"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Black/HeritageSources/Jingle"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Reklaamikõll. 02 (1990)"
+horizontal_alignment = 1
+
+[node name="ArchiveLink" type="Label" parent="Black/HeritageSources/Jingle"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "https://arhiiv.err.ee/audio/vaata/reklaamikoll-02"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="AssetSources" type="VBoxContainer" parent="Black"]
+visible = false
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.04
+anchor_right = 0.9
+anchor_bottom = 0.96
+mouse_filter = 2
+theme = SubResource("Theme_sources")
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Heading" type="Label" parent="Black/AssetSources"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Assets & fonts — itch.io"
+horizontal_alignment = 1
+
+[node name="Font" type="VBoxContainer" parent="Black/AssetSources"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Black/AssetSources/Font"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Modern Notes — kurutik"
+horizontal_alignment = 1
+
+[node name="SourceLink" type="Label" parent="Black/AssetSources/Font"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "https://kurutik.itch.io/free-handwritten-font"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="CharacterModel" type="VBoxContainer" parent="Black/AssetSources"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Black/AssetSources/CharacterModel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "PSX Casual Male Character — Vinrax"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SourceLink" type="Label" parent="Black/AssetSources/CharacterModel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56, 0.62, 0.58, 1)
+theme_override_font_sizes/font_size = 16
+text = "https://vinrax.itch.io/psx-casual-male-character"
+horizontal_alignment = 1
+autowrap_mode = 2
+

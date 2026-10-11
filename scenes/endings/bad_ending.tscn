@@ -1,8 +1,36 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/endings/ending_placeholder.tscn" id="1_ending"]
+[ext_resource type="Script" path="res://scripts/bad_ending.gd" id="1_ending"]
+[ext_resource type="AudioStream" path="res://assets/sounds/pop and fire bad ending.mp3" id="2_fire"]
+[ext_resource type="AudioStream" path="res://assets/sounds/smoke detector.mp3" id="3_alarm"]
 
-[node name="BadEnding" instance=ExtResource("1_ending")]
+[node name="BadEnding" type="Node3D"]
+script = ExtResource("1_ending")
+editor_description = "Timing and camera shake are adjustable here. FireSound and SmokeAlarm have separate volume controls; fire emitters live in Computer/FailureGlow."
 
-[node name="Title" parent="." index="1"]
-text = "BAD ENDING"
+[node name="BurningView" type="Marker3D" parent="."]
+position = Vector3(0, 1.13, 1.15)
+rotation = Vector3(-0.07, 0, 0)
+editor_description = "Slightly wider and higher than the seated view to keep the flames above the CRT in frame."
+
+[node name="FireSound" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 1.17, -0.12)
+stream = ExtResource("2_fire")
+volume_db = -10.0
+unit_size = 0.7
+max_db = 0.0
+max_distance = 7.0
+bus = &"Computer"
+playback_type = 1
+
+[node name="SmokeAlarm" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(-0.3, 2.1, -0.2)
+stream = ExtResource("3_alarm")
+volume_db = -20.0
+unit_size = 1.5
+max_db = -6.0
+max_distance = 8.0
+bus = &"Ambience"
+playback_type = 1
+
+[connection signal="finished" from="FireSound" to="." method="_on_fire_sound_finished"]

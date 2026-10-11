@@ -131,7 +131,9 @@ func _render_room_views() -> void:
 		for frame in 2:
 			await get_tree().process_frame
 			await RenderingServer.frame_post_draw
-		progress_changed.emit(0.5 + 0.5 * float(index + 1) / view_angles.size())
+		progress_changed.emit(0.5 + 0.45 * float(index + 1) / view_angles.size())
+	await prepared_room.get_node("GoodEnding").warm_up_visuals()
+	await prepared_room.get_node("BadEnding").warm_up_visuals()
 	camera.transform = seated_transform
 	camera.set_process(true)
 

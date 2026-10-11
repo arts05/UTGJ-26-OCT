@@ -11,6 +11,10 @@
 [ext_resource type="PackedScene" path="res://scenes/street_ambience.tscn" id="9_street"]
 [ext_resource type="Script" uid="uid://exakxc3w284" path="res://scripts/encounter_release.gd" id="10_release_sequence"]
 [ext_resource type="PackedScene" path="res://scenes/endings/good_ending.tscn" id="11_good_ending"]
+[ext_resource type="PackedScene" path="res://scenes/endings/bad_ending.tscn" id="12_bad_ending"]
+[ext_resource type="PackedScene" path="res://scenes/endings/ending_credits.tscn" id="13_credits"]
+[ext_resource type="AudioStream" path="res://assets/sounds/cd_insert_short.wav" id="14_cd_insert"]
+[ext_resource type="AudioStream" path="res://assets/sounds/Windows Startup.mp3" id="15_startup"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -46,6 +50,22 @@ script = ExtResource("4_main")
 stream = ExtResource("5_ambient_music")
 volume_db = -12.0
 bus = &"Music"
+playback_type = 1
+
+[node name="IntroAudio" type="Node" parent="."]
+editor_description = "New-game introduction: a short CD insertion over black, then the startup chime. Adjust each sound's volume on its player. CD duration and room reveal delay are on the main node."
+
+[node name="CDInsert" type="AudioStreamPlayer" parent="IntroAudio"]
+stream = ExtResource("14_cd_insert")
+volume_db = -6.0
+bus = &"Computer"
+playback_type = 1
+editor_description = "Normalized 1.5-second excerpt from cd_insert.mp3, skipping its quiet lead-in. The original recording is kept alongside it."
+
+[node name="Startup" type="AudioStreamPlayer" parent="IntroAudio"]
+stream = ExtResource("15_startup")
+volume_db = -18.0
+bus = &"Computer"
 playback_type = 1
 
 [node name="Room" parent="." unique_id=626247560 instance=ExtResource("3_room")]
@@ -93,9 +113,18 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="GoodEnding" parent="." node_paths=PackedStringArray("player_camera", "ghost_release") instance=ExtResource("11_good_ending")]
+[node name="GoodEnding" parent="." node_paths=PackedStringArray("player_camera", "ghost_release", "credits") instance=ExtResource("11_good_ending")]
 player_camera = NodePath("../Camera3D")
 ghost_release = NodePath("../Room/GhostRelease")
+credits = NodePath("../EndingCredits")
+
+[node name="BadEnding" parent="." node_paths=PackedStringArray("player_camera", "computer", "case_lights", "credits") instance=ExtResource("12_bad_ending")]
+player_camera = NodePath("../Camera3D")
+computer = NodePath("../Computer")
+case_lights = NodePath("../Room/PCCase/StatusLights")
+credits = NodePath("../EndingCredits")
+
+[node name="EndingCredits" parent="." instance=ExtResource("13_credits")]
 
 [node name="PauseMenu" parent="." unique_id=168662833 node_paths=PackedStringArray("computer", "scene_fade") instance=ExtResource("8_pause")]
 computer = NodePath("../Computer")

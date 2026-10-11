@@ -102,8 +102,7 @@ func _open_game() -> void:
 	var level := RoomStartup.take_room()
 	var tree := get_tree()
 	tree.current_scene = level
-	level.start_game()
-	level.scene_fade.fade_from_black()
+	level.play_intro()
 	queue_free()
 
 

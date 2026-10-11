@@ -15,7 +15,6 @@
 [ext_resource type="PackedScene" path="res://scenes/apps/carl_prompt.tscn" id="12_carl_prompt"]
 [ext_resource type="PackedScene" path="res://scenes/minigames/carl.tscn" id="13_carl"]
 [ext_resource type="PackedScene" path="res://scenes/apps/congratulations.tscn" id="14_congratulations"]
-[ext_resource type="PackedScene" path="res://scenes/endings/bad_ending.tscn" id="16_bad_ending"]
 [ext_resource type="PackedScene" path="res://scenes/apps/start_menu.tscn" id="17_start_menu"]
 [ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="18_os_theme"]
 
@@ -151,9 +150,6 @@ visible = false
 visible = false
 
 [node name="Congratulations" parent="Screens" instance=ExtResource("14_congratulations")]
-visible = false
-
-[node name="BadEnding" parent="Screens" instance=ExtResource("16_bad_ending")]
 visible = false
 
 [node name="Kodukaija" parent="Screens" instance=ExtResource("6_kodukaija")]

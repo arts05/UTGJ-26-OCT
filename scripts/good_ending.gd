@@ -1,11 +1,11 @@
 extends Node3D
-## The final release, shoulder touch, camera turn, and full-screen credits.
+## The final release, shoulder touch, and camera turn before the shared credits.
 
-signal finished
 signal title_reached
 
 @export var player_camera: Camera3D
 @export var ghost_release: Node3D
+@export var credits: EndingCredits
 
 @export_group("Cinematic timing")
 @export_range(0.1, 1.0) var pullback_seconds: float = 0.45
@@ -19,12 +19,6 @@ signal title_reached
 ## The hand reaches its resting pose at 80% of the shoulder-touch animation.
 @export_range(0.0, 1.0, 0.01) var shoulder_contact_progress: float = 0.8
 
-@export_group("Title and credits")
-@export_range(0.0, 0.2, 0.005) var title_music_delay_seconds: float = 0.04
-@export_range(1.0, 6.0) var title_seconds: float = 3.0
-@export_range(1.0, 6.0) var team_credit_seconds: float = 4.0
-@export_range(1.0, 8.0) var sources_seconds: float = 6.0
-
 @onready var camera: Camera3D = $EndingCamera
 @onready var seated_view: Marker3D = $SeatedView
 @onready var shoulder_view: Marker3D = $ShoulderView
@@ -34,18 +28,33 @@ signal title_reached
 @onready var footsteps: AudioStreamPlayer3D = $Footsteps
 @onready var footstep_timing: AnimationPlayer = $FootstepTiming
 @onready var shoulder_pat: AudioStreamPlayer3D = $ShoulderPat
-@onready var ending_music: AudioStreamPlayer = $EndingMusic
 @onready var approach_start: Marker3D = $ApproachStart
 @onready var approach_end: Marker3D = $ApproachEnd
 @onready var reveal_light: OmniLight3D = $RevealLight
-@onready var card: Control = $EndCard/Black
-@onready var title: Label = $EndCard/Black/Title
-@onready var team_credit: Label = $EndCard/Black/Team
-@onready var sources: VBoxContainer = $EndCard/Black/Sources
-@onready var credits: VBoxContainer = $EndCard/Black/Credits
 
 var running: bool = false
 var sequence: Tween
+
+
+func warm_up_visuals() -> void:
+	# Render the face and skinned model in the hidden loading viewport, so their
+	# first appearance does not compile shaders during the camera turn on Web.
+	camera.global_transform = reveal_view.global_transform
+	camera.make_current()
+	actor.show()
+	reveal_light.show()
+	animation.play("shoulder_touch")
+	animation.seek(animation.current_animation_length, true)
+	animation.pause()
+	for frame in 2:
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+	animation.play("RESET")
+	animation.advance(0.0)
+	animation.stop()
+	actor.hide()
+	reveal_light.hide()
+	player_camera.make_current()
 
 
 func play() -> void:
@@ -77,16 +86,6 @@ func play() -> void:
 	sequence.tween_property(camera, "global_transform", reveal_view.global_transform, turn_seconds).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	sequence.tween_interval(face_hold_seconds)
 	sequence.tween_callback(_cut_to_title)
-	# Give the title a brief visual lead before the music's first hit.
-	sequence.tween_interval(title_music_delay_seconds)
-	sequence.tween_callback(ending_music.play)
-	sequence.tween_interval(title_seconds)
-	sequence.tween_callback(_show_team_credit)
-	sequence.tween_interval(team_credit_seconds)
-	sequence.tween_callback(_show_sources)
-	sequence.tween_interval(sources_seconds)
-	sequence.tween_callback(_show_final_credit)
-	# The final card holds until the complete music clip has played.
 
 
 func _begin_approach() -> void:
@@ -104,34 +103,13 @@ func _reach_shoulder() -> void:
 
 
 func _cut_to_title() -> void:
-	card.show()
-	title.show()
 	actor.hide()
 	reveal_light.hide()
+	credits.play()
 	title_reached.emit()
-
-
-func _show_team_credit() -> void:
-	title.hide()
-	team_credit.show()
-
-
-func _show_sources() -> void:
-	team_credit.hide()
-	sources.show()
-
-
-func _show_final_credit() -> void:
-	sources.hide()
-	credits.show()
-
-
-func _on_ending_music_finished() -> void:
-	finished.emit()
 
 
 func _exit_tree() -> void:
 	footstep_timing.stop()
 	footsteps.stop()
 	shoulder_pat.stop()
-	ending_music.stop()

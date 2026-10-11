@@ -5,12 +5,20 @@
 [ext_resource type="Shader" path="res://shaders/room_opaque.gdshader" id="3_surface"]
 [ext_resource type="Texture2D" path="res://assets/models/male_casual/man_tex.png" id="4_texture"]
 [ext_resource type="Texture2D" path="res://resources/kalev_face.tres" id="5_face"]
+[ext_resource type="Shader" path="res://shaders/room_glass.gdshader" id="6_face_surface"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kalev1.png" id="7_portrait"]
 
 [sub_resource type="ShaderMaterial" id="Material_actor"]
 shader = ExtResource("3_surface")
 shader_parameter/surface_texture = ExtResource("4_texture")
 shader_parameter/surface_roughness = 0.85
 shader_parameter/surface_specular = 0.15
+
+[sub_resource type="ShaderMaterial" id="Material_face"]
+shader = ExtResource("6_face_surface")
+shader_parameter/surface_texture = ExtResource("7_portrait")
+shader_parameter/surface_roughness = 1.0
+shader_parameter/surface_specular = 0.0
 
 [node name="Kalev" type="Node3D"]
 
@@ -35,6 +43,8 @@ scale = Vector3(0.86, 1.15, 1)
 pixel_size = 0.00095
 layers = 4
 texture_filter = 0
+material_override = SubResource("Material_face")
+cast_shadow = 0
 shaded = true
 double_sided = false
 texture = ExtResource("5_face")

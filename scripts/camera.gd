@@ -120,8 +120,10 @@ func set_controls_locked(locked: bool) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
-func pull_back(seconds: float) -> void:
-	_move_to_view(room_view, ViewMode.ROOM, seconds)
+func pull_back(seconds: float, target_view: Marker3D = null) -> void:
+	if target_view == null:
+		target_view = room_view
+	_move_to_view(target_view, ViewMode.ROOM, seconds)
 
 
 func _move_to_view(target: Marker3D, next_mode: ViewMode, seconds: float = 0.0) -> void:

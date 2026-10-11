@@ -19,6 +19,8 @@ uniform float halation_strength : hint_range(0.0, 0.5, 0.01) = 0.18;
 uniform float halation_radius_pixels : hint_range(1.0, 8.0, 0.5) = 3.0;
 uniform float glass_sheen_strength : hint_range(0.0, 0.15, 0.005) = 0.045;
 uniform vec3 glass_light_direction = vec3(-0.8, 0.4, 0.7);
+uniform float failure_strength : hint_range(0.0, 1.0) = 0.0;
+uniform float shutdown_progress : hint_range(0.0, 1.0) = 0.0;
 
 
 float pattern_visibility(float cycles_per_pixel) {
@@ -51,6 +53,13 @@ void fragment() {
 	vec2 desktop_size = vec2(textureSize(desktop_texture, 0));
 	vec2 border = vec2(border_pixels) / desktop_size;
 	vec2 desktop_uv = (UV - border) / (1.0 - border * 2.0);
+	float collapse_height = mix(1.0, 0.004, smoothstep(0.0, 0.7, shutdown_progress));
+	desktop_uv.y = (desktop_uv.y - 0.5) / collapse_height + 0.5;
+	float fault_band = floor(UV.y * 28.0);
+	float fault_noise = sample_grain(vec2(fault_band, floor(TIME * 12.0)), 0.0);
+	if (effects_enabled) {
+		desktop_uv.x += (fault_noise - 0.5) * failure_strength * 0.028;
+	}
 	vec3 color = texture(desktop_texture, desktop_uv).rgb;
 	vec2 distance_to_border = min(UV - border, 1.0 - border - UV);
 	vec2 border_mask = smoothstep(vec2(0.0), fwidth(UV), distance_to_border);
@@ -114,7 +123,15 @@ void fragment() {
 		float sheen = pow(max(dot(normalize(reflected_world), normalize(glass_light_direction)), 0.0), 12.0);
 		float grazing_angle = pow(1.0 - max(dot(normalize(NORMAL), VIEW), 0.0), 2.0);
 		color += vec3(0.7, 0.85, 1.0) * sheen * (0.35 + grazing_angle) * glass_sheen_strength;
+		color = mix(color, vec3(fault_noise * 0.6), failure_strength * 0.25);
 	}
 
+	// The tube contracts to a horizontal line, then a point, entirely on the 3D glass.
+	float collapse_width = 1.0 - smoothstep(0.7, 1.0, shutdown_progress);
+	vec2 half_size = vec2(collapse_width, collapse_height) * (0.5 - border);
+	vec2 collapse_mask = 1.0 - smoothstep(half_size, half_size + fwidth(UV), abs(UV - 0.5));
+	float afterglow = smoothstep(0.3, 0.7, shutdown_progress);
+	color = mix(color, vec3(0.8, 0.9, 1.0), afterglow);
+	color *= collapse_mask.x * collapse_mask.y * (1.0 - smoothstep(0.88, 1.0, shutdown_progress));
 	ALBEDO = clamp(color, vec3(0.0), vec3(1.0)) * border_mask.x * border_mask.y;
 }

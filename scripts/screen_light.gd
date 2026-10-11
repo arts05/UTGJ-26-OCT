@@ -8,6 +8,7 @@ extends OmniLight3D
 @export var maximum_energy: float = 0.35
 @export var casing_maximum_energy: float = 0.025
 @export_range(0.1, 1.0) var sample_interval: float = 0.2
+@export_range(0.0, 1.0) var power: float = 1.0
 
 const FADE_SPEED: float = 8.0
 
@@ -36,13 +37,13 @@ func _process(delta: float) -> void:
 
 	var blend := 1.0 - exp(-FADE_SPEED * delta)
 	light_color = light_color.lerp(target_color, blend)
-	light_energy = lerpf(light_energy, target_brightness * maximum_energy, blend)
+	light_energy = lerpf(light_energy, target_brightness * maximum_energy * power, blend)
 	casing_light.light_color = light_color
 	casing_light.light_energy = lerpf(
-		casing_light.light_energy, target_brightness * casing_maximum_energy, blend
+		casing_light.light_energy, target_brightness * casing_maximum_energy * power, blend
 	)
 	# Dust catches the same changing light and disappears when the screen goes dark.
-	screen_dust.color = Color(light_color, lerpf(screen_dust.color.a, target_brightness, blend))
+	screen_dust.color = Color(light_color, lerpf(screen_dust.color.a, target_brightness * power, blend))
 
 
 func _sample_screen() -> void:

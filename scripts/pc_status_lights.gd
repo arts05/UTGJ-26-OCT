@@ -49,6 +49,11 @@ func set_drive_busy(busy: bool) -> void:
 	seconds_to_toggle = 0.0
 
 
+func power_off() -> void:
+	set_restarting(false)
+	set_process(false)
+
+
 func set_restarting(active: bool) -> void:
 	restarting = active
 	drive_on = false
