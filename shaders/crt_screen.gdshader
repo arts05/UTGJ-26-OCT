@@ -15,6 +15,10 @@ uniform float vignette_strength : hint_range(0.0, 0.4, 0.01) = 0.24;
 uniform float rolling_band_strength : hint_range(0.0, 0.3, 0.01) = 0.12;
 uniform float rolling_band_speed : hint_range(0.0, 0.5, 0.01) = 0.08;
 uniform float color_bleed_strength : hint_range(0.0, 0.4, 0.01) = 0.16;
+uniform float halation_strength : hint_range(0.0, 0.5, 0.01) = 0.18;
+uniform float halation_radius_pixels : hint_range(1.0, 8.0, 0.5) = 3.0;
+uniform float glass_sheen_strength : hint_range(0.0, 0.15, 0.005) = 0.045;
+uniform vec3 glass_light_direction = vec3(-0.8, 0.4, 0.7);
 
 
 float pattern_visibility(float cycles_per_pixel) {
@@ -34,6 +38,11 @@ float phosphor_slot(vec2 cell, float center_x, float softness) {
 	// Each mask cell is twice as tall as it is wide.
 	vec2 rounded_end = vec2(distance_from_center.x, max(distance_from_center.y - 0.32, 0.0) * 2.0);
 	return 1.0 - smoothstep(0.11 - softness, 0.11 + softness, length(rounded_end));
+}
+
+
+vec3 bright_phosphors(vec2 desktop_uv) {
+	return max(texture(desktop_texture, desktop_uv).rgb - vec3(0.65), vec3(0.0));
 }
 
 
@@ -60,6 +69,15 @@ void fragment() {
 			texture(desktop_texture, desktop_uv + horizontal_pixel).b
 		);
 		color = mix(color, separated_color, color_bleed_strength);
+
+		// Light spreads around bright pixels, while the original picture stays sharp.
+		vec2 glow_step = vec2(halation_radius_pixels) / desktop_size;
+		vec3 halation = bright_phosphors(desktop_uv + vec2(glow_step.x, 0.0));
+		halation += bright_phosphors(desktop_uv - vec2(glow_step.x, 0.0));
+		halation += bright_phosphors(desktop_uv + vec2(0.0, glow_step.y));
+		halation += bright_phosphors(desktop_uv - vec2(0.0, glow_step.y));
+		vec3 center_phosphors = max(color - vec3(0.65), vec3(0.0));
+		color += max(halation * 0.25 - center_phosphors, vec3(0.0)) * halation_strength;
 
 		float scanline = 0.5 + 0.5 * cos(row * TAU);
 		color *= 1.0 - scanline * scanline_strength * visible_scanlines;
@@ -89,6 +107,13 @@ void fragment() {
 		vec2 pixel = floor(desktop_uv * desktop_size);
 		float noise = sample_grain(pixel, floor(TIME * 24.0));
 		color += (noise - 0.5) * grain_strength;
+
+		// A broad reflection follows the real curved mesh as the camera moves.
+		vec3 reflected_view = reflect(-VIEW, normalize(NORMAL));
+		vec3 reflected_world = (INV_VIEW_MATRIX * vec4(reflected_view, 0.0)).xyz;
+		float sheen = pow(max(dot(normalize(reflected_world), normalize(glass_light_direction)), 0.0), 12.0);
+		float grazing_angle = pow(1.0 - max(dot(normalize(NORMAL), VIEW), 0.0), 2.0);
+		color += vec3(0.7, 0.85, 1.0) * sheen * (0.35 + grazing_angle) * glass_sheen_strength;
 	}
 
 	ALBEDO = clamp(color, vec3(0.0), vec3(1.0)) * border_mask.x * border_mask.y;

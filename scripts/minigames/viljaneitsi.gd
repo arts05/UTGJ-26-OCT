@@ -14,6 +14,9 @@ enum Phase { INTRODUCTION, READY, TYPING, SUCCESS }
 @export_range(1, 10) var required_repetitions: int = 3
 @export var phrase: String = "Kulla neitsid, ärge tehke paha!"
 
+@export_group("Folder feedback")
+@export_range(0.1, 1.5, 0.05) var answer_effect_seconds: float = 0.65
+
 const WOLF_EXPRESSIONS: Array[Texture2D] = [
 	preload("res://assets/sprites/vilja1.png"),
 	preload("res://assets/sprites/vilja2.png"),
@@ -22,6 +25,7 @@ const WOLF_EXPRESSIONS: Array[Texture2D] = [
 
 @onready var folder = $FolderWindow
 @onready var wheat = $FolderWindow/Contents/Wheat
+@onready var field_material: ShaderMaterial = $FolderWindow/Contents/FieldEffect.material
 @onready var character_window: Control = $CharacterWindow
 @onready var speech = $CharacterWindow/Speech
 @onready var action_button: Button = $CharacterWindow/Speech/Panel/Margins/Stack/Actions/ActionButton
@@ -33,6 +37,7 @@ const WOLF_EXPRESSIONS: Array[Texture2D] = [
 var phase: Phase = Phase.INTRODUCTION
 var elapsed_seconds: float = 0.0
 var accepted_repetitions: int = 0
+var answer_tween: Tween
 
 
 func _ready() -> void:
@@ -40,6 +45,10 @@ func _ready() -> void:
 
 
 func reset() -> void:
+	if answer_tween:
+		answer_tween.kill()
+	field_material.set_shader_parameter("pressure", 0.0)
+	field_material.set_shader_parameter("success_amount", 0.0)
 	set_process(false)
 	phase = Phase.INTRODUCTION
 	elapsed_seconds = 0.0
@@ -104,6 +113,7 @@ func _start_typing() -> void:
 func _process(delta: float) -> void:
 	elapsed_seconds = minf(elapsed_seconds + delta, time_limit_seconds)
 	wheat.set_coverage(elapsed_seconds / time_limit_seconds)
+	field_material.set_shader_parameter("pressure", elapsed_seconds / time_limit_seconds)
 	folder.status.text = "%d files" % wheat.filled_cells
 	if elapsed_seconds >= time_limit_seconds:
 		set_process(false)
@@ -133,6 +143,7 @@ func _on_answer_submitted(text: String) -> void:
 	answer_accepted.emit()
 	folder.flash()
 	character_window.flash()
+	_play_answer_effect()
 	answer.clear()
 	var expression_index := mini(accepted_repetitions, WOLF_EXPRESSIONS.size() - 1)
 	character_window.set_artwork_texture(WOLF_EXPRESSIONS[expression_index])
@@ -141,12 +152,21 @@ func _on_answer_submitted(text: String) -> void:
 		phase = Phase.SUCCESS
 		set_process(false)
 		wheat.reset()
+		answer_tween.parallel().tween_property(field_material, "shader_parameter/pressure", 0.0, answer_effect_seconds)
 		folder.status.text = "0 files"
 		instruction.text = "The folder is clear."
 		speech.say("All right. No more grain.", "Continue")
 		feedback.text = ""
 		answer.hide()
 		won.emit()
+
+
+func _play_answer_effect() -> void:
+	if answer_tween:
+		answer_tween.kill()
+	field_material.set_shader_parameter("success_amount", 1.0)
+	answer_tween = create_tween()
+	answer_tween.tween_property(field_material, "shader_parameter/success_amount", 0.0, answer_effect_seconds)
 
 
 func _normalize_phrase(text: String) -> String:
