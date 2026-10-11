@@ -23,6 +23,7 @@ enum Stage {
 	CARL,
 	CARL_VICTORY,
 	CONGRATULATIONS,
+	OUTRO,
 	ENDING,
 	CRASH,
 }
@@ -53,6 +54,11 @@ var active_screen: Control
 var retry_screen: Control
 var computer_focused: bool = false
 var pointer_position := Vector2(-1, -1)
+
+# Pending Kratt dialogue. Each entry is [text: String, expression: int],
+# where expression is 0 = neutral, 1 = serious, 2 = happy.
+var kratt_lines: Array = []
+var kratt_final_button: String = ""
 
 
 func _ready() -> void:
@@ -104,6 +110,21 @@ func _show_screen(next_screen: Control) -> void:
 	set_computer_focused(computer_focused)
 
 
+## Queues Kratt's lines and shows the first one. Each click shows the next line;
+## after the last one, _on_kratt_continued runs its stage logic.
+## Call _show_screen(kratt) right after this to display Kratt.
+func _start_kratt_dialogue(lines: Array, final_button: String) -> void:
+	kratt_lines = lines.duplicate()
+	kratt_final_button = final_button
+	_say_next_kratt_line()
+
+
+func _say_next_kratt_line() -> void:
+	var line: Array = kratt_lines.pop_front()
+	var button := "Next" if not kratt_lines.is_empty() else kratt_final_button
+	kratt.say(line[0], button, line[1])
+
+
 func _on_installer_shortcut_pressed() -> void:
 	# Once installed, its Start entry simply returns to the active task.
 	if stage != Stage.DESKTOP:
@@ -127,11 +148,20 @@ func _on_installation_finished() -> void:
 
 
 func _on_kratt_delay_timeout() -> void:
-	kratt.say("Your disk is full.\n\nThe Viljahunt folder is taking up the space. Let's speak to her first.", "Meet Viljahunt", 0)
+	_start_kratt_dialogue([
+		["Hello there! I'm Kratt, your personal helper friend.", 2],
+		["Hey! Seems that your disk is full!", 1],
+		["It's not malware or a virus either... in fact, I think there's someone inhabiting this folder I found... yes, she seems cunning!", 0],
+		["But she really needs to move out of here, this is not where her presence should be. I can't help you, but the spirit of Kalevipoeg bundled with KalevAV will help you out.", 0],
+	], "Meet Viljahunt")
 	_show_screen(kratt)
 
 
 func _on_kratt_continued() -> void:
+	# More lines queued: show the next one and stay on the Kratt screen.
+	if not kratt_lines.is_empty():
+		_say_next_kratt_line()
+		return
 	match stage:
 		Stage.DISK_WARNING:
 			stage = Stage.VILJANEITSI
@@ -143,6 +173,8 @@ func _on_kratt_continued() -> void:
 		Stage.CARL_INTRO:
 			stage = Stage.CARL_PROMPT
 			_show_screen(carl_prompt)
+		Stage.OUTRO:
+			_begin_ending(true)
 
 
 func _on_viljaneitsi_completed() -> void:
@@ -187,7 +219,15 @@ func _on_victory_pause_timeout() -> void:
 
 func _on_congratulations_finished() -> void:
 	if stage == Stage.CONGRATULATIONS:
-		_begin_ending(true)
+		stage = Stage.OUTRO
+		_start_kratt_dialogue([
+			["Look at that, all the spirits are free to roam the open lands of Estonia once again.", 2],
+			["Right, and your computer is clean now.", 0],
+			["Which means you are obligated to buy this software. Which you have not done. You just found this CD and plopped it in.", 1],
+			["That's quite disrespectful to the spirit of Kalevipoeg.", 1],
+			["Anyway, I'm taking my leave. Ciao!", 2],
+		], "Goodbye")
+		_show_screen(kratt)
 
 
 func _on_carl_failed() -> void:
@@ -216,7 +256,12 @@ func _on_encounter_won() -> void:
 
 func _show_kodukaija_introduction() -> void:
 	stage = Stage.KODUKAIJA_INTRO
-	kratt.say("The extra files are gone.\n\nThere is another file to check: Kodukäija.exe.", "Inspect file", 1)
+	_start_kratt_dialogue([
+		["Cracking job, mate. I'll shuffle a bit through the files again.", 2],
+		["I had a feeling in my bones, well, my... whatever; I found another resident evil here.", 0],
+		["She makes unwelcome visits from home to home. Hence why she's called Kodukäija.", 1],
+		["Have fun!", 2],
+	], "Inspect file")
 	_show_screen(kratt)
 
 
@@ -232,7 +277,13 @@ func _on_kodukaija_completed() -> void:
 
 func _show_carl_introduction() -> void:
 	stage = Stage.CARL_INTRO
-	kratt.say("I found the final file that you should check out.", "Inspect file", 1)
+	_start_kratt_dialogue([
+		["Had fun?", 2],
+		["Whoa, looks like there's something else on your drive as well.", 1],
+		["The well-known Carl R. Jakobson, but here he seems to go just by Carl, I guess.", 0],
+		["I feel like he is here to ask you something. He wants the people to be educated so much he is willing to invade their computers now.", 0],
+		["Hope you brushed up on your mythologies, go ahead and answer him. Don't make him upset.", 1],
+	], "Inspect file")
 	_show_screen(kratt)
 
 
