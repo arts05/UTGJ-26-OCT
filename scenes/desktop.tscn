@@ -15,8 +15,9 @@
 [ext_resource type="PackedScene" path="res://scenes/apps/carl_prompt.tscn" id="12_carl_prompt"]
 [ext_resource type="PackedScene" path="res://scenes/minigames/carl.tscn" id="13_carl"]
 [ext_resource type="PackedScene" path="res://scenes/apps/congratulations.tscn" id="14_congratulations"]
-[ext_resource type="PackedScene" path="res://scenes/endings/good_ending.tscn" id="15_good_ending"]
 [ext_resource type="PackedScene" path="res://scenes/endings/bad_ending.tscn" id="16_bad_ending"]
+[ext_resource type="PackedScene" path="res://scenes/apps/start_menu.tscn" id="17_start_menu"]
+[ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="18_os_theme"]
 
 [sub_resource type="StyleBoxEmpty" id="Style_shortcut_clear"]
 
@@ -34,6 +35,16 @@ bg_color = Color(0.12, 0.3, 0.65, 0.5)
 [sub_resource type="ShaderMaterial" id="Material_cursor"]
 shader = ExtResource("11_cursor_outline")
 
+[sub_resource type="StyleBoxFlat" id="Style_start_hover"]
+bg_color = Color(1, 1, 1, 0.12)
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+
+[sub_resource type="StyleBoxFlat" id="Style_start_pressed"]
+bg_color = Color(0, 0, 0, 0.2)
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+
 [sub_resource type="AtlasTexture" id="Texture_taskbar"]
 atlas = ExtResource("9_taskbar")
 region = Rect2(0, 454.5, 1200, 26.5)
@@ -45,6 +56,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("18_os_theme")
 script = ExtResource("1_flow")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1992822387]
@@ -90,7 +102,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 28
 text = "KalevAV"
 horizontal_alignment = 1
 
@@ -141,9 +153,6 @@ visible = false
 [node name="Congratulations" parent="Screens" instance=ExtResource("14_congratulations")]
 visible = false
 
-[node name="GoodEnding" parent="Screens" instance=ExtResource("15_good_ending")]
-visible = false
-
 [node name="BadEnding" parent="Screens" instance=ExtResource("16_bad_ending")]
 visible = false
 
@@ -152,6 +161,8 @@ visible = false
 
 [node name="CrashScreen" parent="Screens" instance=ExtResource("5_crash")]
 visible = false
+
+[node name="StartMenu" parent="." instance=ExtResource("17_start_menu")]
 
 [node name="Taskbar" type="TextureRect" parent="."]
 layout_mode = 1
@@ -163,6 +174,20 @@ grow_horizontal = 2
 grow_vertical = 0
 texture = SubResource("Texture_taskbar")
 expand_mode = 1
+
+[node name="StartButton" type="Button" parent="Taskbar"]
+layout_mode = 1
+anchor_bottom = 1.0
+offset_right = 84.0
+grow_vertical = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("Style_shortcut_clear")
+theme_override_styles/hover = SubResource("Style_start_hover")
+theme_override_styles/pressed = SubResource("Style_start_pressed")
+theme_override_styles/hover_pressed = SubResource("Style_start_pressed")
+theme_override_styles/focus = SubResource("Style_shortcut_clear")
+toggle_mode = true
 
 [node name="KrattDelay" type="Timer" parent="."]
 wait_time = 1.0
@@ -186,6 +211,10 @@ texture = ExtResource("10_cursor")
 expand_mode = 1
 
 [connection signal="pressed" from="InstallerShortcut" to="." method="_on_installer_shortcut_pressed"]
+[connection signal="pressed" from="Taskbar/StartButton" to="StartMenu" method="toggle"]
+[connection signal="gui_input" from="Taskbar" to="StartMenu" method="_on_outside_gui_input"]
+[connection signal="toggled" from="StartMenu" to="." method="_on_start_menu_toggled"]
+[connection signal="kalevav_requested" from="StartMenu" to="." method="_on_installer_shortcut_pressed"]
 [connection signal="timeout" from="KrattDelay" to="." method="_on_kratt_delay_timeout"]
 [connection signal="timeout" from="VictoryPause" to="." method="_on_victory_pause_timeout"]
 [connection signal="installed" from="Screens/Installation" to="." method="_on_installation_finished"]

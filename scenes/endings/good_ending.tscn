@@ -1,8 +1,173 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/endings/ending_placeholder.tscn" id="1_ending"]
+[ext_resource type="Script" path="res://scripts/good_ending.gd" id="1_ending"]
+[ext_resource type="PackedScene" path="res://scenes/endings/kalev_actor.tscn" id="2_actor"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ending/footstep_left.wav" id="3_steps"]
+[ext_resource type="Theme" path="res://resources/menu_theme.tres" id="4_theme"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ending/shoulder_pat.wav" id="5_pat"]
+[ext_resource type="AudioStream" path="res://assets/sounds/tsitsor.ogg" id="6_music"]
+[ext_resource type="AnimationLibrary" path="res://resources/ending_footsteps.tres" id="7_footsteps"]
 
-[node name="GoodEnding" instance=ExtResource("1_ending")]
+[node name="GoodEnding" type="Node3D"]
+script = ExtResource("1_ending")
 
-[node name="Title" parent="." index="1"]
-text = "GOOD ENDING"
+[node name="SeatedView" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9848078, 0.1736482, 0, -0.1736482, 0.9848078, 0, 1.075, 1)
+
+[node name="ShoulderView" type="Marker3D" parent="."]
+position = Vector3(0, 1.075, 1)
+rotation = Vector3(-0.143243, -0.929432, 0)
+
+[node name="RevealView" type="Marker3D" parent="."]
+position = Vector3(0.015, 1.1, 1.01)
+rotation = Vector3(0.845442, -2.434296, 0)
+
+[node name="EndingCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9848078, 0.1736482, 0, -0.1736482, 0.9848078, 0, 1.075, 1)
+fov = 50.0
+near = 0.025
+
+[node name="Kalev" parent="." instance=ExtResource("2_actor")]
+visible = false
+position = Vector3(0.28, 0.026, 1.32)
+rotation = Vector3(0, -2.443461, 0)
+
+[node name="RevealLight" type="OmniLight3D" parent="."]
+visible = false
+position = Vector3(0.05, 1.65, 0.7)
+light_color = Color(0.8, 0.9, 1, 1)
+light_energy = 0.85
+light_specular = 0.2
+light_cull_mask = 4
+omni_range = 2.0
+
+[node name="ApproachStart" type="Marker3D" parent="."]
+position = Vector3(0.7, 0.1, 3.2)
+
+[node name="ApproachEnd" type="Marker3D" parent="."]
+position = Vector3(0.28, 0.1, 1.32)
+
+[node name="Footsteps" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_steps")
+volume_db = -6.0
+unit_size = 1.5
+max_db = 0.0
+max_distance = 8.0
+bus = &"Ambience"
+playback_type = 1
+
+[node name="FootstepTiming" type="AnimationPlayer" parent="."]
+libraries = {&"": ExtResource("7_footsteps")}
+
+[node name="ShoulderPat" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0.303, 0.945, 1.101)
+stream = ExtResource("5_pat")
+volume_db = -9.0
+unit_size = 0.75
+max_db = 0.0
+max_distance = 4.0
+bus = &"Ambience"
+playback_type = 1
+
+[node name="EndingMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_music")
+volume_db = -6.0
+bus = &"Music"
+playback_type = 1
+editor_description = "Starts on the title cut. Its finished signal returns to the menu after the entire clip; the last credit card holds until then."
+
+[node name="EndCard" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="Black" type="ColorRect" parent="EndCard"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("4_theme")
+color = Color(0, 0, 0, 1)
+
+[node name="Title" type="Label" parent="EndCard/Black"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 84
+text = "Project Kalev"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Team" type="Label" parent="EndCard/Black"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 56
+text = "PAPADOPOULOS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Credits" type="VBoxContainer" parent="EndCard/Black"]
+visible = false
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.25
+anchor_right = 0.9
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Engine" type="Label" parent="EndCard/Black/Credits"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Created with Godot"
+horizontal_alignment = 1
+
+[node name="Thanks" type="Label" parent="EndCard/Black/Credits"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Thank you for playing."
+horizontal_alignment = 1
+
+[node name="Sources" type="VBoxContainer" parent="EndCard/Black"]
+visible = false
+layout_mode = 1
+anchor_left = 0.1
+anchor_top = 0.2
+anchor_right = 0.9
+anchor_bottom = 0.8
+mouse_filter = 2
+theme_override_constants/separation = 28
+alignment = 1
+editor_description = "Placeholder source acknowledgements. Replace these labels with the final archive references and asset credits."
+
+[node name="Heading" type="Label" parent="EndCard/Black/Sources"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "Sources"
+horizontal_alignment = 1
+
+[node name="References" type="Label" parent="EndCard/Black/Sources"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Archive references — to be added\nArtwork and model credits — to be added\nAudio sources — to be added"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[connection signal="finished" from="EndingMusic" to="." method="_on_ending_music_finished"]

@@ -1,9 +1,14 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/minigames/kodukaija.gd" id="1_game"]
-[ext_resource type="PackedScene" path="res://scenes/minigames/kodukaija_house.tscn" id="2_house"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kodumap.png" id="2_map"]
 [ext_resource type="Shader" path="res://shaders/house_visibility.gdshader" id="3_visibility"]
 [ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="4_theme"]
+[ext_resource type="PackedScene" path="res://scenes/minigames/kodukaija_note.tscn" id="5_note"]
+[ext_resource type="Script" path="res://scripts/minigames/kodukaija_ghost.gd" id="6_ghost"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kon1.png" id="7_calm"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kon2.png" id="8_warning"]
+[ext_resource type="Texture2D" path="res://assets/sprites/kon3.png" id="9_attack"]
 
 [sub_resource type="FastNoiseLite" id="Noise_fog"]
 noise_type = 1
@@ -21,8 +26,17 @@ resource_local_to_scene = true
 shader = ExtResource("3_visibility")
 shader_parameter/fog_noise = SubResource("Texture_fog")
 
-[sub_resource type="World2D" id="World_house"]
-resource_local_to_scene = true
+[sub_resource type="StyleBoxEmpty" id="Style_clear"]
+
+[sub_resource type="StyleBoxFlat" id="Style_name"]
+bg_color = Color(0.025, 0.03, 0.035, 0.9)
+border_width_bottom = 2
+border_color = Color(0.7, 0.72, 0.73, 0.65)
+
+[sub_resource type="StyleBoxFlat" id="Style_name_hover"]
+bg_color = Color(0.12, 0.13, 0.14, 0.95)
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
 
 [node name="Kodukaija" type="Control"]
 layout_mode = 3
@@ -31,73 +45,191 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+clip_contents = true
 theme = ExtResource("4_theme")
 script = ExtResource("1_game")
+editor_description = "Panorama nodes use the original 8000 × 1100 map coordinates. Move notes, ghost spawn markers, the summoning point, and Exit directly in the 2D editor. F6 the KodukaijaPreview scene to play inside the CRT."
 
-[node name="GameView" type="SubViewportContainer" parent="."]
-offset_right = 1200.0
-offset_bottom = 900.0
-stretch = true
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
-[node name="HouseViewport" type="SubViewport" parent="GameView"]
-disable_3d = true
-world_2d = SubResource("World_house")
-size = Vector2i(1200, 900)
-render_target_update_mode = 2
-canvas_item_default_texture_filter = 0
+[node name="Panorama" type="Node2D" parent="."]
+position = Vector2(-913.636, 0)
+scale = Vector2(0.818182, 0.818182)
 
-[node name="House" parent="GameView/HouseViewport" instance=ExtResource("2_house")]
+[node name="Map" type="TextureRect" parent="Panorama"]
+offset_right = 8000.0
+offset_bottom = 1100.0
+mouse_filter = 2
+texture = ExtResource("2_map")
+expand_mode = 1
+
+[node name="Notes" type="Node2D" parent="Panorama"]
+
+[node name="KitchenNote" parent="Panorama/Notes" instance=ExtResource("5_note")]
+offset_left = 1750.0
+offset_top = 360.0
+offset_right = 1850.0
+offset_bottom = 444.0
+text = "JU"
+
+[node name="TableNote" parent="Panorama/Notes" instance=ExtResource("5_note")]
+offset_left = 3800.0
+offset_top = 820.0
+offset_right = 3900.0
+offset_bottom = 904.0
+text = "HA"
+
+[node name="PortraitNote" parent="Panorama/Notes" instance=ExtResource("5_note")]
+offset_left = 6280.0
+offset_top = 410.0
+offset_right = 6380.0
+offset_bottom = 494.0
+text = "N"
+
+[node name="Exit" type="Button" parent="Panorama"]
+offset_left = 280.0
+offset_top = 140.0
+offset_right = 775.0
+offset_bottom = 1040.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("Style_clear")
+theme_override_styles/hover = SubResource("Style_clear")
+theme_override_styles/pressed = SubResource("Style_clear")
+theme_override_styles/disabled = SubResource("Style_clear")
+theme_override_styles/focus = SubResource("Style_clear")
+disabled = true
+
+[node name="Outline" type="Line2D" parent="Panorama/Exit"]
+visible = false
+points = PackedVector2Array(10, 885, 10, 14, 485, 14, 485, 885)
+width = 5.0
+default_color = Color(0.32, 0.9, 0.65, 0.85)
+antialiased = true
+
+[node name="Handle" type="Line2D" parent="Panorama/Exit/Outline"]
+points = PackedVector2Array(435, 460, 390, 460)
+width = 6.0
+default_color = Color(0.45, 1, 0.7, 1)
+antialiased = true
+
+[node name="GhostSpawns" type="Node2D" parent="Panorama"]
+
+[node name="Doorway" type="Marker2D" parent="Panorama/GhostSpawns"]
+position = Vector2(850, 1060)
+
+[node name="Kitchen" type="Marker2D" parent="Panorama/GhostSpawns"]
+position = Vector2(2020, 1060)
+
+[node name="Cupboard" type="Marker2D" parent="Panorama/GhostSpawns"]
+position = Vector2(2870, 1060)
+
+[node name="Table" type="Marker2D" parent="Panorama/GhostSpawns"]
+position = Vector2(3950, 1060)
+
+[node name="Bed" type="Marker2D" parent="Panorama/GhostSpawns"]
+position = Vector2(4950, 1060)
+
+[node name="Picture" type="Marker2D" parent="Panorama/GhostSpawns"]
+position = Vector2(5930, 1060)
+
+[node name="Television" type="Marker2D" parent="Panorama/GhostSpawns"]
+position = Vector2(6980, 1060)
+
+[node name="SummoningPoint" type="Marker2D" parent="Panorama"]
+position = Vector2(6580, 1060)
+
+[node name="Ghost" type="Node2D" parent="Panorama"]
+visible = false
+position = Vector2(2020, 1060)
+script = ExtResource("6_ghost")
+poses = Array[Texture2D]([ExtResource("7_calm"), ExtResource("8_warning"), ExtResource("9_attack")])
+
+[node name="Portrait" type="TextureRect" parent="Panorama/Ghost"]
+offset_left = -450.0
+offset_top = -900.0
+offset_right = 450.0
+pivot_offset = Vector2(450, 900)
+mouse_filter = 2
+texture = ExtResource("7_calm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameButton" type="Button" parent="Panorama/Ghost"]
+visible = false
+offset_left = -150.0
+offset_top = -520.0
+offset_right = 150.0
+offset_bottom = -430.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource("4_theme")
+theme_override_colors/font_color = Color(0.85, 0.87, 0.88, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 54
+theme_override_styles/normal = SubResource("Style_name")
+theme_override_styles/hover = SubResource("Style_name_hover")
+theme_override_styles/pressed = SubResource("Style_name_hover")
+theme_override_styles/focus = SubResource("Style_clear")
+text = "JUHAN"
+
+[node name="FocusPoint" type="Marker2D" parent="Panorama/Ghost"]
+position = Vector2(0, -550)
+editor_description = "Where the objective light points after the full name is found."
 
 [node name="Darkness" type="ColorRect" parent="."]
 material = SubResource("Material_darkness")
-offset_right = 1200.0
-offset_bottom = 900.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
+
+[node name="NameFragments" type="Label" parent="."]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 824.0
+offset_right = 760.0
+offset_bottom = 870.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.76, 0.78, 0.8, 1)
+theme_override_font_sizes/font_size = 38
+text = "—  —  —"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftHint" type="Line2D" parent="."]
+position = Vector2(50, 450)
+points = PackedVector2Array(10, -14, -3, 0, 10, 14)
+width = 2.0
+default_color = Color(0.85, 0.87, 0.89, 1)
+antialiased = true
+
+[node name="RightHint" type="Line2D" parent="."]
+position = Vector2(1150, 450)
+points = PackedVector2Array(-10, -14, 3, 0, -10, 14)
+width = 2.0
+default_color = Color(0.85, 0.87, 0.89, 1)
+antialiased = true
 
 [node name="CloseButton" type="Button" parent="."]
-offset_left = 1130.0
-offset_top = 20.0
+offset_left = 1135.0
+offset_top = 18.0
 offset_right = 1180.0
-offset_bottom = 70.0
+offset_bottom = 65.0
 focus_mode = 0
 flat = true
+theme_override_colors/font_color = Color(0.5, 0.52, 0.54, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 text = "×"
 
-[node name="InteractionPrompt" type="Label" parent="."]
-visible = false
-offset_left = 450.0
-offset_top = 495.0
-offset_right = 750.0
-offset_bottom = 530.0
-theme_override_colors/font_color = Color(0.9, 0.86, 0.74, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-mouse_filter = 2
-text = "Space"
-
-[node name="NameFragment" type="Label" parent="."]
-visible = false
-offset_left = 450.0
-offset_top = 367.0
-offset_right = 750.0
-offset_bottom = 410.0
-theme_override_colors/font_color = Color(0.98, 0.86, 0.61, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
-mouse_filter = 2
-
-[node name="ContinueButton" type="Button" parent="."]
-visible = false
-offset_left = 510.0
-offset_top = 780.0
-offset_right = 690.0
-offset_bottom = 830.0
-focus_mode = 0
-text = "Continue"
-
+[connection signal="pressed" from="Panorama/Exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="Panorama/Ghost/NameButton" to="." method="_on_name_pressed"]
 [connection signal="pressed" from="CloseButton" to="." method="_on_close_pressed"]
-[connection signal="pressed" from="ContinueButton" to="." method="_on_continue_pressed"]

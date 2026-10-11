@@ -15,18 +15,15 @@ shader_parameter/hover_amount = 1.0
 [node name="Installation" instance=ExtResource("1_frame")]
 script = ExtResource("2_installer")
 
-[node name="Title" type="Label" parent="."]
-offset_left = 36.0
-offset_top = 8.0
-offset_right = 620.0
-offset_bottom = 42.0
+[node name="Title" parent="." index="3"]
 text = "KalevAV setup"
 
 [node name="AntivirusLogo" type="TextureRect" parent="."]
-offset_left = 68.0
-offset_top = 198.0
-offset_right = 232.0
-offset_bottom = 374.0
+layout_mode = 1
+anchor_left = 0.075
+anchor_top = 0.3
+anchor_right = 0.265
+anchor_bottom = 0.57
 mouse_filter = 2
 texture = ExtResource("7_logo")
 expand_mode = 1
@@ -34,13 +31,10 @@ stretch_mode = 5
 
 [node name="Kalevipoeg" type="TextureRect" parent="."]
 layout_mode = 1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 18.0
-offset_top = -272.0
-offset_right = 276.0
-offset_bottom = -14.0
-grow_vertical = 0
+anchor_left = 0.02
+anchor_top = 0.58
+anchor_right = 0.307
+anchor_bottom = 0.975
 mouse_filter = 2
 texture = ExtResource("3_kalev")
 expand_mode = 1
@@ -48,28 +42,32 @@ stretch_mode = 5
 flip_h = true
 
 [node name="Content" type="MarginContainer" parent="."]
-offset_left = 294.0
-offset_top = 194.0
-offset_right = 852.0
-offset_bottom = 632.0
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
+layout_mode = 1
+anchor_left = 0.32
+anchor_top = 0.255
+anchor_right = 0.97
+anchor_bottom = 0.97
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+editor_description = "Anchors follow the painted white panel. Margins keep text and buttons clear of the sketched border."
 
 [node name="Stack" type="VBoxContainer" parent="Content"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 24
 
 [node name="Heading" type="Label" parent="Content/Stack"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_type_variation = &"WindowHeading"
 text = "KalevAV"
+autowrap_mode = 2
 
 [node name="Status" type="Label" parent="Content/Stack"]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_vertical = 3
+theme_type_variation = &"WindowBody"
 text = "Welcome to KalevAV.\n\nLet's check what is living on this computer."
 autowrap_mode = 2
 

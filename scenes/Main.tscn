@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="8_pause"]
 [ext_resource type="PackedScene" path="res://scenes/street_ambience.tscn" id="9_street"]
 [ext_resource type="Script" uid="uid://exakxc3w284" path="res://scripts/encounter_release.gd" id="10_release_sequence"]
+[ext_resource type="PackedScene" path="res://scenes/endings/good_ending.tscn" id="11_good_ending"]
 
 [sub_resource type="Environment" id="Environment_room"]
 background_mode = 1
@@ -91,6 +92,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="GoodEnding" parent="." node_paths=PackedStringArray("player_camera", "ghost_release") instance=ExtResource("11_good_ending")]
+player_camera = NodePath("../Camera3D")
+ghost_release = NodePath("../Room/GhostRelease")
 
 [node name="PauseMenu" parent="." unique_id=168662833 node_paths=PackedStringArray("computer", "scene_fade") instance=ExtResource("8_pause")]
 computer = NodePath("../Computer")

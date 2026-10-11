@@ -33,6 +33,6 @@ color = Color(0.93, 0.79, 0.43, 1)
 offset_top = 33.0
 offset_right = 96.0
 offset_bottom = 55.0
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 20
 text = "vili_01.png"
 horizontal_alignment = 1

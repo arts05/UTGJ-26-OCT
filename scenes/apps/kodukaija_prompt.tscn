@@ -66,6 +66,12 @@ material = SubResource("ShaderMaterial_rveer")
 texture = ExtResource("3_artwork")
 
 [node name="TitleBar" parent="." index="2"]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 18.0
+offset_top = 8.0
 offset_right = -76.0
 offset_bottom = 53.0
 
@@ -123,10 +129,8 @@ offset_top = 15.0
 offset_right = 804.0
 offset_bottom = 145.0
 theme_override_colors/font_color = Color(0.08, 0.09, 0.11, 1)
-theme_override_font_sizes/font_size = 22
-text = "Find its name.
-
-WASD / arrows · Space"
+theme_override_font_sizes/font_size = 30
+text = "Find its name. Don't stare at the ghost.\n\nMouse to the edges to look. Click to collect, then call its name."
 autowrap_mode = 2
 
 [node name="ButtonsCover" type="ColorRect" parent="." index="8" unique_id=299256432]

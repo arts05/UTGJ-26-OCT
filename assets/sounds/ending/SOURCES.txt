@@ -1,0 +1,12 @@
+footstep_left.wav and footstep_right.wav: short mono edits of ../walker.mp3,
+with softened high frequencies, shorter tails, and balanced peak levels.
+
+shoulder_pat.wav and title_impact.wav: synthesized placeholder effects created
+for this ending. No external recordings are used in these two sounds.
+
+The WAV files contain the finished sounds; the game only plays them.
+Edit volume on Footsteps and ShoulderPat in good_ending.tscn.
+FootstepTiming's approach animation holds the individual step cues.
+
+The title now uses the user's ../tsitsor.ogg, played in full by EndingMusic.
+title_impact.wav is the earlier placeholder and is no longer used by the scene.

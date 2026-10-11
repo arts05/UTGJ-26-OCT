@@ -5,6 +5,7 @@
 [ext_resource type="Theme" path="res://resources/desktop_theme.tres" id="3_theme"]
 [ext_resource type="PackedScene" path="res://scenes/apps/speech_bubble.tscn" id="4_speech"]
 [ext_resource type="Script" path="res://scripts/apps/floating_portrait.gd" id="5_float"]
+[ext_resource type="FontFile" path="res://assets/fonts/tahoma.ttf" id="6_dialogue_font"]
 
 [node name="Kratt" type="Control"]
 offset_right = 460.0
@@ -27,4 +28,10 @@ stretch_mode = 5
 
 [node name="Speech" parent="." instance=ExtResource("4_speech")]
 
+[node name="Message" parent="Speech/Panel/Margins/Stack" index="0"]
+theme_override_fonts/font = ExtResource("6_dialogue_font")
+theme_override_font_sizes/font_size = 22
+
 [connection signal="action_pressed" from="Speech" to="." method="_on_continue_pressed"]
+
+[editable path="Speech"]

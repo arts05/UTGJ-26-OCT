@@ -1,0 +1,97 @@
+[gd_resource type="AnimationLibrary" format=3]
+
+[sub_resource type="Animation" id="Animation_7mtp6"]
+length = 0.001
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/rig/Skeleton3D:chest")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.07435399, -1.1887934e-07, -8.863686e-09, 0.9972319)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model/rig/Skeleton3D:neck")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.2788436, -1.14481004e-07, -3.3240756e-08, 0.9603365)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Model/rig/Skeleton3D:head")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.15708424, -4.7440374e-14, 3.74518e-08, 0.9875852)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Model/rig/Skeleton3D:upper_arm_right")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, -0.39578268, -0.6255664, 0.39808586, 0.54180294)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Model/rig/Skeleton3D:forearm_right")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0.18051893, -0.09795457, 0.019780515, 0.97848177)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Model/rig/Skeleton3D:hand_right")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, -0.058245447, 0.12290996, -0.0038762002, 0.9906995)
+
+[sub_resource type="Animation" id="Animation_nefdx"]
+length = 0.85
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/rig/Skeleton3D:chest")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, -0.07435399, -1.1887934e-07, -8.863686e-09, 0.9972319, 0.68, 1, -0.0046094856, -1.1919085e-07, -4.274744e-09, 0.9999894, 0.85, 1, -0.0046094856, -1.1919085e-07, -4.274744e-09, 0.9999894)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model/rig/Skeleton3D:neck")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.2788436, -1.14481004e-07, -3.3240756e-08, 0.9603365, 0.68, 1, 0.3776986, -1.0134891e-07, -5.1194387e-08, 0.9259286, 0.85, 1, 0.3776986, -1.0134891e-07, -5.1194387e-08, 0.9259286)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Model/rig/Skeleton3D:head")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, -0.15708424, -4.7440374e-14, 3.74518e-08, 0.9875852, 0.68, 1, -0.00065788644, -1.4881552e-08, -2.981212e-08, 0.99999976, 0.85, 1, -0.00065788644, -1.4881552e-08, -2.981212e-08, 0.99999976)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Model/rig/Skeleton3D:upper_arm_right")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, -0.39578268, -0.6255664, 0.39808586, 0.54180294, 0.68, 1, -0.31204298, -0.45001057, 0.6074092, 0.575477, 0.85, 1, -0.31204298, -0.45001057, 0.6074092, 0.575477)
+tracks/4/type = "rotation_3d"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Model/rig/Skeleton3D:forearm_right")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = PackedFloat32Array(0, 1, 0.18051893, -0.09795457, 0.019780515, 0.97848177, 0.68, 1, 0.09394269, -0.11518802, 0.10085497, 0.9837351, 0.85, 1, 0.09394269, -0.11518802, 0.10085497, 0.9837351)
+tracks/5/type = "rotation_3d"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Model/rig/Skeleton3D:hand_right")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = PackedFloat32Array(0, 1, -0.058245447, 0.12290996, -0.0038762002, 0.9906995, 0.68, 1, 0.44673792, 0.16213599, -0.30072966, 0.82686085, 0.85, 1, 0.44673792, 0.16213599, -0.30072966, 0.82686085)
+
+[resource]
+_data = {
+&"RESET": SubResource("Animation_7mtp6"),
+&"shoulder_touch": SubResource("Animation_nefdx")
+}

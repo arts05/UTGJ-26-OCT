@@ -13,6 +13,7 @@ extends CanvasLayer
 
 var mouse_mode_before_pause: Input.MouseMode = Input.MOUSE_MODE_VISIBLE
 var returning_to_menu: bool = false
+var resume_after_options: bool = false
 
 
 func _input(event: InputEvent) -> void:
@@ -61,7 +62,17 @@ func _on_options_pressed() -> void:
 	options.open()
 
 
+func open_options_from_desktop() -> void:
+	_pause()
+	resume_after_options = true
+	_on_options_pressed()
+
+
 func _on_options_closed() -> void:
+	if resume_after_options:
+		resume_after_options = false
+		_on_resume_pressed()
+		return
 	menu.show()
 	options_button.grab_focus()
 

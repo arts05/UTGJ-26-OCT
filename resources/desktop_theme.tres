@@ -1,5 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://cqrr0s3epjvkp"]
 
+[ext_resource type="FontVariation" path="res://resources/os_font.tres" id="1_font"]
+
 [sub_resource type="StyleBoxFlat" id="Style_button"]
 content_margin_left = 14.0
 content_margin_top = 8.0
@@ -46,7 +48,8 @@ border_color = Color(0.3, 0.32, 0.35, 1)
 bg_color = Color(0.18, 0.4, 0.28, 1)
 
 [resource]
-default_font_size = 24
+default_font = ExtResource("1_font")
+default_font_size = 32
 Button/colors/font_color = Color(0.08, 0.09, 0.11, 1)
 Button/colors/font_disabled_color = Color(0.48, 0.48, 0.48, 1)
 Button/colors/font_hover_color = Color(0.08, 0.09, 0.11, 1)
@@ -64,3 +67,12 @@ LineEdit/styles/focus = SubResource("Style_focus")
 LineEdit/styles/normal = SubResource("Style_input")
 ProgressBar/styles/background = SubResource("Style_input")
 ProgressBar/styles/fill = SubResource("Style_fill")
+WindowTitle/base_type = &"Label"
+WindowTitle/font_sizes/font_size = 28
+WindowHeading/base_type = &"Label"
+WindowHeading/font_sizes/font_size = 38
+WindowBody/base_type = &"Label"
+WindowBody/constants/line_spacing = 4
+WindowBody/font_sizes/font_size = 32
+WindowCaption/base_type = &"Label"
+WindowCaption/font_sizes/font_size = 26

@@ -43,7 +43,7 @@ theme_override_constants/separation = 14
 
 [node name="Heading" type="Label" parent="Overlay/Center/Menu"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 54
 text = "Paused"
 horizontal_alignment = 1
 
@@ -64,7 +64,7 @@ text = "Main menu"
 [node name="Hint" type="Label" parent="Overlay/Center/Menu"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.68, 0.63, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "Esc / P to resume
 Leaving ends this run."
 horizontal_alignment = 1

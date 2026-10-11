@@ -65,7 +65,7 @@ theme_override_constants/separation = 32
 [node name="Title" type="Label" parent="Center/Menu"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.95, 0.92, 1)
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 64
 text = "Project Kalev"
 horizontal_alignment = 1
 

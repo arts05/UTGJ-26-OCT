@@ -31,46 +31,43 @@ texture = ExtResource("6_blank_window")
 material = SubResource("ShaderMaterial_1rbb1")
 texture = ExtResource("6_blank_window")
 
-[node name="TitleBar" parent="." index="2"]
-anchors_preset = 10
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-
-[node name="Title" type="Label" parent="." index="3" unique_id=861965574]
-layout_mode = 1
-offset_left = 36.0
-offset_top = 8.0
-offset_right = 620.0
-offset_bottom = 42.0
+[node name="Title" parent="." index="3"]
 text = "File Explorer"
 
-[node name="Address" type="ColorRect" parent="." index="4" unique_id=1609185694]
+[node name="Address" type="Control" parent="."]
 layout_mode = 1
-offset_left = 92.0
-offset_top = 82.0
-offset_right = 648.0
-offset_bottom = 109.0
+anchor_left = 0.13
+anchor_top = 0.11
+anchor_right = 0.84
+anchor_bottom = 0.15
 mouse_filter = 2
-color = Color(0.96, 0.96, 0.94, 1)
+editor_description = "Text area inside the drawn address field, between the folder icon and dropdown."
 
 [node name="Path" type="Label" parent="Address" index="0" unique_id=1582172751]
 layout_mode = 1
-offset_left = 8.0
-offset_right = 548.0
-offset_bottom = 27.0
-theme_override_font_sizes/font_size = 20
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_right = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"WindowCaption"
 text = "C:\\"
+vertical_alignment = 1
+clip_text = true
 
 [node name="Folder" type="Button" parent="." index="5" unique_id=2050310639]
 material = ExtResource("4_highlight")
 layout_mode = 1
-offset_left = 48.0
-offset_top = 156.0
-offset_right = 198.0
-offset_bottom = 280.0
+anchor_left = 0.045
+anchor_top = 0.18
+anchor_right = 0.045
+anchor_bottom = 0.18
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 170.0
+offset_bottom = 144.0
 focus_mode = 0
 mouse_default_cursor_shape = 2
 flat = true
@@ -93,7 +90,7 @@ layout_mode = 1
 offset_top = 86.0
 offset_right = 150.0
 offset_bottom = 120.0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 30
 horizontal_alignment = 1
 
 [node name="Contents" type="Control" parent="." index="6" unique_id=1529032647]
@@ -101,19 +98,30 @@ visible = false
 clip_contents = true
 layout_mode = 1
 anchors_preset = 0
-offset_left = 48.0
-offset_top = 156.0
-offset_right = 732.0
-offset_bottom = 646.0
+anchor_left = 0.045
+anchor_top = 0.18
+anchor_right = 0.97
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -84.0
 mouse_filter = 1
+editor_description = "Minigame content stays inside this area. The bottom inset reserves room for the folder status."
 
 [node name="Status" type="Label" parent="." index="7" unique_id=1145868003]
 layout_mode = 1
-offset_left = 48.0
-offset_top = 660.0
-offset_right = 732.0
-offset_bottom = 694.0
-theme_override_font_sizes/font_size = 20
+anchor_left = 0.045
+anchor_top = 1.0
+anchor_right = 0.97
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -66.0
+offset_right = -20.0
+offset_bottom = -34.0
+theme_type_variation = &"WindowCaption"
 text = "Open the folder Kratt found."
+vertical_alignment = 1
+clip_text = true
 
 [connection signal="pressed" from="Folder" to="." method="_on_folder_pressed"]

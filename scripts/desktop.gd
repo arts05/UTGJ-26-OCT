@@ -3,10 +3,12 @@ extends Control
 
 signal encounter_won
 signal ending_reached
+signal good_ending_requested
 signal drive_activity_changed(busy: bool)
 signal restart_state_changed(restarting: bool)
 signal button_clicked
 signal notification_requested
+signal settings_requested
 
 enum Stage {
 	DESKTOP,
@@ -37,12 +39,13 @@ enum Stage {
 @onready var carl_prompt = $Screens/CarlPrompt
 @onready var carl = $Screens/Carl
 @onready var congratulations = $Screens/Congratulations
-@onready var good_ending: Control = $Screens/GoodEnding
 @onready var bad_ending: Control = $Screens/BadEnding
 @onready var crash_screen = $Screens/CrashScreen
 @onready var kratt_delay: Timer = $KrattDelay
 @onready var victory_pause: Timer = $VictoryPause
 @onready var taskbar: TextureRect = $Taskbar
+@onready var start_button: Button = $Taskbar/StartButton
+@onready var start_menu = $StartMenu
 @onready var cursor: TextureRect = $Cursor
 
 var stage: Stage = Stage.DESKTOP
@@ -53,6 +56,7 @@ var pointer_position := Vector2(-1, -1)
 
 
 func _ready() -> void:
+	start_menu.settings_requested.connect(settings_requested.emit)
 	# Sound follows button activation, so dragging and disabled buttons stay quiet.
 	for button: BaseButton in find_children("*", "BaseButton", true, false):
 		button.pressed.connect(button_clicked.emit)
@@ -61,6 +65,8 @@ func _ready() -> void:
 
 func set_computer_focused(focused: bool) -> void:
 	computer_focused = focused
+	if not focused:
+		start_menu.close(true)
 	if active_screen == viljaneitsi:
 		viljaneitsi.set_computer_focused(focused)
 	elif active_screen == kodukaija:
@@ -70,6 +76,8 @@ func set_computer_focused(focused: bool) -> void:
 func set_cursor_position(desktop_position: Vector2) -> void:
 	# Keep the arrow tip at the click point, allowing for the texture's transparent margin.
 	pointer_position = desktop_position
+	if active_screen == kodukaija:
+		kodukaija.set_pointer_position(desktop_position)
 	cursor.position = desktop_position.floor() - cursor_hotspot
 	cursor.visible = (
 		Rect2(Vector2.ZERO, size).has_point(desktop_position)
@@ -79,6 +87,7 @@ func set_cursor_position(desktop_position: Vector2) -> void:
 
 
 func _show_screen(next_screen: Control) -> void:
+	start_menu.close(true)
 	for screen: Control in $Screens.get_children():
 		screen.hide()
 		screen.process_mode = Node.PROCESS_MODE_DISABLED
@@ -96,8 +105,19 @@ func _show_screen(next_screen: Control) -> void:
 
 
 func _on_installer_shortcut_pressed() -> void:
+	# Once installed, its Start entry simply returns to the active task.
+	if stage != Stage.DESKTOP:
+		return
 	stage = Stage.INSTALLATION
 	_show_screen(installation)
+
+
+func _on_start_menu_toggled(opened: bool) -> void:
+	start_button.set_pressed_no_signal(opened)
+	if opened:
+		get_viewport().gui_release_focus()
+	elif computer_focused:
+		set_computer_focused(true)
 
 
 func _on_installation_finished() -> void:
@@ -143,8 +163,7 @@ func _on_carl_declined() -> void:
 		stage = Stage.VILJANEITSI
 		_show_screen(viljaneitsi)
 	else:
-		stage = Stage.KODUKAIJA
-		_show_screen(kodukaija)
+		_show_carl_introduction()
 
 
 func _on_carl_won() -> void:
@@ -156,6 +175,8 @@ func finish_encounter_release() -> void:
 	if stage == Stage.CARL_VICTORY:
 		_show_screen(null)
 		victory_pause.start()
+	elif stage == Stage.KODUKAIJA:
+		kodukaija.finish_release()
 
 
 func _on_victory_pause_timeout() -> void:
@@ -175,10 +196,13 @@ func _on_carl_failed() -> void:
 
 func _begin_ending(good: bool) -> void:
 	stage = Stage.ENDING
-	var ending := good_ending if good else bad_ending
-	_show_screen(ending)
 	ending_reached.emit()
-	ending.get_node("AnimationPlayer").play(&"reveal")
+	if good:
+		_show_screen(null)
+		good_ending_requested.emit()
+	else:
+		_show_screen(bad_ending)
+		bad_ending.get_node("AnimationPlayer").play(&"reveal")
 
 
 func _on_viljaneitsi_started() -> void:

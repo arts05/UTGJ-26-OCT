@@ -12,7 +12,7 @@ script = ExtResource("1_options")
 
 [node name="Heading" type="Label" parent="."]
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 48
 text = "Options"
 horizontal_alignment = 1
 
@@ -84,7 +84,7 @@ text = "Fullscreen"
 [node name="Controls" type="Label" parent="."]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.68, 0.63, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "Click the computer or press E to use the CRT.
 Right-click to look away.
 Esc or P to pause.

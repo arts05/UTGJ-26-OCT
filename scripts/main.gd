@@ -18,6 +18,10 @@ func _ready() -> void:
 	encounter_release.finished.connect(desktop.finish_encounter_release)
 	desktop.ending_reached.connect(ambient_music.stop)
 	desktop.ending_reached.connect($StreetAmbience.stop)
+	desktop.good_ending_requested.connect($GoodEnding.play)
+	$GoodEnding.title_reached.connect($Computer/Audio/CRTLoop.stop)
+	$GoodEnding.finished.connect(_on_good_ending_finished)
+	desktop.settings_requested.connect($PauseMenu.open_options_from_desktop)
 	if start_on_ready:
 		start_game()
 
@@ -39,3 +43,9 @@ func start_ambient_music() -> void:
 
 func _exit_tree() -> void:
 	ambient_music.stop()
+
+
+func _on_good_ending_finished() -> void:
+	var error := get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	if error != OK:
+		push_error("Could not return to the main menu: " + error_string(error))

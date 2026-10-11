@@ -1,0 +1,39 @@
+[gd_resource type="AnimationLibrary" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/sounds/ending/footstep_left.wav" id="1_pfdty"]
+[ext_resource type="AudioStream" path="res://assets/sounds/ending/footstep_right.wav" id="2_kkhjo"]
+
+[sub_resource type="Animation" id="Animation_psaxb"]
+length = 2.6
+tracks/0/type = "audio"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Footsteps")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("1_pfdty")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("2_kkhjo")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("1_pfdty")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("2_kkhjo")
+}],
+"times": PackedFloat32Array(0.12, 0.75, 1.38, 2.01)
+}
+tracks/0/use_blend = false
+
+[resource]
+_data = {
+&"approach": SubResource("Animation_psaxb")
+}

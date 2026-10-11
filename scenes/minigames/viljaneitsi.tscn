@@ -102,7 +102,7 @@ grow_horizontal = 2
 mouse_filter = 2
 color = Color(0.64, 0.65, 0.64, 1)
 
-[node name="Prompt" type="Control" parent="FolderWindow/Contents" index="3" unique_id=484427956]
+[node name="Prompt" type="VBoxContainer" parent="FolderWindow/Contents" index="3" unique_id=484427956]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -110,48 +110,31 @@ offset_top = 280.0
 offset_bottom = 468.0
 grow_horizontal = 2
 mouse_filter = 1
+theme_override_constants/separation = 12
 
 [node name="Instruction" type="Label" parent="FolderWindow/Contents/Prompt" unique_id=323017356]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 40.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 22
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
 text = "Type this 3 times to stop the new files."
 autowrap_mode = 2
 
 [node name="Phrase" type="Label" parent="FolderWindow/Contents/Prompt" unique_id=1059100232]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 44.0
-offset_bottom = 78.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 24
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Dear maidens, do no evil!"
 
 [node name="Answer" type="LineEdit" parent="FolderWindow/Contents/Prompt" unique_id=1802558966]
 visible = false
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 88.0
-offset_bottom = 130.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 24
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
 placeholder_text = "Type here"
 max_length = 120
 keep_editing_on_text_submit = true
 
 [node name="Feedback" type="Label" parent="FolderWindow/Contents/Prompt" unique_id=270387715]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 138.0
-offset_bottom = 174.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 21
+layout_mode = 2
+theme_type_variation = &"WindowCaption"
 text = "Press Enter after each line."
 
 [node name="CharacterWindow" type="Control" parent="." unique_id=1993049299 node_paths=PackedStringArray("artwork", "shadow")]

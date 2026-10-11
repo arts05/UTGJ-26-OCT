@@ -6,6 +6,8 @@ uniform float radius = 300.0;
 uniform float soft_edge = 65.0;
 uniform sampler2D fog_noise : repeat_enable, filter_linear;
 uniform float fog_time = 0.0;
+uniform float pan_offset = 0.0;
+uniform float dread : hint_range(0.0, 1.0) = 0.0;
 uniform vec2 objective_position = vec2(600.0, 398.0);
 uniform float objective_strength = 0.0;
 uniform bool escaping = false;
@@ -14,12 +16,14 @@ uniform float light_scatter_strength : hint_range(0.0, 0.4, 0.01) = 0.16;
 
 void fragment() {
 	vec2 pixel = UV * view_size;
-	float noise = texture(fog_noise, UV * 2.2 + vec2(fog_time * 0.017, -fog_time * 0.012)).r;
+	vec2 drift = vec2(pan_offset * 1.8 + fog_time * 0.017, -fog_time * 0.012);
+	float noise = texture(fog_noise, UV * 2.2 + drift).r;
 	float distance_to_player = length((UV - 0.5) * view_size);
-	float uneven_edge = distance_to_player + (noise - 0.5) * 42.0;
+	float breathing = sin(fog_time * (2.5 + dread * 4.0)) * dread * 12.0;
+	float uneven_edge = distance_to_player + (noise - 0.5) * (55.0 + dread * 50.0) + breathing;
 	float darkness = smoothstep(max(0.0, radius - soft_edge), max(0.01, radius), uneven_edge);
 	vec3 mist = vec3(0.014, 0.02, 0.023) * noise * (1.0 - smoothstep(radius, radius + 130.0, distance_to_player));
-	float deep_noise = texture(fog_noise, UV * vec2(3.4, 1.6) - vec2(fog_time * 0.01, fog_time * 0.016)).r;
+	float deep_noise = texture(fog_noise, UV * vec2(3.4, 1.6) + vec2(pan_offset * 0.8 - fog_time * 0.01, -fog_time * 0.016)).r;
 	float wisps = smoothstep(0.12, 0.55, abs(noise - deep_noise));
 	float mist_edge = darkness * (1.0 - smoothstep(radius + 30.0, radius + 220.0, distance_to_player));
 	mist += vec3(0.032, 0.039, 0.046) * wisps * mist_edge * wisp_strength;
@@ -41,5 +45,9 @@ void fragment() {
 	shaft *= smoothstep(-35.0, 30.0, along_light) * (1.0 - smoothstep(80.0, 580.0, along_light));
 	float scattered_light = shaft * (0.3 + wisps * 0.7) * darkness;
 	glow += scattered_light * objective_strength * pulse * light_scatter_strength;
-	COLOR = vec4(mist + light_color * glow, max(darkness, glow));
+	// Inside the opening the paper itself is readable; the light lives in the void.
+	glow *= mix(0.12, 1.0, darkness);
+	float opacity = max(darkness, glow);
+	// Keep the glow's brightness when blending over the clear part of the opening.
+	COLOR = vec4((mist + light_color * glow) / max(opacity, 0.001), opacity);
 }
